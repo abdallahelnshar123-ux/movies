@@ -1,0 +1,30 @@
+class AppAssets {
+  /// images =============================================================
+  static const String onBoardingImage1 = 'assets/images/onboarding_image1.png';
+  static const String onBoardingImage2 = 'assets/images/onboarding_image2.png';
+  static const String onBoardingImage3 = 'assets/images/onboarding_image3.png';
+  static const String onBoardingImage4 = 'assets/images/onboarding_image4.png';
+  static const String onBoardingImage5 = 'assets/images/onboarding_image5.png';
+  static const String onBoardingImage6 = 'assets/images/onboarding_image6.png';
+  static const String forgetPasswordImage =
+      'assets/images/forget_password_image.png';
+  static const String avatarImage1 = 'assets/images/avatar1.png';
+  static const String avatarImage2 = 'assets/images/avatar2.png';
+  static const String avatarImage3 = 'assets/images/avatar3.png';
+  static const String avatarImage4 = 'assets/images/avatar4.png';
+  static const String avatarImage5 = 'assets/images/avatar5.png';
+  static const String avatarImage6 = 'assets/images/avatar6.png';
+  static const String avatarImage7 = 'assets/images/avatar7.png';
+  static const String avatarImage8 = 'assets/images/avatar8.png';
+  static const String avatarImage9 = 'assets/images/avatar9.png';
+  static const String egyptLogo = 'assets/images/egypt_logo.png';
+  static const String usaLogo = 'assets/images/usa_logo.png';
+
+  /// icons ===================================================================
+  static const String emailIcon = 'assets/icons/email-icon.svg';
+  static const String googleIcon = 'assets/icons/google_icon.svg';
+  static const String nameIcon = 'assets/icons/name_icon.svg';
+  static const String passwordIcon = 'assets/icons/password_icon.svg';
+  static const String phoneIcon = 'assets/icons/phone_icon.svg';
+  static const String profileNameIcon = 'assets/icons/profile_name_icon.svg';
+}
