@@ -35,6 +35,7 @@ class AppStyles {
     color: AppColors.whiteColor,
     fontSize: 16,
     fontWeight: FontWeight.w400,
+
   );
   static TextStyle robotoRegular14Yellow = GoogleFonts.inter(
     color: AppColors.yellowColor,
