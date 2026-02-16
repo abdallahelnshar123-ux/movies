@@ -19,6 +19,7 @@ class AppAssets {
   static const String avatarImage9 = 'assets/images/avatar9.png';
   static const String egyptLogo = 'assets/images/egypt_logo.png';
   static const String usaLogo = 'assets/images/usa_logo.png';
+  static const String appLogo = 'assets/images/app_logo.png';
 
   /// icons ===================================================================
   static const String emailIcon = 'assets/icons/email-icon.svg';
