@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
         AppRoutes.homeRouteName: (context) => HomeScreen(),
         AppRoutes.onboardingRouteName: (context) => OnboardingScreen(),
         AppRoutes.loginRouteName: (context) => LoginScreen(),
-        AppRoutes.registerRouteName: (context) => RegisterScreen(),
+        AppRoutes.registerRouteName: (context) => HomeScreen(),
         AppRoutes.updateProfileRouteName: (context) => UpdateProfileScreen(),
         AppRoutes.forgetPasswordRouteName: (context) => ForgetPasswordScreen(),
       },
