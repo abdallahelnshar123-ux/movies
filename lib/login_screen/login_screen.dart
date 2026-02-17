@@ -7,6 +7,7 @@ import 'package:movies/widgets/custom_elevated_button.dart';
 import 'package:movies/widgets/custom_text_form_field.dart';
 
 import '../utils/app_colors.dart';
+import '../utils/app_routes.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -55,25 +56,31 @@ class _LoginScreenState extends State<LoginScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                Text("forget_password_?",style:AppStyles.robotoRegular14Yellow),
+                  TextButton(
+                      style: TextButton.styleFrom(tapTargetSize:MaterialTapTargetSize.shrinkWrap,padding: EdgeInsets.zero),
+                      onPressed:(){
+                        //todo Navigate to Forget Password Screen
+                        Navigator.pushReplacementNamed(context, AppRoutes.forgetPasswordRouteName);
+                      }, child: Text("forget_password",  style: AppStyles.robotoRegular14Yellow,)),
               ],),
 
               CustomElevatedButton(decorationColor: AppColors.yellowColor, onPressed: (){
                 //todo login
               }, child:Text("login",style: AppStyles.robotoRegular20Black,)),
 
-              Text.rich(
-                textAlign: TextAlign.center,
-                TextSpan(
-                  text: "don't_have_account ?",
-                  style: AppStyles.robotoRegular14White,
-                  children: [
-                    TextSpan(
-                    text: "create_one",
-                    style: AppStyles.robotoRegular14Yellow,)
-                  ]
-                )
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("don't_have_account",style:AppStyles.robotoRegular14White),
+                  TextButton(
+                    style: TextButton.styleFrom(tapTargetSize:MaterialTapTargetSize.shrinkWrap,padding: EdgeInsets.zero),
+                      onPressed:(){
+                    //todo Navigate to Register Screen
+                        Navigator.pushReplacementNamed(context, AppRoutes.registerRouteName);
+                  }, child: Text("create_one",  style: AppStyles.robotoRegular14Yellow,)),
+                ],
               ),
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
