@@ -1,8 +1,10 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:movies/register_screen/avatar_carousel.dart';
 import 'package:movies/utils/app_assets.dart';
 import 'package:movies/utils/app_colors.dart';
+import 'package:movies/utils/app_routes.dart';
 import 'package:movies/utils/app_styles.dart';
 import 'package:movies/utils/screen_size.dart';
 import 'package:movies/widgets/change_language_item.dart';
@@ -17,7 +19,8 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  bool isObscure = true;
+  bool passIsObscure = true;
+  bool confPassIsObscure = true;
   bool iseSelected = true;
 
   @override
@@ -27,7 +30,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
       appBar: AppBar(
         backgroundColor: AppColors.transparentColor,
         leading: IconButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).pushNamed(AppRoutes.loginRouteName);
+          },
           icon: Icon(Icons.arrow_back_outlined, color: AppColors.yellowColor),
         ),
         title: Text('Register', style: AppStyles.robotoRegular16Yellow),
@@ -35,15 +40,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal:context.width*0.04),
+          padding: EdgeInsets.symmetric(horizontal: context.width * 0.04),
           child: Column(
-            spacing: context.height*0.02,
+            spacing: context.height * 0.02,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              AvatarCarousel(),
-              Text('Avatar', style: AppStyles.robotoRegular16White, textAlign:TextAlign.center,),
+              Padding(
+                padding: EdgeInsets.only(bottom: context.height * 0.02),
+                child: Column(
+                  children: [
+                    AvatarCarousel(),
+                    Text(
+                      'Avatar',
+                      style: AppStyles.robotoRegular16White,
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+
               CustomTextFormField(
-                prefixIcon: SvgPicture.asset(AppAssets.nameIcon, fit: BoxFit.none),
+                prefixIcon: SvgPicture.asset(
+                  AppAssets.nameIcon,
+                  fit: BoxFit.none,
+                ),
                 hintText: "Name",
                 hintStyle: AppStyles.robotoRegular16White,
                 filled: true,
@@ -66,20 +86,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   AppAssets.passwordIcon,
                   fit: BoxFit.none,
                 ),
-                obscureText: isObscure,
+                obscureText: passIsObscure,
                 filled: true,
                 fillColor: AppColors.darkGrayColor,
                 suffixIcon: IconButton(
                   onPressed: () {
-                    isObscure = !isObscure;
+                    passIsObscure = !passIsObscure;
                     setState(() {});
                   },
-                  icon: isObscure
+                  icon: passIsObscure
                       ? Icon(
                           Icons.visibility_off_rounded,
                           color: AppColors.whiteColor,
                         )
-                      : Icon(Icons.visibility_rounded, color: AppColors.whiteColor),
+                      : Icon(
+                          Icons.visibility_rounded,
+                          color: AppColors.whiteColor,
+                        ),
                 ),
               ),
               CustomTextFormField(
@@ -89,46 +112,73 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   AppAssets.passwordIcon,
                   fit: BoxFit.none,
                 ),
-                obscureText: isObscure,
+                obscureText: confPassIsObscure,
                 filled: true,
                 fillColor: AppColors.darkGrayColor,
                 suffixIcon: IconButton(
                   onPressed: () {
-                    isObscure = !isObscure;
+                    confPassIsObscure = !confPassIsObscure;
                     setState(() {});
                   },
-                  icon: isObscure
+                  icon: confPassIsObscure
                       ? Icon(
                           Icons.visibility_off_rounded,
                           color: AppColors.whiteColor,
                         )
-                      : Icon(Icons.visibility_rounded, color: AppColors.whiteColor),
+                      : Icon(
+                          Icons.visibility_rounded,
+                          color: AppColors.whiteColor,
+                        ),
                 ),
               ),
               CustomTextFormField(
-                prefixIcon: SvgPicture.asset(AppAssets.phoneIcon, fit: BoxFit.none),
+                prefixIcon: SvgPicture.asset(
+                  AppAssets.phoneIcon,
+                  fit: BoxFit.none,
+                ),
                 hintText: "Phone Number",
                 hintStyle: AppStyles.robotoRegular16White,
                 filled: true,
                 fillColor: AppColors.darkGrayColor,
               ),
-              CustomElevatedButton(
-                  decorationColor: AppColors.yellowColor, onPressed: (){},
-                child: Text('Create Account',style: AppStyles.robotoRegular20Black,),
-                 ),
-              Text.rich(
-                  textAlign: TextAlign.center,
-                  TextSpan(
-                      text: "Already Have Account ?",
-                      style: AppStyles.robotoRegular14White,
-                      children: [
-                        TextSpan(
-                          text: "Login",
-                          style: AppStyles.robotoRegular14Yellow,)
-                      ]
-                  )
+
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: context.height * 0.02),
+                child: Column(
+                  spacing: context.height * 0.02,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    CustomElevatedButton(
+                      decorationColor: AppColors.yellowColor,
+                      onPressed: () {},
+                      child: Text(
+                        'Create Account',
+                        style: AppStyles.robotoRegular20Black,
+                      ),
+                    ),
+
+                    Text.rich(
+                      textAlign: TextAlign.center,
+                      TextSpan(
+                        text: "Already Have Account? ",
+                        style: AppStyles.robotoRegular14White,
+                        children: [
+                          TextSpan(
+                            text: "Login",
+                            style: AppStyles.robotoRegular14Yellow,
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                              Navigator.of(context).pushNamed(AppRoutes.loginRouteName);
+                              },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              ChangeLanguageItem()
+
+              ChangeLanguageItem(),
             ],
           ),
         ),
