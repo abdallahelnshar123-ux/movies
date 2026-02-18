@@ -1,0 +1,51 @@
+{
+  "onboarding_title1": "Find Your Next Favorite Movie Here",
+  "onboarding_description1": "Get access to a huge library of movies to suit all tastes. You will surely like it",
+
+  "onboarding_title2": "Discover Movies",
+  "onboarding_description2": "Explore a vast collection of movies in all qualities and genres. Find your next favorite film with ease.",
+
+  "onboarding_title3": "Explore All Genres",
+  "onboarding_description3": "Discover movies from every genre, in all available qualities. Find something new and exciting to watch every day.",
+
+  "onboarding_title4": "Create Watchlists",
+  "onboarding_description4": "Save movies to your watchlist to keep track of what you want to watch next. Enjoy films in various qualities and genres.",
+
+  "onboarding_title5": "Rate, Review, and Learn",
+  "onboarding_description5": "Share your thoughts on the movies you've watched. Dive deep into film details and help others discover great movies with your reviews.",
+
+  "onboarding_title6": "Start Watching Now",
+
+  "explore_now": "Explore Now",
+  "next": "Next",
+  "back": "Back",
+  "finish": "Finish",
+
+  "email": "Email",
+  "password": "Password",
+  "forget_password": "Forget Password",
+  "login": "Login",
+
+  "don't_have_account": "Don't Have Account?",
+  "create_one": "Create One",
+  "or": "OR",
+  "login_with_google": "Login With Google",
+
+  "register": "Register",
+  "name": "Name",
+  "confirm_password": "Confirm Password",
+  "phone_number": "Phone Number",
+  "create_account": "Create Account",
+
+  "already_have_account": "Already Have Account?",
+  "verify_email": "Verify Email",
+  "reset_password": "Reset Password",
+  "delete_account": "Delete Account",
+  "update_data": "Update Data",
+
+  "screen_shots": "Screen Shots",
+  "avatar": "Avatar",
+  "pick_avatar": "Pick Avatar",
+
+  "watch": "Watch"
+}

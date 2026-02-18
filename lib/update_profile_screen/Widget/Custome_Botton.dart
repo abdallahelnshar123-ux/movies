@@ -1,0 +1,26 @@
+import 'package:flutter/material.dart';
+import 'package:movies/utils/app_styles.dart';
+import 'package:movies/utils/screen_size.dart';
+
+class CustomButton extends StatelessWidget {
+  String text;
+  TextStyle style;
+  Color backgroundColor;
+  CustomButton({super.key ,required this.text,required this.backgroundColor , required this.style});
+
+  @override
+  Widget build(BuildContext context) {
+    var size  = MediaQuery.of(context).size;
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+      padding: EdgeInsets.symmetric(horizontal:size.width*0.35 ,vertical: size.height*0.015),
+        backgroundColor: backgroundColor,
+        shape:RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15)
+        )
+      ),
+        onPressed: () {},
+        child: Text(text , style: style,)
+    );
+  }
+}
