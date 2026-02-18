@@ -17,6 +17,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
    final PageController controller =  PageController();
   int currentIndex = 0;
 
+   final List<Color> gradientColors = [
+     AppColors.blackGradientTop,
+     AppColors.cyanGradiantColor,
+     AppColors.orangeGradiantColor,
+     AppColors.purpleGradiantColor,
+     AppColors.redGradiantColor,
+     AppColors.blackGradiantColor,
+   ];
+
   @override
   void initState() {
     controller.addListener(() {
@@ -122,20 +131,20 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
                 Positioned.fill(
                   child: Container(
-                    decoration:  BoxDecoration(
+                    decoration: BoxDecoration(
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                         colors: [
                           AppColors.transparentColor,
-                          Colors.black87,
-                         AppColors.blackColor
+                          gradientColors[index],
                         ],
-                        stops: [0.4, 0.8, 1],
+                        stops:[0, 1.0],
                       ),
                     ),
                   ),
                 ),
+
                 //todo : first page only
                 index == 0 ?
                   Padding(
