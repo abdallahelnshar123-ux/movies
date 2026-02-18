@@ -78,68 +78,75 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
           icon: Icon(Icons.arrow_back, size: 25, color: AppColors.yellowColor),
         ),
       ),
-      body: Column(
-        spacing: 15,
-        children: [
-          GestureDetector(
-            onTap: () {
-              showAvatrBottomSheet();
-            },
-            child: Container(
-              padding: EdgeInsets.symmetric(vertical: size.height * 0.02),
-              child: Image.asset(AvatarList[currentAvatarIndex].emoji , fit: BoxFit.fill,),
-            ),
-          ),
-          CustomeTextfeild(
-            prefixIcon: Icon(Icons.person, color: AppColors.whiteColor),
-            textcontroller: namecontroller,
-            hint: "Enter Your Name",
-            onTap: () {},
-          ),
-          CustomeTextfeild(
-            prefixIcon: Icon(Icons.phone, color: AppColors.whiteColor),
-            textcontroller: phonecontroller,
-            hint: "Enter Your Phone Number",
-            onTap: () {},
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+      body: Padding(
+        padding:  EdgeInsets.symmetric(horizontal:size.width*0.015),
+        child: SingleChildScrollView(
+          child: Column(
+            spacing: 15,
             children: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(
-                    context,
-                  ).pushReplacementNamed(AppRoutes.forgetPasswordRouteName);
+              GestureDetector(
+                onTap: () {
+                  showAvatrBottomSheet();
                 },
-                child: Text(
-                  "Reset Password",
-                  style: AppStyles.robotoRegular16White.copyWith(
-                    decoration: TextDecoration.underline,
-                    decorationColor: AppColors.whiteColor,
-                  ),
-                ),
+                child:SizedBox(
+                  height: size.height*0.12,
+                  child:Image.asset(AvatarList[currentAvatarIndex].emoji , fit: BoxFit.cover,),
+                )
               ),
+              SizedBox(height: size.height*0.01,),
+              CustomeTextfeild(
+                prefixIcon: Icon(Icons.person, color: AppColors.whiteColor),
+                textcontroller: namecontroller,
+                hint: "Enter Your Name",
+                onTap: () {},
+              ),
+              CustomeTextfeild(
+                prefixIcon: Icon(Icons.phone, color: AppColors.whiteColor),
+                textcontroller: phonecontroller,
+                hint: "Enter Your Phone Number",
+                onTap: () {},
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(
+                        context,
+                      ).pushReplacementNamed(AppRoutes.forgetPasswordRouteName);
+                    },
+                    child: Text(
+                      "Reset Password",
+                      style: AppStyles.robotoRegular16White.copyWith(
+                        decoration: TextDecoration.underline,
+                        decorationColor: AppColors.whiteColor,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: size.height * 0.32),
+              CustomButton(
+                text: 'Delete Account',
+                style: AppStyles.robotoRegular16White.copyWith(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+                backgroundColor: AppColors.redColor,
+              ),
+              CustomButton(
+          
+                text: 'Update Account',
+                style: AppStyles.robotoRegular16DarkGray.copyWith(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+                backgroundColor: AppColors.yellowColor,
+              ),
+              SizedBox(height: size.height * 0.015),
             ],
           ),
-          Spacer(),
-          CustomButton(
-            text: 'Delete Account',
-            style: AppStyles.robotoRegular16White.copyWith(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-            ),
-            backgroundColor: AppColors.redColor,
-          ),
-          CustomButton(
-            text: 'Update Account',
-            style: AppStyles.robotoRegular16DarkGray.copyWith(
-              fontSize: 15,
-              fontWeight: FontWeight.w600,
-            ),
-            backgroundColor: AppColors.yellowColor,
-          ),
-          SizedBox(height: size.height * 0.015),
-        ],
+        ),
       ),
     );
   }
