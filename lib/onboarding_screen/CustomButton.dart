@@ -17,7 +17,8 @@ class CustomButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 12,vertical: 4),
       width:context.width,
       height: context.height * 0.06,
       child: isOutlined

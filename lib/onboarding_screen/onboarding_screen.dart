@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movies/onboarding_screen/CustomButton.dart';
+import 'package:movies/onboarding_screen/onBoardingSharedPrefrance.dart';
 import 'package:movies/utils/app_colors.dart';
 import 'package:movies/utils/app_styles.dart';
 import 'package:movies/utils/screen_size.dart';
@@ -99,12 +100,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     }
   }
 
-  void finishOnboarding() {
-    Navigator.pushReplacementNamed(
-      context,
-      AppRoutes.loginRouteName,
-    );
-  }
+
+   void finishOnboarding() async {
+     await MyPreferences.setOnboardingCompleted();
+     Navigator.pushReplacementNamed(
+       context,
+       AppRoutes.loginRouteName,
+     );
+   }
+
 
   @override
   Widget build(BuildContext context) {
