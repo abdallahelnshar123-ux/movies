@@ -13,4 +13,5 @@ class AppColors {
   static const Color orangeGradiantColor = Color(0xff85210E);
   static const Color cyanGradiantColor = Color(0xff084250);
   static const Color transparentColor = Colors.transparent;
+  static const Color blackGradientTop = Color(0xff1E1E1E);
 }

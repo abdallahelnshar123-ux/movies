@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movies/onboarding_screen/CustomButton.dart';
+import 'package:movies/onboarding_screen/onBoardingSharedPrefrance.dart';
 import 'package:movies/utils/app_colors.dart';
 import 'package:movies/utils/app_styles.dart';
 import 'package:movies/utils/screen_size.dart';
@@ -16,6 +17,15 @@ class OnboardingScreen extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingScreen> {
    final PageController controller =  PageController();
   int currentIndex = 0;
+
+   final List<Color> gradientColors = [
+     AppColors.blackGradientTop,
+     AppColors.cyanGradiantColor,
+     AppColors.orangeGradiantColor,
+     AppColors.purpleGradiantColor,
+     AppColors.redGradiantColor,
+     AppColors.blackGradiantColor,
+   ];
 
   @override
   void initState() {
@@ -90,12 +100,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     }
   }
 
-  void finishOnboarding() {
-    Navigator.pushReplacementNamed(
-      context,
-      AppRoutes.loginRouteName,
-    );
-  }
+
+   void finishOnboarding() async {
+     await MyPreferences.setOnboardingCompleted();
+     Navigator.pushReplacementNamed(
+       context,
+       AppRoutes.loginRouteName,
+     );
+   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -122,20 +135,20 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
                 Positioned.fill(
                   child: Container(
-                    decoration:  BoxDecoration(
+                    decoration: BoxDecoration(
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                         colors: [
                           AppColors.transparentColor,
-                          Colors.black87,
-                         AppColors.blackColor
+                          gradientColors[index],
                         ],
-                        stops: [0.4, 0.8, 1],
+                        stops:[0, 1.0],
                       ),
                     ),
                   ),
                 ),
+
                 //todo : first page only
                 index == 0 ?
                   Padding(
