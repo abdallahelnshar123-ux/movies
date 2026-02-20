@@ -113,7 +113,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                     onPressed: () {
                       Navigator.of(
                         context,
-                      ).pushReplacementNamed(AppRoutes.forgetPasswordRouteName);
+                      ).pushNamed(AppRoutes.forgetPasswordRouteName);
                     },
                     child: Text(
                       "Reset Password",

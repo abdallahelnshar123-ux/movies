@@ -62,7 +62,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         style: TextButton.styleFrom(tapTargetSize:MaterialTapTargetSize.shrinkWrap,padding: EdgeInsets.only(bottom:context.height*0.02)),
                         onPressed:(){
                           //todo Navigate to Forget Password Screen
-                          Navigator.pushReplacementNamed(context, AppRoutes.forgetPasswordRouteName);
+                          Navigator.pushNamed(
+                              context, AppRoutes.forgetPasswordRouteName);
                         }, child: Text("forget_password".tr(),  style: AppStyles.robotoRegular14Yellow,)),
                 ],),
         

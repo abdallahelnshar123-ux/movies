@@ -29,12 +29,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.transparentColor,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.of(context).pushNamed(AppRoutes.loginRouteName);
-          },
-          icon: Icon(Icons.arrow_back_outlined, color: AppColors.yellowColor),
-        ),
         title: Text('Register', style: AppStyles.robotoRegular16Yellow),
         centerTitle: true,
       ),
