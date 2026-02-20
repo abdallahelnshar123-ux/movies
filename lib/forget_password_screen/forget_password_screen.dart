@@ -11,10 +11,7 @@ class ForgetPasswordScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: Icon(Icons.arrow_back_outlined),
-        title: Text("Forget Password"),
-      ),
+      appBar: AppBar(title: Text("Forget Password")),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(

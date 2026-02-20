@@ -25,8 +25,7 @@
   "password": "Password",
   "forget_password": "Forget Password?",
   "login": "Login",
-
-  "don't_have_account": "Don't Have Account?",
+  "don't_have_account": "Don't Have Account ? ",
   "create_one": "Create One",
   "or": "OR",
   "login_with_google": "Login With Google",
