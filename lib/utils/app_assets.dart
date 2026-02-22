@@ -6,7 +6,8 @@ class AppAssets {
   static const String onBoardingImage4 = 'assets/images/onboarding_image4.png';
   static const String onBoardingImage5 = 'assets/images/onboarding_image5.png';
   static const String onBoardingImage6 = 'assets/images/onboarding_image6.png';
-  static const String forgetPasswordImage = 'assets/images/forget_password_image.png';
+  static const String forgetPasswordImage =
+      'assets/images/forget_password_image.png';
   static const String avatarImage1 = 'assets/images/avatar1.png';
   static const String avatarImage2 = 'assets/images/avatar2.png';
   static const String avatarImage3 = 'assets/images/avatar3.png';
@@ -19,6 +20,9 @@ class AppAssets {
   static const String egyptLogo = 'assets/images/egypt_logo.png';
   static const String usaLogo = 'assets/images/usa_logo.png';
   static const String appLogo = 'assets/images/app_logo.png';
+  static const String availableNowImage =
+      'assets/images/available_now_image.png';
+  static const String watchNowImage = 'assets/images/watch_now_image.png';
 
   /// icons ===================================================================
   static const String emailIcon = 'assets/icons/email-icon.svg';
@@ -27,4 +31,8 @@ class AppAssets {
   static const String passwordIcon = 'assets/icons/password_icon.svg';
   static const String phoneIcon = 'assets/icons/phone_icon.svg';
   static const String profileNameIcon = 'assets/icons/profile_name_icon.svg';
+  static const String bnbExploreIcon = 'assets/icons/bnb_explore_icon.svg';
+  static const String bnbHomeIcon = 'assets/icons/bnb_home_icon.svg';
+  static const String bnbProfileIcon = 'assets/icons/bnb_profile_icon.svg';
+  static const String bnbSearchIcon = 'assets/icons/bnb_search_icon.svg';
 }
