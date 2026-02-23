@@ -41,6 +41,8 @@ dependencies:
   flutter_svg: ^2.2.3
   carousel_slider: ^5.1.2
   dio: ^5.9.1
+  flutter_bloc: ^9.1.1
+  bloc: ^9.2.0
 
 
 dev_dependencies:
