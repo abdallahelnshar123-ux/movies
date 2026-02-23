@@ -1,0 +1,25 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "movies-db1db",
+          "appId": "1:503224830946:android:b143add4fe919add1d87bb",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "movies-db1db",
+          "configurations": {
+            "android": "1:503224830946:android:b143add4fe919add1d87bb",
+            "ios": "1:503224830946:ios:12a3e6705d23edee1d87bb",
+            "macos": "1:503224830946:ios:12a3e6705d23edee1d87bb",
+            "web": "1:503224830946:web:12f183a983fb46571d87bb",
+            "windows": "1:503224830946:web:dfbaed2127104db71d87bb"
+          }
+        }
+      }
+    }
+  }
+}
