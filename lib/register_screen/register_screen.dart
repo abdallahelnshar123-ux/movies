@@ -36,7 +36,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.transparentColor,
-        title: Text('Register', style: AppStyles.robotoRegular16Yellow),
+        title: Text('Register'.tr(), style: AppStyles.robotoRegular16Yellow),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -54,7 +54,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     children: [
                       AvatarCarousel(),
                       Text(
-                        'Avatar',
+                        'Avatar'.tr(),
                         style: AppStyles.robotoRegular16White,
                         textAlign: TextAlign.center,
                       ),
@@ -71,7 +71,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   controller: nameController,
                   validator: (text){
                     if(text == null || text.trim().isEmpty){
-                      return 'Please Enter your name';
+                      return 'Please Enter your name'.tr();
                     }
                     return null;
                   },
@@ -79,7 +79,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     AppAssets.nameIcon,
                     fit: BoxFit.none,
                   ),
-                  hintText: "Name",
+                  hintText: "Name".tr(),
                   hintStyle: AppStyles.robotoRegular16White,
                   filled: true,
                   fillColor: AppColors.darkGrayColor,
@@ -91,7 +91,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     fontSize: 12,
                     fontWeight: FontWeight.w400,
                   ),
-                  controller: nameController,
+                  controller: emailController,
                   validator: (text) {
                     if (text == null || text
                         .trim()
@@ -102,7 +102,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
                     ).hasMatch(text); //or emailController
                     if (!emailValid) {
-                      return 'please enter valid email';
+                      return 'please enter valid email'.tr();
                     }
                     return null;
                   } ,
@@ -110,7 +110,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     "assets/icons/email-icon.svg",
                     fit: BoxFit.none,
                   ),
-                  hintText: "Email",
+                  hintText: "Email".tr(),
                   hintStyle: AppStyles.robotoRegular16White,
                   filled: true,
                   fillColor: AppColors.darkGrayColor,
@@ -126,17 +126,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     if (text == null || text
                         .trim()
                         .isEmpty) {
-                      return 'please Enter password';
+                      return 'please Enter password'.tr();
                     }
                     if (text.length < 6) {
-                      return 'Password should be at least 6 char';
+                      return 'Password should be at least 6 char'.tr();
                     }
 
                     return null;
                   },
                   controller: passwordController,
                   hintStyle: AppStyles.robotoRegular16White,
-                  hintText: "Password",
+                  hintText: "Password".tr(),
                   prefixIcon: SvgPicture.asset(
                     AppAssets.passwordIcon,
                     fit: BoxFit.none,
@@ -171,15 +171,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     if (text == null || text
                         .trim()
                         .isEmpty) {
-                      return 'please Enter Re-Password';
+                      return 'please Enter Re-Password'.tr();
                     }
                     if (text != passwordController.text) {
-                      return "Re-password doesn't match password";
+                      return "Re-password doesn't match password".tr();
                     }
                     return null;
                   },
                   controller: confPasswordController,
-                  hintText: "Confirm Password",
+                  hintText: "Confirm Password".tr(),
                   hintStyle: AppStyles.robotoRegular16White,
                   prefixIcon: SvgPicture.asset(
                     AppAssets.passwordIcon,
@@ -225,7 +225,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     AppAssets.phoneIcon,
                     fit: BoxFit.none,
                   ),
-                  hintText: "Phone Number",
+                  hintText: "Phone Number".tr(),
                   hintStyle: AppStyles.robotoRegular16White,
                   filled: true,
                   fillColor: AppColors.darkGrayColor,
@@ -241,7 +241,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         decorationColor: AppColors.yellowColor,
                         onPressed: register,
                         child: Text(
-                          'Create Account',
+                          'Create Account'.tr(),
                           style: AppStyles.robotoRegular20Black,
                         ),
                       ),
@@ -249,11 +249,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       Text.rich(
                         textAlign: TextAlign.center,
                         TextSpan(
-                          text: "Already Have Account? ",
+                          text: "Already Have Account? ".tr(),
                           style: AppStyles.robotoRegular14White,
                           children: [
                             TextSpan(
-                              text: "Login",
+                              text: "Login".tr(),
                               style: AppStyles.robotoRegular14Yellow,
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
