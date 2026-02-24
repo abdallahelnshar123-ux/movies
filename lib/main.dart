@@ -44,7 +44,9 @@ class MyApp extends StatelessWidget {
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: context.locale,
-      initialRoute: isSeen ? AppRoutes.loginRouteName : AppRoutes.onboardingRouteName,
+      initialRoute: AppRoutes.homeRouteName,
+
+      // isSeen ? AppRoutes.loginRouteName : AppRoutes.onboardingRouteName,
       routes: {
         AppRoutes.homeRouteName: (context) => HomeScreen(),
         AppRoutes.onboardingRouteName: (context) => OnboardingScreen(),
