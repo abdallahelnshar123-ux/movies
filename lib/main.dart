@@ -15,26 +15,23 @@ import 'firebase_options.dart';
 
 bool isSeen = false;
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   isSeen = await MyPreferences.isOnboardingCompleted();
   runApp(
-  EasyLocalization(
+    EasyLocalization(
       supportedLocales: const [Locale('en'), Locale('ar')],
       path: 'assets/translations',
       fallbackLocale: const Locale('en'),
       startLocale: const Locale('en'),
-    child: MyApp(),
-  ),
+      child: MyApp(),
+    ),
   );
 }
 
 class MyApp extends StatelessWidget {
-
   MyApp({super.key});
 
   @override
@@ -44,7 +41,9 @@ class MyApp extends StatelessWidget {
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: context.locale,
-      initialRoute: isSeen ? AppRoutes.loginRouteName : AppRoutes.onboardingRouteName,
+      initialRoute: isSeen
+          ? AppRoutes.loginRouteName
+          : AppRoutes.onboardingRouteName,
       routes: {
         AppRoutes.homeRouteName: (context) => HomeScreen(),
         AppRoutes.onboardingRouteName: (context) => OnboardingScreen(),

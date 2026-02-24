@@ -5,6 +5,9 @@ import 'app_styles.dart';
 
 class AppTheme {
   static ThemeData darkTheme = ThemeData(
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        type: BottomNavigationBarType.fixed
+    ),
     scaffoldBackgroundColor: AppColors.blackColor,
     appBarTheme: AppBarTheme(
       backgroundColor: AppColors.blackColor,
