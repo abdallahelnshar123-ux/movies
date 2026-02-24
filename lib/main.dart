@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:movies/forget_password_screen/forget_password_screen.dart';
 import 'package:movies/home_screen/home_screen.dart';
+import 'package:movies/home_screen/tabs/home_tab/home_tab.dart';
 import 'package:movies/login_screen/login_screen.dart';
 import 'package:movies/onboarding_screen/onBoardingSharedPrefrance.dart';
 import 'package:movies/onboarding_screen/onboarding_screen.dart';
@@ -38,7 +39,8 @@ class MyApp extends StatelessWidget {
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: context.locale,
-      initialRoute: isSeen ? AppRoutes.loginRouteName : AppRoutes.onboardingRouteName,
+      // initialRoute: isSeen ? AppRoutes.loginRouteName : AppRoutes.onboardingRouteName,
+      initialRoute: AppRoutes.homeTabRouteName,
       routes: {
         AppRoutes.homeRouteName: (context) => HomeScreen(),
         AppRoutes.onboardingRouteName: (context) => OnboardingScreen(),
@@ -46,6 +48,7 @@ class MyApp extends StatelessWidget {
         AppRoutes.registerRouteName: (context) => RegisterScreen(),
         AppRoutes.updateProfileRouteName: (context) => UpdateProfileScreen(),
         AppRoutes.forgetPasswordRouteName: (context) => ForgetPasswordScreen(),
+        AppRoutes.homeTabRouteName: (context) => HomeTab(),
       },
       themeMode: ThemeMode.dark,
       darkTheme: AppTheme.darkTheme,
