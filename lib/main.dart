@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:movies/forget_password_screen/forget_password_screen.dart';
 import 'package:movies/home_screen/home_screen.dart';
+import 'package:movies/home_screen/tabs/home_tab/home_tab.dart';
 import 'package:movies/login_screen/login_screen.dart';
 import 'package:movies/onboarding_screen/onBoardingSharedPrefrance.dart';
 import 'package:movies/onboarding_screen/onboarding_screen.dart';
@@ -19,9 +20,6 @@ bool isSeen = false;
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
   isSeen = await MyPreferences.isOnboardingCompleted();
   runApp(
   EasyLocalization(
@@ -47,12 +45,13 @@ class MyApp extends StatelessWidget {
       locale: context.locale,
       initialRoute: isSeen ? AppRoutes.homeRouteName : AppRoutes.onboardingRouteName,
       routes: {
-        AppRoutes.homeRouteName: (context) => HomeTab(),
+        AppRoutes.homeRouteName: (context) => HomeScreen(),
         AppRoutes.onboardingRouteName: (context) => OnboardingScreen(),
         AppRoutes.loginRouteName: (context) => LoginScreen(),
         AppRoutes.registerRouteName: (context) => RegisterScreen(),
         AppRoutes.updateProfileRouteName: (context) => UpdateProfileScreen(),
         AppRoutes.forgetPasswordRouteName: (context) => ForgetPasswordScreen(),
+        AppRoutes.homeTabRouteName: (context) => HomeTab(),
       },
       themeMode: ThemeMode.dark,
       darkTheme: AppTheme.darkTheme,
