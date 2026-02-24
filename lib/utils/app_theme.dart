@@ -7,12 +7,13 @@ import 'app_styles.dart';
 class AppTheme {
   static ThemeData darkTheme = ThemeData(
     scaffoldBackgroundColor: AppColors.blackColor,
-    appBarTheme: AppBarThemeData(
-      backgroundColor: AppColors.blackColor
-  ),
-    bottomSheetTheme: BottomSheetThemeData(
-      backgroundColor: Colors.transparent
-    )
+    appBarTheme: AppBarTheme(
+      backgroundColor: AppColors.blackColor,
+      elevation: 0,
+      centerTitle: true,
+      iconTheme: IconThemeData(color: AppColors.yellowColor),
+      titleTextStyle: AppStyles.robotoRegular16Yellow,
+    ),
+    bottomSheetTheme: BottomSheetThemeData(backgroundColor: Colors.transparent),
   );
-
 }

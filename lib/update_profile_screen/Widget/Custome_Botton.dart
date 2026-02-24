@@ -13,14 +13,17 @@ class CustomButton extends StatelessWidget {
     var size  = MediaQuery.of(context).size;
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-      padding: EdgeInsets.symmetric(horizontal:size.width*0.35 ,vertical: size.height*0.015),
+      padding: EdgeInsets.symmetric(horizontal:size.width*0.32 ,vertical: size.height*0.015),
         backgroundColor: backgroundColor,
         shape:RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15)
         )
       ),
         onPressed: () {},
-        child: Text(text , style: style,)
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+            child: Text(text , style: style, maxLines: 1,)
+        )
     );
   }
 }

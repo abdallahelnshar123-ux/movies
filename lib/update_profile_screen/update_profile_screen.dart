@@ -135,6 +135,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                 backgroundColor: AppColors.redColor,
               ),
               CustomButton(
+
                 text: 'Update Account',
                 style: AppStyles.robotoRegular16DarkGray.copyWith(
                   fontSize: 16,
