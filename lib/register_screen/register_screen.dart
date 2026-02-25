@@ -1,16 +1,26 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:movies/model/my_user.dart';
 import 'package:movies/register_screen/avatar_carousel.dart';
 import 'package:movies/utils/app_assets.dart';
 import 'package:movies/utils/app_colors.dart';
 import 'package:movies/utils/app_routes.dart';
 import 'package:movies/utils/app_styles.dart';
+import 'package:movies/utils/dialog_utils.dart';
+import 'package:movies/utils/firebase_utils.dart';
 import 'package:movies/utils/screen_size.dart';
 import 'package:movies/widgets/change_language_item.dart';
 import 'package:movies/widgets/custom_elevated_button.dart';
 import 'package:movies/widgets/custom_text_form_field.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/avatar_provider.dart';
+import '../providers/user_provider.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -29,6 +39,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool passIsObscure = true;
   bool confPassIsObscure = true;
   bool iseSelected = true;
+
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +127,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   fillColor: AppColors.darkGrayColor,
                 ),
                 CustomTextFormField(
-                  keyboardType: TextInputType.numberWithOptions(),
+                  keyboardType: TextInputType.text,
                   errorStyle: TextStyle(
                     color: AppColors.redColor,
                     fontSize: 12,
@@ -161,7 +172,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
                 CustomTextFormField(
-                  keyboardType: TextInputType.numberWithOptions(),
+                  keyboardType: TextInputType.text,
                   errorStyle: TextStyle(
                     color: AppColors.redColor,
                     fontSize: 12,
@@ -212,15 +223,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     fontWeight: FontWeight.w400,
                   ),
                   controller: phoneController,
-                  validator:(text) {
-                    if (text == null || text
-                        .trim()
-                        .isEmpty) {
-                      return 'please Enter your phone number'.tr();
-                    }
-
-                    return null;
-                  } ,
+                  validator:phoneValidator,
                   prefixIcon: SvgPicture.asset(
                     AppAssets.phoneIcon,
                     fit: BoxFit.none,
@@ -275,9 +278,87 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
     );
   }
-   void register(){
-    if(formKey.currentState?.validate() == true){
+   Future<void> register() async {
+     final avatarIndex = context.read<AvatarProvider>().selectedAvatarIndex;
+
+     if(formKey.currentState?.validate() == true){
       //todo: register
+      //todo: show loading
+      DialogUtils.showLoading(context: context, loadingMessage: 'Loading...');
+      try {
+        final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailController.text,
+          password: passwordController.text,
+        );
+        //todo: hide loading
+        DialogUtils.hideLoading(context: context);
+
+        //todo: add user to firebase firestore
+        MyUser myUser = MyUser(
+            id: credential!.user!.uid,
+            email: emailController.text,
+            name: nameController.text,
+            phone: phoneController.text,
+            avatarIndex: avatarIndex);
+
+        await FirebaseUtils.addUserToFireStore(myUser);
+
+        //todo: add user in provider
+        var userProvider = Provider.of<UserProvider>(context, listen: false);
+        userProvider.updateUser(myUser);
+
+        // await FirebaseFirestore.instance
+        //     .collection('users')
+        //     .doc(credential!.user!.uid)
+        //     .set({
+        //   'email':emailController.text.trim(),
+        //   'name': nameController.text.trim(),
+        //   'phone': phoneController.text.trim(),
+        //   'avatarIndex': avatarIndex,
+        // });
+
+
+        //todo: show message
+        DialogUtils.showMessage(context: context, message: 'Register Successfully', posActionName: 'ok',posAction: (){
+          Navigator.of(context).pushNamed(AppRoutes.loginRouteName);
+        });
+
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'weak-password') {
+          //todo: hide loading
+          DialogUtils.hideLoading(context: context);
+          //todo: show message
+          DialogUtils.showMessage(context: context,
+              message: 'The password provided is too weak.',title: 'Error',posActionName: 'ok');
+
+        } else if (e.code == 'email-already-in-use') {
+          //todo: hide loading
+          DialogUtils.hideLoading(context: context);
+          //todo: show message
+          DialogUtils.showMessage(context: context, message: 'The account already exists for that email.',title: 'Error',posActionName: 'ok');
+
+        }
+      } catch (e) {
+        //todo: hide loading
+        DialogUtils.hideLoading(context: context);
+        //todo: show message
+        DialogUtils.showMessage(context: context, message: '$e',title: 'Error',posActionName: 'ok');
+
+      }
+
     }
+
+
    }
+  String? phoneValidator(String? text) {
+    if (text == null || text.trim().isEmpty) {
+      return 'please enter phone number';
+    }
+    final phone = text.trim();
+    final basic = RegExp(r'^\+\d{8,15}$');
+    if (!basic.hasMatch(phone)) {
+      return 'Enter a valid phone number e.g.(+1234567890)';    }
+
+    return null;
+  }
 }

@@ -7,6 +7,8 @@ import 'package:movies/login_screen/login_screen.dart';
 import 'package:movies/onboarding_screen/onBoardingSharedPrefrance.dart';
 import 'package:movies/onboarding_screen/onboarding_screen.dart';
 import 'package:movies/providers/app_language_provider.dart';
+import 'package:movies/providers/avatar_provider.dart';
+import 'package:movies/providers/user_provider.dart';
 import 'package:movies/register_screen/register_screen.dart';
 import 'package:movies/update_profile_screen/update_profile_screen.dart';
 import 'package:movies/utils/app_routes.dart';
@@ -37,7 +39,18 @@ void main() async{
       startLocale: Locale(langProvider.appLanguage),
       child: MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (_) => langProvider),
+          ChangeNotifierProvider(
+              create: (_) => langProvider,
+
+          ),
+          ChangeNotifierProvider(
+            create: (_) => AvatarProvider(),
+
+          ),
+          ChangeNotifierProvider(
+            create: (_) =>UserProvider()
+
+          ),
         ],
         child: MyApp(),
       ),

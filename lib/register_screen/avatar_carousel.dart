@@ -1,20 +1,26 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movies/providers/avatar_provider.dart';
 import 'package:movies/utils/app_assets.dart';
-import 'package:movies/utils/app_colors.dart';
 import 'package:movies/utils/screen_size.dart';
+import 'package:provider/provider.dart';
 
 class AvatarCarousel extends StatefulWidget {
-  const AvatarCarousel({super.key});
+  final ValueChanged<int>? onChanged;
+  final int initialIndex; // اختياري
+
+  const AvatarCarousel({
+    super.key,
+    this.onChanged,
+    this.initialIndex = 0,
+  });
 
   @override
   State<AvatarCarousel> createState() => _AvatarCarouselState();
 }
 
 class _AvatarCarouselState extends State<AvatarCarousel> {
-  // todo: Start from a large page index to allow infinite scrolling left/right
   static const int _initialPage = 1000;
-
-  String? selectedAvatar;
 
   final List<String> avatars = [
     AppAssets.avatarImage1,
@@ -31,15 +37,17 @@ class _AvatarCarouselState extends State<AvatarCarousel> {
   late final PageController _controller;
 
   double _page = _initialPage.toDouble();
+  int selectedIndex = 0;
 
   @override
   void initState() {
     super.initState();
 
-    // todo: Initialize controller with viewportFraction and a big initialPage.
+    selectedIndex = widget.initialIndex.clamp(0, avatars.length - 1);
+
     _controller = PageController(
       viewportFraction: 0.35,
-      initialPage: _initialPage,
+      initialPage: _initialPage + selectedIndex, // ✅ يخلي البداية على الافاتار المختار
     );
 
     _controller.addListener(() {
@@ -47,54 +55,49 @@ class _AvatarCarouselState extends State<AvatarCarousel> {
         _page = _controller.page ?? _initialPage.toDouble();
       });
     });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      widget.onChanged?.call(selectedIndex);
+    });
   }
 
   @override
   void dispose() {
-    // todo: Always dispose controllers to prevent memory leaks.
     _controller.dispose();
     super.dispose();
   }
 
-
-  // todo: Circular distance so scaling stays smooth when wrapping from last -> first.
-  //          Example: distance between 0 and 8 in a list of 9 should be 1 (wrap-around),
-  //          not 8.
   double _circularDistance(double a, double b, int n) {
-    final d = (a - b).abs();    /// 8 - 1 = -7  = 7
+    final d = (a - b).abs();
     return d > n / 2 ? n - d : d;
   }
 
   @override
   Widget build(BuildContext context) {
+    var avatarProvider = Provider.of<AvatarProvider>(context);
     final n = avatars.length;
 
     return SizedBox(
-      height:context.height*0.180 ,
+      height: context.height * 0.180,
       child: PageView.builder(
         controller: _controller,
-
         itemBuilder: (context, index) {
           final realIndex = index % n;
-          final isSelected = selectedAvatar == avatars[realIndex];
 
+          final isSelected = avatarProvider.selectedAvatarIndex == realIndex;
           final realPage = _page % n;
-
           final distance = _circularDistance(realPage, realIndex.toDouble(), n);
 
           final scale = isSelected
               ? 1.1
-              : (1 - (distance * 0.35)).clamp(0.75, 1.05); //0.8
+              : (1 - (distance * 0.35)).clamp(0.75, 1.05);
 
           return Center(
             child: Transform.scale(
               scale: scale,
               child: GestureDetector(
                 onTap: () {
-                  setState(() {
-                    selectedAvatar = avatars[realIndex];
-                  });
-
+                  context.read<AvatarProvider>().changeAvatar(realIndex);
 
                   _controller.animateToPage(
                     index,
@@ -103,12 +106,10 @@ class _AvatarCarouselState extends State<AvatarCarousel> {
                   );
                 },
                 child: Container(
-
                   width: context.width * 0.395,
                   height: context.height * 0.14,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-
                     image: DecorationImage(
                       image: AssetImage(avatars[realIndex]),
                       fit: BoxFit.cover,
