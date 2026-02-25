@@ -1,6 +1,8 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:movies/Api/Api_manager.dart';
+import 'package:movies/Api/model/movie_model.dart';
 import 'package:movies/utils/app_assets.dart';
 import 'package:movies/utils/app_colors.dart';
 import 'package:movies/utils/app_routes.dart';
@@ -16,102 +18,227 @@ class HomeTab extends StatefulWidget {
 
 class _HomeTabState extends State<HomeTab> {
   int currentIndex = 0;
- List<String> moviesList = [
-   AppAssets.card1Image,
-   AppAssets.card2Image,
-   AppAssets.card3Image,
-   AppAssets.card4Image,
- ];
+  final MovieModel movie = MovieModel();
+  late Future<MovieModel> moviesFuture;
+  @override
+  void initState() {
+    super.initState();
+    moviesFuture = ApiManager.getMovies();
+  }
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children:[
-        Image.asset(moviesList[currentIndex],
-        fit: BoxFit.cover,
-        height: 600,  ),
-        BackdropFilter(filter: ImageFilter.blur(
-          sigmaX: 7,
-          sigmaY: 2
-        ),
-        child: Container(
-          color: Colors.black.withOpacity(0.6),
-        ),
-        ),
-        Expanded(
-          child: SingleChildScrollView(
-            child: Column(
-              spacing:context.height*0.02,
-            children: [
-              Image.asset(AppAssets.availableNowImage),
-              CarouselSlider.builder(
-                  itemCount: moviesList.length,
-                  itemBuilder: (context, index, realIndex) {
-                    return Container(
-                      margin: EdgeInsets.symmetric(
-                          horizontal: context.width*0.01
-                      ),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          image: DecorationImage(
-                              image: AssetImage(moviesList[index]),
-                              fit: BoxFit.cover)
-                      ),
-                    );
-                  },
-                  options: CarouselOptions(
-                      height: 400,
-                      enlargeCenterPage: true,
-                      viewportFraction: 0.7,
-                      onPageChanged: (index, reason){
-                        setState(() {
-                          currentIndex = index ;
-                        });
-                      }
-                  )
+    return FutureBuilder<MovieModel>(
+      future: moviesFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+            child: SizedBox(
+              height: 20,
+              width: 20,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                color: AppColors.whiteColor,
               ),
-              Image.asset(AppAssets.watchNowImage),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: context.width*0.05,
+            ),
+          );
+        } else if (snapshot.hasError) {
+          return Text("Error snapshot");
+        }
+        if (snapshot.data?.status == "error") {
+          print("error status ");
+          return Text("Error status");
+        }
+        var moviesList = snapshot.data?.data?.movies ?? [];
+        if (moviesList.isEmpty) {
+          return Center(
+            child: Text(
+              "No Sources Found",
+              style: Theme.of(context).textTheme.headlineLarge,
+            ),
+          );
+        }
+        return Scaffold(
+          body: Stack(
+            children: [
+              Positioned.fill(
+                child: Image.network(
+                  moviesList[currentIndex].largeCoverImage ?? "",
+                  fit: BoxFit.cover,
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              ),
+              Positioned.fill(
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 7, sigmaY: 7),
+                  child: Container(
+                    color: Color(0xB3000000),
+                  ),
+                ),
+              ),
+
+              SingleChildScrollView(
+                child: Column(
                   children: [
-                    Text('Action',style: AppStyles.robotoRegular20White,),
-                    Row(
-                      children: [
-                        TextButton(onPressed: (){
-                          // todo: Navigator to movieDetailsScreen
+                    SizedBox(height: context.height * 0.03),
+                    Image.asset(AppAssets.availableNowImage),
+                    SizedBox(height: context.height * 0.03),
+                    CarouselSlider.builder(
+                      itemCount: moviesList.length,
+                      itemBuilder: (context, index, realIndex) {
+                        return Stack(
+                        children: [
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: context.width * 0.01),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              image: DecorationImage(
+                                image: NetworkImage(
+                                  moviesList[index].largeCoverImage ?? "",
+                                ),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            top: context.height * 0.02,
+                            left: context.width * 0.03,
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              decoration: BoxDecoration(
+                                color: Color(0x66000000),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    moviesList[index].rating?.toString() ?? "unrated",
+                                    style: AppStyles.robotoRegular16White,
+                                  ),
+                                  SizedBox(width: context.width * 0.01),
+                                  Icon(
+                                    Icons.star,
+                                    color: Colors.amber,
+                                    size: 18,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                        );
+                      },
+                      options: CarouselOptions(
+                        height: context.height * 0.45,
+                        enlargeCenterPage: true,
+                        viewportFraction: 0.7,
+                        onPageChanged: (index, reason) {
+                          setState(() {
+                            currentIndex = index;
+                          });
                         },
-                            child: Text('See More',
-                              style: AppStyles.robotoRegular16Yellow,)),
-                        Icon(Icons.arrow_forward_outlined,size: 18,
-                          color: AppColors.yellowColor,)
-                      ],
-                    )
+                      ),
+                    ),
+
+                    SizedBox(height: context.height * 0.02),
+                    Image.asset(AppAssets.watchNowImage),
+                    SizedBox(height: context.height * 0.02),
+
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: context.width * 0.03),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Action",
+                            style: AppStyles.robotoRegular20White,
+                          ),
+                          Row(
+                            children: [
+                              TextButton(
+                                onPressed: () {},
+                                child: Text(
+                                  "See More",
+                                  style: AppStyles.robotoRegular16Yellow,
+                                ),
+                              ),
+                              Icon(
+                                Icons.arrow_forward_outlined,
+                                color: AppColors.yellowColor,
+                                size: 18,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    SizedBox(height: context.height * 0.015),
+
+                    /// Horizontal Movies List
+                    SizedBox(
+                      height: context.height * 0.15,
+                      child: ListView.builder(
+                        padding: EdgeInsets.only(left: context.width * 0.02),
+                        scrollDirection: Axis.horizontal,
+                        itemCount: moviesList.length,
+                        itemBuilder: (context, index) {
+                          return Container(
+                            margin: EdgeInsets.only(right: context.width * 0.03),
+                            width: context.width * 0.25,
+                            child: Stack(
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: Image.network(
+                                    moviesList[index].largeCoverImage ?? "",
+                                    fit: BoxFit.cover,
+                                    width: context.width * 0.25,
+                                    height: context.height * 0.15,
+                                  ),
+                                ),
+                                Positioned(
+                                  top: 6,
+                                  left: 6,
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                                    decoration: BoxDecoration(
+                                      color:Color(0xB3000000),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(
+                                          moviesList[index].rating
+                                              ?.toStringAsFixed(1) ??
+                                              "unrated",
+                                          style: AppStyles.robotoRegular14White,
+                                        ),
+                                        SizedBox(width: 3),
+                                        Icon(
+                                          Icons.star,
+                                          color: Colors.amber,
+                                          size: 12,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+
+                    SizedBox(height: 30),
                   ],
                 ),
               ),
-               Container(
-                 height: 150,
-                 padding: EdgeInsets.only(left: context.width*0.04),
-                 child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            image: DecorationImage(image: AssetImage(moviesList[index]))
-                        ),
-                        width: 115,
-                      );
-                    },
-                    itemCount: moviesList.length),
-               ),
             ],
-                  ),
           ),
-        ),]
+        );
+      },
     );
   }
 }
