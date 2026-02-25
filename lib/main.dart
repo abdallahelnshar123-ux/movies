@@ -12,6 +12,7 @@ import 'package:movies/utils/app_routes.dart';
 import 'package:movies/utils/app_theme.dart';
 
 import 'firebase_options.dart';
+import 'home_screen/tabs/home_tab/home_tab.dart';
 
 bool isSeen = false;
 
@@ -44,9 +45,9 @@ class MyApp extends StatelessWidget {
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: context.locale,
-      initialRoute: isSeen ? AppRoutes.loginRouteName : AppRoutes.onboardingRouteName,
+      initialRoute: isSeen ? AppRoutes.homeRouteName : AppRoutes.onboardingRouteName,
       routes: {
-        AppRoutes.homeRouteName: (context) => HomeScreen(),
+        AppRoutes.homeRouteName: (context) => HomeTab(),
         AppRoutes.onboardingRouteName: (context) => OnboardingScreen(),
         AppRoutes.loginRouteName: (context) => LoginScreen(),
         AppRoutes.registerRouteName: (context) => RegisterScreen(),
