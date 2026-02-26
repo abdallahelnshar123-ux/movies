@@ -1,6 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:movies/cubit/auth_view_model.dart';
 
 import '../../utils/app_assets.dart';
 import '../../utils/app_colors.dart';
@@ -103,6 +105,7 @@ class _LoginUiState extends State<LoginUi> {
                   decorationColor: AppColors.yellowColor,
                   onPressed: () {
                     //todo login
+                    context.read<AuthCubit>().login(, password);
                   },
                   child: Text(
                     "login".tr(),

@@ -1,25 +1,32 @@
 import 'package:bloc/bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:movies/model/my_user.dart';
+import 'package:movies/utils/firebase_utils.dart';
 
-import '../model/user_model.dart';
 import 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   AuthCubit() : super(AuthInitial());
 
-  UserModel? currentUser;
+  MyUser? currentUser;
 
   Future<void> login(String email, String password) async {
     try {
       emit(AuthLoading());
+      final credential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      final response = await FirebaseUtils.readUserFromFireStore(
+          credential.user?.uid ?? '');
 
-      final response = await ApiManager.login(email, password);
-
-      final user = UserModel(
-        id: response['id'],
-        name: response['name'],
-        email: response['email'],
-        image: response['image'],
-        phone: response['phone'],
+      final user = MyUser(
+        id: response!.id,
+        name: response.name,
+        email: response.email,
+        avatarIndex: response.avatarIndex,
+        phone: response.phone,
       );
 
       currentUser = user;

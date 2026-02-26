@@ -1,14 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movies/login_screen/widget/Login_ui.dart';
+
+import '../cubit/auth_state.dart';
+import '../cubit/auth_view_model.dart';
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+  LoginScreen({super.key});
 
   GlobalKey<FormState> formState = GlobalKey<FormState>();
 
   // bool isObscure = true;
   @override
   Widget build(BuildContext context) {
-    return;
+    return BlocConsumer<AuthCubit, AuthState>(
+      listener: (context, state) {
+        if (state is AuthAuthenticated) {
+          Navigator.pushReplacementNamed(context, '/home');
+        }
+
+        if (state is AuthError) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(state.message)));
+        }
+      },
+      builder: (context, state) {
+        if (state is AuthLoading) {
+          return Center(child: CircularProgressIndicator());
+        }
+
+        return LoginUi();
+      },
+    );
 
     //   Scaffold(
     //   body: SingleChildScrollView(
