@@ -20,7 +20,9 @@ class LoginUi extends StatefulWidget {
 }
 
 class _LoginUiState extends State<LoginUi> {
-  GlobalKey<FormState> formState = GlobalKey<FormState>();
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   bool isObscure = true;
 
@@ -36,13 +38,26 @@ class _LoginUiState extends State<LoginUi> {
             vertical: context.height * 0.03,
           ),
           child: Form(
-            key: formState,
+            key: formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               spacing: context.height * 0.02,
               children: [
                 Image.asset(AppAssets.appLogo, height: context.height * 0.3),
                 CustomTextFormField(
+                  validator: (text) {
+                    if (text?.trim().isEmpty ?? true) {
+                      return context.tr('please_enter_email');
+                    }
+                    final bool emailValid = RegExp(
+                      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
+                    ).hasMatch(text!);
+                    if (!emailValid) {
+                      return context.tr('please_enter_valid_email');
+                    }
+                    return null;
+                  },
+                  controller: emailController,
                   prefixIcon: SvgPicture.asset(
                     "assets/icons/email-icon.svg",
                     fit: BoxFit.none,
@@ -53,6 +68,16 @@ class _LoginUiState extends State<LoginUi> {
                   fillColor: AppColors.darkGrayColor,
                 ),
                 CustomTextFormField(
+                  validator: (text) {
+                    if (text?.trim().isEmpty ?? true) {
+                      return context.tr('please_enter_password');
+                    }
+                    if (text!.length < 6) {
+                      return context.tr('password_must_be_at_least');
+                    }
+                    return null;
+                  },
+                  controller: passwordController,
                   prefixIcon: SvgPicture.asset(
                     "assets/icons/password_icon.svg",
                     fit: BoxFit.none,
@@ -104,8 +129,13 @@ class _LoginUiState extends State<LoginUi> {
                 CustomElevatedButton(
                   decorationColor: AppColors.yellowColor,
                   onPressed: () {
+                    if (formKey.currentState?.validate() == true) {
+                      context.read<AuthCubit>().login(
+                        emailController.text,
+                        passwordController.text,
+                      );
+                    }
                     //todo login
-                    context.read<AuthCubit>().login(, password);
                   },
                   child: Text(
                     "login".tr(),
