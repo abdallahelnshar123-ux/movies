@@ -1,6 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movies/cubit/auth_view_model.dart';
 import 'package:movies/forget_password_screen/forget_password_screen.dart';
 import 'package:movies/home_screen/home_screen.dart';
 import 'package:movies/login_screen/login_screen.dart';
@@ -20,13 +22,17 @@ void main() async {
   await EasyLocalization.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   isSeen = await MyPreferences.isOnboardingCompleted();
+
   runApp(
-    EasyLocalization(
-      supportedLocales: const [Locale('en'), Locale('ar')],
-      path: 'assets/translations',
-      fallbackLocale: const Locale('en'),
-      startLocale: const Locale('en'),
-      child: MyApp(),
+    BlocProvider(
+      create: (context) => AuthCubit(),
+      child: EasyLocalization(
+        supportedLocales: const [Locale('en'), Locale('ar')],
+        path: 'assets/translations',
+        fallbackLocale: const Locale('en'),
+        startLocale: const Locale('en'),
+        child: MyApp(),
+      ),
     ),
   );
 }
@@ -41,9 +47,10 @@ class MyApp extends StatelessWidget {
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: context.locale,
-      initialRoute: isSeen
+      initialRoute: AppRoutes.updateProfileRouteName,
+      /*isSeen
           ? AppRoutes.loginRouteName
-          : AppRoutes.onboardingRouteName,
+          : AppRoutes.onboardingRouteName,*/
       routes: {
         AppRoutes.homeRouteName: (context) => HomeScreen(),
         AppRoutes.onboardingRouteName: (context) => OnboardingScreen(),
