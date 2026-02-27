@@ -1,14 +1,14 @@
 import 'dart:ui';
 
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:movies/Api/Api_manager.dart';
 import 'package:movies/Api/model/movie_model.dart';
 import 'package:movies/utils/app_assets.dart';
 import 'package:movies/utils/app_colors.dart';
-import 'package:movies/utils/app_routes.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:movies/utils/app_styles.dart';
 import 'package:movies/utils/screen_size.dart';
+
 class HomeTab extends StatefulWidget {
   const HomeTab({super.key});
 
@@ -20,11 +20,13 @@ class _HomeTabState extends State<HomeTab> {
   int currentIndex = 0;
   final MovieModel movie = MovieModel();
   late Future<MovieModel> moviesFuture;
+
   @override
   void initState() {
     super.initState();
     moviesFuture = ApiManager.getMovies();
   }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<MovieModel>(
@@ -69,68 +71,72 @@ class _HomeTabState extends State<HomeTab> {
               Positioned.fill(
                 child: BackdropFilter(
                   filter: ImageFilter.blur(sigmaX: 7, sigmaY: 7),
-                  child: Container(
-                    color: Color(0xB3000000),
-                  ),
+                  child: Container(color: Color(0xB3000000)),
                 ),
               ),
 
               SingleChildScrollView(
                 child: Column(
                   children: [
-                    SizedBox(height: context.height * 0.03),
+                    SizedBox(height: context.height * 0.05),
                     Image.asset(AppAssets.availableNowImage),
                     SizedBox(height: context.height * 0.03),
                     CarouselSlider.builder(
                       itemCount: moviesList.length,
                       itemBuilder: (context, index, realIndex) {
                         return Stack(
-                        children: [
-                          Container(
-                            margin: EdgeInsets.symmetric(horizontal: context.width * 0.01),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              image: DecorationImage(
-                                image: NetworkImage(
-                                  moviesList[index].largeCoverImage ?? "",
-                                ),
-                                fit: BoxFit.cover,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.symmetric(
+                                horizontal: context.width * 0.01,
                               ),
-                            ),
-                          ),
-                          Positioned(
-                            top: context.height * 0.02,
-                            left: context.width * 0.03,
-                            child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                               decoration: BoxDecoration(
-                                color: Color(0x66000000),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    moviesList[index].rating?.toString() ?? "unrated",
-                                    style: AppStyles.robotoRegular16White,
+                                borderRadius: BorderRadius.circular(20),
+                                image: DecorationImage(
+                                  image: NetworkImage(
+                                    moviesList[index].largeCoverImage ?? "",
                                   ),
-                                  SizedBox(width: context.width * 0.01),
-                                  Icon(
-                                    Icons.star,
-                                    color: Colors.amber,
-                                    size: 18,
-                                  ),
-                                ],
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                            Positioned(
+                              top: context.height * 0.02,
+                              left: context.width * 0.03,
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 4,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Color(0x66000000),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      moviesList[index].rating?.toString() ??
+                                          "unrated",
+                                      style: AppStyles.robotoRegular16White,
+                                    ),
+                                    SizedBox(width: context.width * 0.01),
+                                    Icon(
+                                      Icons.star,
+                                      color: Colors.amber,
+                                      size: 22,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
                         );
                       },
                       options: CarouselOptions(
                         height: context.height * 0.45,
                         enlargeCenterPage: true,
-                        viewportFraction: 0.7,
+                        viewportFraction: context.width * 0.0017,
                         onPageChanged: (index, reason) {
                           setState(() {
                             currentIndex = index;
@@ -144,14 +150,13 @@ class _HomeTabState extends State<HomeTab> {
                     SizedBox(height: context.height * 0.02),
 
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: context.width * 0.03),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: context.width * 0.03,
+                      ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            "Action",
-                            style: AppStyles.robotoRegular20White,
-                          ),
+                          Text("Action", style: AppStyles.robotoRegular20White),
                           Row(
                             children: [
                               TextButton(
@@ -183,7 +188,9 @@ class _HomeTabState extends State<HomeTab> {
                         itemCount: moviesList.length,
                         itemBuilder: (context, index) {
                           return Container(
-                            margin: EdgeInsets.only(right: context.width * 0.03),
+                            margin: EdgeInsets.only(
+                              right: context.width * 0.03,
+                            ),
                             width: context.width * 0.25,
                             child: Stack(
                               children: [
@@ -200,9 +207,12 @@ class _HomeTabState extends State<HomeTab> {
                                   top: 6,
                                   left: 6,
                                   child: Container(
-                                    padding: EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 6,
+                                      vertical: 3,
+                                    ),
                                     decoration: BoxDecoration(
-                                      color:Color(0xB3000000),
+                                      color: Color(0xB3000000),
                                       borderRadius: BorderRadius.circular(10),
                                     ),
                                     child: Row(
@@ -210,15 +220,15 @@ class _HomeTabState extends State<HomeTab> {
                                       children: [
                                         Text(
                                           moviesList[index].rating
-                                              ?.toStringAsFixed(1) ??
+                                                  ?.toStringAsFixed(1) ??
                                               "unrated",
-                                          style: AppStyles.robotoRegular14White,
+                                          style: AppStyles.robotoRegular10White,
                                         ),
                                         SizedBox(width: 3),
                                         Icon(
                                           Icons.star,
                                           color: Colors.amber,
-                                          size: 12,
+                                          size: 14,
                                         ),
                                       ],
                                     ),
@@ -231,7 +241,7 @@ class _HomeTabState extends State<HomeTab> {
                       ),
                     ),
 
-                    SizedBox(height: 30),
+                    SizedBox(height: context.height * 0.1),
                   ],
                 ),
               ),

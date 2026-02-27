@@ -216,7 +216,7 @@ class _LoginUiState extends State<LoginUi> {
                         fit: BoxFit.none,
                       ),
                       Text(
-                        "login_with_google".tr(),
+                        "continue_with_google".tr(),
                         style: AppStyles.robotoRegular20Black,
                       ),
                     ],
