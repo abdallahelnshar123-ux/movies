@@ -46,5 +46,25 @@
   "avatar": "الصورة الرمزية",
   "pick_avatar": "اختر صورة رمزية",
 
-  "watch": "مشاهدة"
+  "watch": "مشاهدة",
+
+
+  "Register": "إنشاء حساب",
+  "Avatar": "الصورة الرمزية",
+  "Please Enter your name": "يرجى إدخال الاسم",
+  "Name": "الاسم",
+  "please Enter Email": "يرجى إدخال البريد الإلكتروني",
+  "please enter valid email": "يرجى إدخال بريد إلكتروني صحيح",
+  "Email": "البريد الإلكتروني",
+  "Password": "كلمة المرور",
+  "please Enter Re-Password": "يرجى إعادة إدخال كلمة المرور",
+  "Re-password doesn't match password": "كلمتا المرور غير متطابقتين",
+  "Confirm Password": "تأكيد كلمة المرور",
+  "please Enter password": "يرجى إدخال كلمة المرور",
+  "Password should be at least 6 char": "يجب أن تتكون كلمة المرور من 6 أحرف على الأقل",
+  "please Enter your phone number": "يرجى إدخال رقم الهاتف",
+  "Phone Number": "رقم الهاتف",
+  "Create Account": "إنشاء الحساب",
+  "Already Have Account? ": "هل لديك حساب بالفعل؟ ",
+  "Login": "تسجيل الدخول"
 }
