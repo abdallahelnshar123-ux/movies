@@ -24,8 +24,7 @@
   "password": "كلمة المرور",
   "forget_password": "نسيت كلمة المرور",
   "login": "تسجيل الدخول",
-
-  "dont_have_account": "ليس لديك حساب؟",
+  "don't_have_account": " ليس لديك حساب ؟",
   "create_one": "أنشئ حسابًا",
   "or": "أو",
   "login_with_google": "تسجيل الدخول باستخدام جوجل",
@@ -45,6 +44,12 @@
   "screen_shots": "لقطات الشاشة",
   "avatar": "الصورة الرمزية",
   "pick_avatar": "اختر صورة رمزية",
+  "watch": "مشاهدة",
+  "login_successfully": "تم تسجيل الدخول بنجاح",
+  "success": "نجاح !",
+  "error": "خطأ !",
+  "ok": "حسناً"
+
 
   "watch": "مشاهدة",
 

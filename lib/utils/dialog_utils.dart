@@ -1,33 +1,25 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:movies/utils/app_colors.dart';
 import 'package:movies/utils/app_styles.dart';
 
-import 'app_colors.dart';
-
+// todo: approved ===========================================================
 class DialogUtils {
-  static void showLoading({
-    required BuildContext context,
-    required String loadingMessage,
-  }) {
+  static void showLoading({required BuildContext context}) {
     showDialog(
       barrierDismissible: false,
       context: context,
-      builder: (context) {
-        return AlertDialog(
-          backgroundColor: AppColors.blackColor,
-          content: Row(
-            spacing: 20,
-            children: [
-              CircularProgressIndicator(color: AppColors.yellowColor),
-              Text(
-                loadingMessage,
-                style: AppStyles.robotoRegular16Yellow,
-              ).tr(),
-            ],
-          ),
-        );
-      },
+      builder: (context) => AlertDialog(
+        contentPadding: EdgeInsets.all(20),
+        content: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          spacing: 20,
+          children: [
+            CircularProgressIndicator(color: AppColors.yellowColor),
+            Text(context.tr('loading'), style: AppStyles.robotoRegular14White),
+          ],
+        ),
+      ),
     );
   }
 
@@ -37,63 +29,55 @@ class DialogUtils {
 
   static void showMessage({
     required BuildContext context,
+    String title = '',
     required String message,
-    String? title,
-    String? posActionName,
+    String? posActionText,
     VoidCallback? posAction,
-    String? negActionName,
+    String? negActionText,
     VoidCallback? negAction,
-  })
-  {
+  }) {
     List<Widget> actions = [];
-    if (posActionName != null) {
+    if (posActionText != null) {
       actions.add(
         TextButton(
           onPressed: () {
             Navigator.pop(context);
-            // if(posAction!=null){
-            //   posAction.call();
-            // }
             posAction?.call();
           },
           child: Text(
-            posActionName,
-            style:AppStyles.robotoRegular16Yellow,
-          ).tr(),
+            context.tr(posActionText),
+            style: AppStyles.robotoRegular16Yellow,
+          ),
         ),
       );
     }
-    if (negActionName != null) {
+    if (negActionText != null) {
       actions.add(
         TextButton(
           onPressed: () {
             Navigator.pop(context);
-            // if(posAction!=null){
-            //   posAction.call();
-            // }
             negAction?.call();
           },
           child: Text(
-            negActionName,
+            context.tr(negActionText),
             style: AppStyles.robotoRegular16Yellow,
-          ).tr(),
+          ),
         ),
       );
     }
-
     showDialog(
+      barrierDismissible: false,
       context: context,
-      builder: (context) {
-        return AlertDialog(
-          backgroundColor: AppColors.blackColor,
-          content: Text(
-            message,
-            style:AppStyles.robotoRegular16Yellow ,
-          ).tr(),
-          title: title == null ? null : Text(title, style: AppStyles.robotoRegular16Yellow,).tr(),
-          actions: actions,
-        );
-      },
+      builder: (context) => AlertDialog(
+        contentPadding: EdgeInsets.all(20),
+        content: Text(
+          context.tr(message),
+          style: AppStyles.robotoRegular14White,
+        ),
+        title: Text(context.tr(title), style: AppStyles.robotoRegular16Yellow),
+        actions: actions,
+      ),
     );
+    FocusManager.instance.primaryFocus?.unfocus();
   }
 }
