@@ -35,10 +35,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool iseSelected = true;
   int selectedIndexAvatar = 0;
 
-
   @override
   Widget build(BuildContext context) {
-    GlobalKey<FormState> formState = GlobalKey<FormState>();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.transparentColor,
@@ -58,9 +56,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   padding: EdgeInsets.only(bottom: context.height * 0.02),
                   child: Column(
                     children: [
-                      AvatarCarousel(onChanged: (index){
-                        selectedIndexAvatar = index;
-                      },),
+                      AvatarCarousel(
+                        onChanged: (index) {
+                          selectedIndexAvatar = index;
+                        },
+                      ),
                       Text(
                         'Avatar'.tr(),
                         style: AppStyles.robotoRegular16White,
@@ -70,15 +70,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
                 CustomTextFormField(
-                 keyboardType:TextInputType.text,
+                  keyboardType: TextInputType.text,
                   errorStyle: TextStyle(
                     color: AppColors.redColor,
                     fontSize: 12,
                     fontWeight: FontWeight.w400,
                   ),
                   controller: nameController,
-                  validator: (text){
-                    if(text == null || text.trim().isEmpty){
+                  validator: (text) {
+                    if (text == null || text.trim().isEmpty) {
                       return 'Please Enter your name'.tr();
                     }
                     return null;
@@ -101,9 +101,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   controller: emailController,
                   validator: (text) {
-                    if (text == null || text
-                        .trim()
-                        .isEmpty) {
+                    if (text == null || text.trim().isEmpty) {
                       return 'please Enter Email';
                     }
                     final bool emailValid = RegExp(
@@ -113,7 +111,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       return 'please enter valid email'.tr();
                     }
                     return null;
-                  } ,
+                  },
                   prefixIcon: SvgPicture.asset(
                     "assets/icons/email-icon.svg",
                     fit: BoxFit.none,
@@ -131,9 +129,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     fontWeight: FontWeight.w400,
                   ),
                   validator: (text) {
-                    if (text == null || text
-                        .trim()
-                        .isEmpty) {
+                    if (text == null || text.trim().isEmpty) {
                       return 'please Enter password'.tr();
                     }
                     if (text.length < 6) {
@@ -176,9 +172,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     fontWeight: FontWeight.w400,
                   ),
                   validator: (text) {
-                    if (text == null || text
-                        .trim()
-                        .isEmpty) {
+                    if (text == null || text.trim().isEmpty) {
                       return 'please Enter Re-Password'.tr();
                     }
                     if (text != passwordController.text) {
@@ -220,7 +214,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     fontWeight: FontWeight.w400,
                   ),
                   controller: phoneController,
-                  validator:phoneValidator,
+                  validator: phoneValidator,
                   prefixIcon: SvgPicture.asset(
                     AppAssets.phoneIcon,
                     fit: BoxFit.none,
@@ -232,7 +226,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
 
                 Padding(
-                  padding: EdgeInsets.symmetric(vertical: context.height * 0.02),
+                  padding: EdgeInsets.symmetric(
+                    vertical: context.height * 0.02,
+                  ),
                   child: Column(
                     spacing: context.height * 0.02,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -257,7 +253,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               style: AppStyles.robotoRegular14Yellow,
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
-                                Navigator.of(context).pushNamed(AppRoutes.loginRouteName);
+                                  Navigator.of(
+                                    context,
+                                  ).pushNamed(AppRoutes.loginRouteName);
                                 },
                             ),
                           ],
@@ -275,75 +273,78 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
     );
   }
-   Future<void> register() async {
 
-     if(formKey.currentState?.validate() == true){
+  Future<void> register() async {
+    if (formKey.currentState?.validate() == true) {
       //todo: register
       //todo: show loading
-      DialogUtils.showLoading(context: context, loadingMessage: 'Loading...');
+      DialogUtils.showLoading(context: context);
       try {
-        final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: emailController.text,
-          password: passwordController.text,
-        );
+        final credential = await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(
+              email: emailController.text,
+              password: passwordController.text,
+            );
         //todo: hide loading
-        DialogUtils.hideLoading(context: context);
 
         //todo: add user to firebase firestore
         MyUser myUser = MyUser(
-            id: credential!.user!.uid,
-            email: emailController.text,
-            name: nameController.text,
-            phone: phoneController.text,
-            avatarIndex: selectedIndexAvatar);
+          id: credential.user!.uid,
+          email: emailController.text,
+          name: nameController.text,
+          phone: phoneController.text,
+          avatarIndex: selectedIndexAvatar,
+        );
 
         await FirebaseUtils.addUserToFireStore(myUser);
-
-
-
-        // await FirebaseFirestore.instance
-        //     .collection('users')
-        //     .doc(credential!.user!.uid)
-        //     .set({
-        //   'email':emailController.text.trim(),
-        //   'name': nameController.text.trim(),
-        //   'phone': phoneController.text.trim(),
-        //   'avatarIndex': avatarIndex,
-        // });
-
+        DialogUtils.hideLoading(context: context);
 
         //todo: show message
-        DialogUtils.showMessage(context: context, message: 'Register Successfully', posActionName: 'ok',posAction: (){
-          Navigator.of(context).pushNamed(AppRoutes.loginRouteName);
-        });
-
+        DialogUtils.showMessage(
+          context: context,
+          title: 'success',
+          message: 'Register Successfully',
+          posActionText: 'ok',
+          posAction: () {
+            Navigator.of(context).pushNamed(AppRoutes.loginRouteName);
+          },
+        );
       } on FirebaseAuthException catch (e) {
         if (e.code == 'weak-password') {
           //todo: hide loading
           DialogUtils.hideLoading(context: context);
           //todo: show message
-          DialogUtils.showMessage(context: context,
-              message: 'The password provided is too weak.',title: 'Error',posActionName: 'ok');
-
+          DialogUtils.showMessage(
+            context: context,
+            message: 'The password provided is too weak.',
+            title: 'error',
+            posActionText: 'ok',
+          );
         } else if (e.code == 'email-already-in-use') {
           //todo: hide loading
           DialogUtils.hideLoading(context: context);
           //todo: show message
-          DialogUtils.showMessage(context: context, message: 'The account already exists for that email.',title: 'Error',posActionName: 'ok');
-
+          DialogUtils.showMessage(
+            context: context,
+            message: 'The account already exists for that email.',
+            title: 'error',
+            posActionText: 'ok',
+          );
         }
       } catch (e) {
         //todo: hide loading
         DialogUtils.hideLoading(context: context);
         //todo: show message
-        DialogUtils.showMessage(context: context, message: '$e',title: 'Error',posActionName: 'ok');
-
+        DialogUtils.showMessage(
+          context: context,
+          message: '$e',
+          title: 'error',
+          posActionText: 'ok',
+        );
       }
-
     }
+  }
 
-
-   }
   String? phoneValidator(String? text) {
     if (text == null || text.trim().isEmpty) {
       return 'please enter phone number';
@@ -351,7 +352,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final phone = text.trim();
     final basic = RegExp(r'^\+\d{8,15}$');
     if (!basic.hasMatch(phone)) {
-      return 'Enter a valid phone number e.g.(+1234567890)';    }
+      return 'Enter a valid phone number e.g.(+1234567890)';
+    }
 
     return null;
   }
