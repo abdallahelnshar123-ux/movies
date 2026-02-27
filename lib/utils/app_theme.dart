@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:movies/utils/app_colors.dart';
 
-import 'app_colors.dart';
 import 'app_styles.dart';
 
 class AppTheme {
   static ThemeData darkTheme = ThemeData(
+    dialogTheme: DialogThemeData(
+        backgroundColor: AppColors.darkGrayColor
+    ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
         type: BottomNavigationBarType.fixed
     ),

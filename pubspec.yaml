@@ -46,6 +46,7 @@ dependencies:
   dio: ^5.9.1
   flutter_bloc: ^9.1.1
   bloc: ^9.2.0
+  shared_preferences: ^2.5.4
   cloud_firestore: ^6.1.2
 
 

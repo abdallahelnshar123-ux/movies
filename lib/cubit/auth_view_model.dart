@@ -20,37 +20,42 @@ class AuthCubit extends Cubit<AuthState> {
         email: email,
         password: password,
       );
-      debugPrint('\n \n');
-      debugPrint(credential.user?.uid ?? 'no user' );
 
-      debugPrint('\n \n');
+      debugPrint(credential.user?.uid ?? 'no user');
+
       final userData = await FirebaseUtils.readUserFromFireStore(
-        credential.user?.uid ?? 'TaCucQMGdnSW9WlPed0gfXE552n1',
+        credential.user?.uid ?? '',
       );
-      debugPrint('done' );
-      debugPrint('\n \n');
-      debugPrint(userData.toString() );
 
-      debugPrint('\n \n');
+      if (userData == null) {
+        emit(AuthError('Email not found'));
+        return;
+      }
+
+      debugPrint(userData.toString());
+
       final user = MyUser(
-        id: userData?.id ?? 'no id' ,
-        name: userData?.name??'no id',
-        email: userData?.email??'no id',
-        avatarIndex: userData?.avatarIndex?? 5,
-        phone: userData?.phone??'no id',
+        id: userData.id,
+        name: userData.name,
+        email: userData.email,
+        avatarIndex: userData.avatarIndex,
+        phone: userData.phone,
       );
 
       currentUser = user;
 
-      emit(AuthAuthenticated(user));
+      emit(AuthAuthenticated());
     } catch (e) {
       debugPrint(e.toString());
-      emit(AuthError(e.toString()));
-      // if (e is FirebaseAuthException) {
-      //   emit(AuthError(e.message ?? 'Login failed'));
-      // } else {
-      //   emit(AuthError('Something went wrong'));
-      // }
+
+      if (e is FirebaseAuthException) {
+        if (e.message ==
+            'The supplied auth credential is incorrect, malformed or has expired.') {
+          emit(AuthError('Email or password is incorrect ! '));
+        }
+      } else {
+        emit(AuthError('Something went wrong'));
+      }
     }
   }
 

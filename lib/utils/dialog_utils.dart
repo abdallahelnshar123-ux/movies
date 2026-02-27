@@ -1,8 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
-
 import 'package:flutter/material.dart';
 import 'package:movies/utils/app_colors.dart';
+import 'package:movies/utils/app_styles.dart';
 
+// todo: approved ===========================================================
 class DialogUtils {
   static void showLoading({required BuildContext context}) {
     showDialog(
@@ -15,10 +16,7 @@ class DialogUtils {
           spacing: 20,
           children: [
             CircularProgressIndicator(color: AppColors.yellowColor),
-            Text(
-              context.tr('loading'),
-              style: Theme.of(context).textTheme.displaySmall,
-            ),
+            Text(context.tr('loading'), style: AppStyles.robotoRegular14White),
           ],
         ),
       ),
@@ -48,7 +46,7 @@ class DialogUtils {
           },
           child: Text(
             context.tr(posActionText),
-            style: Theme.of(context).textTheme.displaySmall,
+            style: AppStyles.robotoRegular16Yellow,
           ),
         ),
       );
@@ -62,7 +60,7 @@ class DialogUtils {
           },
           child: Text(
             context.tr(negActionText),
-            style: Theme.of(context).textTheme.displaySmall,
+            style: AppStyles.robotoRegular16Yellow,
           ),
         ),
       );
@@ -74,12 +72,9 @@ class DialogUtils {
         contentPadding: EdgeInsets.all(20),
         content: Text(
           context.tr(message),
-          style: Theme.of(context).textTheme.displaySmall,
+          style: AppStyles.robotoRegular14White,
         ),
-        title: Text(
-          context.tr(title),
-          style: Theme.of(context).textTheme.displaySmall,
-        ),
+        title: Text(context.tr(title), style: AppStyles.robotoRegular16Yellow),
         actions: actions,
       ),
     );

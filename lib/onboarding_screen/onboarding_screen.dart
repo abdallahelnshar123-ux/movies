@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:movies/onboarding_screen/CustomButton.dart';
+import 'package:movies/onboarding_screen/custom_button.dart';
 import 'package:movies/onboarding_screen/onBoardingSharedPrefrance.dart';
 import 'package:movies/utils/app_colors.dart';
 import 'package:movies/utils/app_styles.dart';
 import 'package:movies/utils/screen_size.dart';
+
 import '../utils/app_assets.dart';
 import '../utils/app_routes.dart';
 
@@ -204,7 +205,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           pages[index]["subtitle"] != null ? Text(
                             pages[index]["subtitle"],
                             textAlign: TextAlign.center,
-                            style: AppStyles.interRegular20White
+                              style: AppStyles.interRegular16White
                           ):SizedBox(),
                           SizedBox(height: context.height * 0.02),
 
