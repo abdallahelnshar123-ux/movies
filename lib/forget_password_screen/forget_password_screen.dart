@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:movies/utils/app_colors.dart';
 import 'package:movies/utils/app_styles.dart';
+import 'package:movies/utils/dialog_utils.dart';
 
 import '../utils/app_assets.dart';
 import '../utils/screen_size.dart';
@@ -16,7 +17,6 @@ class ForgetPasswordScreen extends StatefulWidget {
 
 class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
   final AuthService _authService = AuthService();
-
 
   final TextEditingController _emailController = TextEditingController();
 
@@ -71,50 +71,71 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                 child: ElevatedButton(
                   onPressed: () async {
                     try {
-                      await _authService.sendResetPasswordEmail(_emailController.text);
-                      debugPrint("SUCCESS: reset email requested for ${_emailController.text.trim()}");
+                      DialogUtils.showLoading(context: context);
+                      await _authService.sendResetPasswordEmail(
+                        _emailController.text,
+                      );
+                      debugPrint(
+                        "SUCCESS: reset email requested for ${_emailController.text.trim()}",
+                      );
 
                       if (!context.mounted) return;
-                      showDialog(
+                      DialogUtils.hideLoading(context: context);
+                      DialogUtils.showMessage(
                         context: context,
-                        barrierDismissible: false,
-                        builder: (context) {
-                          return AlertDialog(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            title: const Text("Email Sent"),
-                            content: const Text(
-                              "A password reset link has been sent to your email.\n Please check your inbox or spam.",
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                  Navigator.pop(context);
-                                },
-                                child: const Text("OK"),
-                              ),
-                            ],
-                          );
-                        },
+                        message:
+                            "A password reset link has been sent to your email."
+                            "\n Please check your inbox or spam.",
+                        title: "Email Sent",
+                        posActionText: 'ok',
+                        posAction: () => Navigator.pop(context),
                       );
-                    }
-                    on FirebaseAuthException catch (e) {
+                      // showDialog(
+                      //   context: context,
+                      //   barrierDismissible: false,
+                      //   builder: (context) {
+                      //     return AlertDialog(
+                      //       shape: RoundedRectangleBorder(
+                      //         borderRadius: BorderRadius.circular(20),
+                      //       ),
+                      //       title: const Text("Email Sent"),
+                      //       content: const Text(
+                      //         "A password reset link has been sent to your email.\n Please check your inbox or spam.",
+                      //       ),
+                      //       actions: [
+                      //         TextButton(
+                      //           onPressed: () {
+                      //             Navigator.pop(context);
+                      //             Navigator.pop(context);
+                      //           },
+                      //           child: const Text("OK"),
+                      //         ),
+                      //       ],
+                      //     );
+                      //   },
+                      // );
+                    } on FirebaseAuthException catch (e) {
                       if (!context.mounted) return;
-                      showDialog(
-                        builder: (_) => AlertDialog(
-                          title: const Text("Error"),
-                          content: Text(e.message ?? e.code),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.pop(context),
-                              child: const Text("OK"),
-                            ),
-                          ],
-                        ),
+                      DialogUtils.hideLoading(context: context);
+                      DialogUtils.showMessage(
                         context: context,
+                        message: e.message ?? e.code,
+                        title: "error",
+                        posActionText: 'ok',
                       );
+                      // showDialog(
+                      //   builder: (_) => AlertDialog(
+                      //     title: const Text("Error"),
+                      //     content: Text(e.message ?? e.code),
+                      //     actions: [
+                      //       TextButton(
+                      //         onPressed: () => Navigator.pop(context),
+                      //         child: const Text("OK"),
+                      //       ),
+                      //     ],
+                      //   ),
+                      //   context: context,
+                      // );
                     }
                   },
                   style: ElevatedButton.styleFrom(
