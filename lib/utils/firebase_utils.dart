@@ -21,36 +21,40 @@ class FirebaseUtils {
     var querySnapshot = await getUsersCollection().doc(uId).get();
     return querySnapshot.data();
   }
-  static Future<MyUser?> updateUser(String name , String phoneNum , int AvatarIndex , String uId){
-    var querySnapshot = getUsersCollection().doc(uId);
-    return querySnapshot.update({
-      'name' : name,
-      'phone' : phoneNum,
-      'avatarIndex' : AvatarIndex,
-    }).then(
-          (value) {
-      print('then');
-      getUsersCollection().doc(uId);
-    },).catchError(
-        (error) {
-          print(error);
-        },
-    );
+
+  static Future<void> updateUserDataToFirestore(MyUser user) async {
+    var querySnapshot = getUsersCollection().doc(user.id);
+    return await querySnapshot.update(user.toFireStore());
   }
+
+  // static Future<MyUser?> updateUser(String name , String phoneNum , int AvatarIndex , String uId){
+  //   var querySnapshot = getUsersCollection().doc(uId);
+  //   return querySnapshot.update({
+  //     'name' : name,
+  //     'phone' : phoneNum,
+  //     'avatarIndex' : AvatarIndex,
+  //   }).then(
+  //         (value) {
+  //     print('then');
+  //     getUsersCollection().doc(uId);
+  //   },).catchError(
+  //       (error) {
+  //         print(error);
+  //       },
+  //   );
 
   static Future<void> deleteUser(String uId) async {
     await getUsersCollection().doc(uId).delete();
   }
 
-  static Future<void> updateUserInFireStore(MyUser user) async {
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(user.id)
-        .update({
-      'name': user.name,
-      'phone': user.phone,
-      'avatarIndex': user.avatarIndex,
-    });
-  }
-
+  // static Future<void> updateUserInFireStore(MyUser user) async {
+  //   await FirebaseFirestore.instance
+  //       .collection('users')
+  //       .doc(user.id)
+  //       .update({
+  //     'name': user.name,
+  //     'phone': user.phone,
+  //     'avatarIndex': user.avatarIndex,
+  //   });
+  // }
 }
