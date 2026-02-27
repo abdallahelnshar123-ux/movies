@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:movies/cubit/auth_view_model.dart';
 
+import '../../model/my_user.dart';
 import '../../utils/app_assets.dart';
 import '../../utils/app_colors.dart';
 import '../../utils/app_routes.dart';
@@ -24,9 +25,18 @@ class _LoginUiState extends State<LoginUi> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
+  late MyUser? user;
+
   bool isObscure = true;
 
-  bool iseSelected = true;
+  String language = 'en';
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -129,13 +139,13 @@ class _LoginUiState extends State<LoginUi> {
                 CustomElevatedButton(
                   decorationColor: AppColors.yellowColor,
                   onPressed: () {
+                    //todo login
                     if (formKey.currentState?.validate() == true) {
                       context.read<AuthCubit>().login(
                         emailController.text,
                         passwordController.text,
                       );
                     }
-                    //todo login
                   },
                   child: Text(
                     "login".tr(),
@@ -220,28 +230,43 @@ class _LoginUiState extends State<LoginUi> {
                       border: Border.all(color: AppColors.yellowColor),
                     ),
                     child: Row(
+                      spacing: context.width * 0.02,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        InkWell(
+                        GestureDetector(
                           onTap: () {
                             // todo change language to en
+                            if (language != 'en') {
+                              language == 'en';
+                              context.setLocale(Locale('en'));
+                            }
+                            setState(() {});
+                            context.setLocale(Locale('en'));
                           },
                           child: CircleAvatar(
                             radius: 20,
-                            backgroundColor: Colors.yellow,
+                            backgroundColor: language == 'en'
+                                ? AppColors.yellowColor
+                                : Colors.transparent,
                             child: Image.asset(AppAssets.usaLogo, width: 30),
                           ),
                         ),
-                        SizedBox(width: context.width * 0.02),
-                        InkWell(
+                        // SizedBox(width: context.width * 0.02),
+                        GestureDetector(
                           onTap: () {
                             // todo change language to ar
+                            if (language != 'ar') {
+                              context.setLocale(Locale('ar'));
+                              language == 'ar';
+                            }
+                            setState(() {});
                           },
                           child: CircleAvatar(
                             radius: 20,
-                            backgroundColor: iseSelected == false
+                            backgroundColor: language == 'ar'
                                 ? AppColors.yellowColor
                                 : Colors.transparent,
+
                             child: CircleAvatar(
                               radius: 14,
                               backgroundImage: AssetImage(AppAssets.egyptLogo),

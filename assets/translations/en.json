@@ -45,6 +45,12 @@
   "screen_shots": "Screen Shots",
   "avatar": "Avatar",
   "pick_avatar": "Pick Avatar",
+  "watch": "Watch",
+  "login_successfully": "Login Successfully",
+  "success": "Success !",
+  "error": "Error !",
+  "ok": "Ok"
 
-  "watch": "Watch"
+
+
 }

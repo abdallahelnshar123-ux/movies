@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies/login_screen/widget/Login_ui.dart';
 import 'package:movies/utils/app_routes.dart';
+import 'package:movies/utils/dialog_utils.dart';
 
 import '../cubit/auth_state.dart';
 import '../cubit/auth_view_model.dart';
@@ -14,25 +15,39 @@ class LoginScreen extends StatelessWidget {
   // bool isObscure = true;
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AuthCubit, AuthState>(
+    return BlocListener<AuthCubit, AuthState>(
       listener: (context, state) {
         if (state is AuthAuthenticated) {
-          Navigator.pushReplacementNamed(context, AppRoutes.homeRouteName);
+          DialogUtils.hideLoading(context: context);
+          DialogUtils.showMessage(
+            title: 'success',
+            context: context,
+            message: 'login_successfully',
+          );
+          Future.delayed(
+            Duration(seconds: 3),
+            () => Navigator.pushNamedAndRemoveUntil(
+              context,
+              AppRoutes.homeRouteName,
+              (route) => false,
+            ),
+          );
         }
 
         if (state is AuthError) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(state.message)));
+          DialogUtils.hideLoading(context: context);
+          DialogUtils.showMessage(
+            posActionText: 'ok',
+            title: 'error',
+            context: context,
+            message: state.message,
+          );
         }
-      },
-      builder: (context, state) {
         if (state is AuthLoading) {
-          return Center(child: CircularProgressIndicator());
+          DialogUtils.showLoading(context: context);
         }
-
-        return LoginUi();
       },
+      child: LoginUi(),
     );
 
     //   Scaffold(
