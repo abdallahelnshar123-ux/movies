@@ -1,4 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movies/cubit/auth_state.dart';
+import 'package:movies/cubit/auth_view_model.dart';
+import 'package:movies/model/my_user.dart';
 import 'package:movies/update_profile_screen/Widget/Custome_Botton.dart';
 import 'package:movies/update_profile_screen/Widget/Custome_TextFormFeild.dart';
 import 'package:movies/update_profile_screen/Widget/selecteAvatarBottomSheet.dart';
@@ -7,6 +12,7 @@ import 'package:movies/utils/app_assets.dart';
 import 'package:movies/utils/app_colors.dart';
 import 'package:movies/utils/app_routes.dart';
 import 'package:movies/utils/app_styles.dart';
+import 'package:movies/utils/dialog_utils.dart';
 
 class UpdateProfileScreen extends StatefulWidget {
   UpdateProfileScreen({super.key});
@@ -15,10 +21,41 @@ class UpdateProfileScreen extends StatefulWidget {
 }
 
 class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
-  int currentAvatarIndex = 0;
-  TextEditingController namecontroller = TextEditingController();
-  TextEditingController phonecontroller = TextEditingController();
+  TextEditingController nameController = TextEditingController();
 
+  TextEditingController phoneController = TextEditingController();
+
+ int currentAvatarIndex  = 0;
+  late MyUser user;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final authCubit = context.read<AuthCubit>();
+      if (authCubit.currentUser != null) {
+        user = authCubit.currentUser!;
+        currentAvatarIndex = user.avatarIndex;
+        nameController.text = user.name;
+        phoneController.text = user.phone;
+      } else {
+        DialogUtils.showMessage(
+          context: context,
+          message: "Dont Have User In Your Cloud Storage",
+          posActionText: 'Ok',
+          negActionText: 'No',
+          posAction: () {
+            Navigator.pushReplacementNamed(
+              context,
+              AppRoutes.registerRouteName,
+            );
+          },
+        );
+      }
+    });
+  }
+
+  var _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     List<Avatardata> AvatarList = [
@@ -68,86 +105,177 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
         label: "label",
       ),
     ];
+
     var size = MediaQuery.of(context).size;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("pick Avatar", style: AppStyles.robotoRegular16Yellow),
-        centerTitle: true,
-        leading: IconButton(
-          onPressed: () {},
-          icon: Icon(Icons.arrow_back, size: 25, color: AppColors.yellowColor),
-        ),
-      ),
-      body: Padding(
-        padding:  EdgeInsets.symmetric(horizontal:size.width*0.015),
-        child: SingleChildScrollView(
-          child: Column(
-            spacing: 15,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  showAvatrBottomSheet();
-                },
-                child:SizedBox(
-                  height: size.height*0.12,
-                  child:Image.asset(AvatarList[currentAvatarIndex].emoji , fit: BoxFit.cover,),
-                )
+
+    return BlocConsumer<AuthCubit, AuthState>(
+      listenWhen: (previous, current) => true,
+      listener: (context, state) {
+        if (state is AuthUpdateSuccess) {
+          DialogUtils.showMessage(
+            context: context,
+            title: 'Update User Information',
+            message: 'Profile updated successfully!',
+            posActionText: 'Ok',
+            posAction: () {
+              Navigator.pushReplacementNamed(context, AppRoutes.homeRouteName);
+            },
+          );
+        }
+        if (state is AuthError) {
+          DialogUtils.showMessage(
+            context: context,
+            message: 'Error!!!',
+            posActionText: 'Ok',
+          );
+        }
+      },
+      buildWhen:(previous, current) =>
+      current is AuthLoading || current is AuthUpdateSuccess || current is AuthError,
+      builder: (context, state) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Text("pick Avatar", style: AppStyles.robotoRegular16Yellow),
+            centerTitle: true,
+            leading: IconButton(
+              onPressed: () {},
+              icon: Icon(
+                Icons.arrow_back,
+                size: 25,
+                color: AppColors.yellowColor,
               ),
-              SizedBox(height: size.height*0.01,),
-              CustomeTextfeild(
-                prefixIcon: Icon(Icons.person, color: AppColors.whiteColor),
-                textcontroller: namecontroller,
-                hint: "Enter Your Name",
-                onTap: () {},
-              ),
-              CustomeTextfeild(
-                prefixIcon: Icon(Icons.phone, color: AppColors.whiteColor),
-                textcontroller: phonecontroller,
-                hint: "Enter Your Phone Number",
-                onTap: () {},
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(
-                        context,
-                      ).pushNamed(AppRoutes.forgetPasswordRouteName);
-                    },
-                    child: Text(
-                      "Reset Password",
-                      style: AppStyles.robotoRegular16White.copyWith(
-                        decoration: TextDecoration.underline,
-                        decorationColor: AppColors.whiteColor,
+            ),
+          ),
+          body: Padding(
+            padding: EdgeInsets.symmetric(horizontal: size.width * 0.015),
+            child: SingleChildScrollView(
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  spacing: 15,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        showAvatrBottomSheet();
+                      },
+                      child: SizedBox(
+                        height: size.height * 0.12,
+                        child: Image.asset(
+                          AvatarList[currentAvatarIndex].emoji,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(height: size.height * 0.32),
-              CustomButton(
-                text: 'Delete Account',
-                style: AppStyles.robotoRegular16White.copyWith(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
+                    SizedBox(height: size.height * 0.01),
+                    CustomeTextfeild(
+                      prefixIcon: Icon(
+                        Icons.person,
+                        color: AppColors.whiteColor,
+                      ),
+                      textcontroller: nameController,
+                      hint: "Enter Your Name",
+                      validation: (text) {
+                        if (text == null || text.trim().isEmpty) {
+                          return 'Please enter a name';
+                        }
+                        return null;
+                      },
+                    ),
+                    CustomeTextfeild(
+                      prefixIcon: Icon(
+                        Icons.phone,
+                        color: AppColors.whiteColor,
+                      ),
+                      textcontroller: phoneController,
+                      hint: "Enter Your Phone Number",
+                      validation: (text) {
+                        if (text == null || text.trim().isEmpty) {
+                          return 'Please enter a Phone Number';
+                        }
+                        if (text.trim().length < 11) {
+                          return 'Name must be at least 3 characters';
+                        }
+                        return null;
+                      },
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(
+                              context,
+                            ).pushNamed(AppRoutes.forgetPasswordRouteName);
+                          },
+                          child: Text(
+                            "Reset Password",
+                            style: AppStyles.robotoRegular16White.copyWith(
+                              decoration: TextDecoration.underline,
+                              decorationColor: AppColors.whiteColor,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: size.height * 0.32),
+                    CustomButton(
+                      text: 'Delete Account',
+                      style: AppStyles.robotoRegular16White.copyWith(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      backgroundColor: AppColors.redColor,
+                      onPressed: ()  {
+                        if(_formKey.currentState!.validate()){
+                          DialogUtils.showMessage(
+                            context: context,
+                            title: 'Delete Account',
+                            message: 'Are you sure you want to delete your account?',
+                            posActionText: 'Delete',
+                            negActionText: 'Cancel',
+                            posAction: () {
+                              context.read<AuthCubit>().deleteUserAccount();
+                            },
+                          );
+                        }
+                      },
+                    ),
+                    CustomButton(
+                      text: 'Update Account',
+                      style: AppStyles.robotoRegular16DarkGray.copyWith(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      backgroundColor: AppColors.yellowColor,
+                      onPressed: () {
+                        print('updated');
+                        if(_formKey.currentState!.validate()){
+                          DialogUtils.showMessage(
+                            context: context,
+                            title: 'Delete Account',
+                            message: 'Are you sure you want to delete your account?',
+                            posActionText: 'Delete',
+                            negActionText: 'Cancel',
+                            posAction: () {
+                              context.read<AuthCubit>().updateUserProfile(
+                                name: nameController.text,
+                                phone: phoneController.text,
+                                avatarIndex: currentAvatarIndex,
+                              );
+                            },
+                          );
+                        }
+                        print('updated');
+                      },
+                    ),
+                    SizedBox(height: size.height * 0.015),
+                  ],
                 ),
-                backgroundColor: AppColors.redColor,
               ),
-              CustomButton(
-
-                text: 'Update Account',
-                style: AppStyles.robotoRegular16DarkGray.copyWith(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
-                backgroundColor: AppColors.yellowColor,
-              ),
-              SizedBox(height: size.height * 0.015),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
