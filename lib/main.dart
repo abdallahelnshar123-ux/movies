@@ -30,9 +30,10 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   isSeen = await MyPreferences.isOnboardingCompleted();
+
   runApp(
     BlocProvider(
-      create: (BuildContext context) => AuthCubit(),
+      create: (context) => AuthCubit(),
       child: EasyLocalization(
         supportedLocales: const [Locale('en'), Locale('ar')],
         path: 'assets/translations',
@@ -54,9 +55,10 @@ class MyApp extends StatelessWidget {
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: context.locale,
-      initialRoute: isSeen
+      initialRoute: AppRoutes.updateProfileRouteName,
+      /*isSeen
           ? AppRoutes.loginRouteName
-          : AppRoutes.onboardingRouteName,
+          : AppRoutes.onboardingRouteName,*/
       routes: {
         AppRoutes.homeRouteName: (context) => HomeScreen(),
         AppRoutes.onboardingRouteName: (context) => OnboardingScreen(),
