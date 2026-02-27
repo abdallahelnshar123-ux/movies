@@ -236,16 +236,21 @@ class _LoginUiState extends State<LoginUi> {
                         GestureDetector(
                           onTap: () {
                             // todo change language to en
-                            if (language != 'en') {
-                              language == 'en';
+
+                            if (context.savedLocale?.languageCode != 'en')
                               context.setLocale(Locale('en'));
-                            }
                             setState(() {});
-                            context.setLocale(Locale('en'));
+                            // if (language != 'en') {
+                            //   language == 'en';
+                            //   context.setLocale(Locale('en'));
+                            // }
+                            // setState(() {});
+                            // context.setLocale(Locale('en'));
                           },
                           child: CircleAvatar(
                             radius: 20,
-                            backgroundColor: language == 'en'
+                            backgroundColor:
+                                context.savedLocale?.languageCode == 'ar'
                                 ? AppColors.yellowColor
                                 : Colors.transparent,
                             child: Image.asset(AppAssets.usaLogo, width: 30),
@@ -255,15 +260,19 @@ class _LoginUiState extends State<LoginUi> {
                         GestureDetector(
                           onTap: () {
                             // todo change language to ar
-                            if (language != 'ar') {
+                            if (context.savedLocale?.languageCode != 'ar')
                               context.setLocale(Locale('ar'));
-                              language == 'ar';
-                            }
                             setState(() {});
+                            // if (language != 'ar') {
+                            //   context.setLocale(Locale('ar'));
+                            //   language == 'ar';
+                            // }
+                            // setState(() {});
                           },
                           child: CircleAvatar(
                             radius: 20,
-                            backgroundColor: language == 'ar'
+                            backgroundColor:
+                                context.savedLocale?.languageCode == 'en'
                                 ? AppColors.yellowColor
                                 : Colors.transparent,
 
