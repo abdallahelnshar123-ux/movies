@@ -14,6 +14,11 @@ class AppStyles {
     fontSize: 20,
     fontWeight: FontWeight.w400,
   );
+  static TextStyle interRegular16White = GoogleFonts.inter(
+    color: AppColors.whiteColor,
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+  );
   static TextStyle interSBold20Black = GoogleFonts.inter(
     color: AppColors.blackColor,
     fontSize: 20,
@@ -50,6 +55,11 @@ class AppStyles {
   static TextStyle robotoRegular14White = GoogleFonts.inter(
     color: AppColors.whiteColor,
     fontSize: 14,
+    fontWeight: FontWeight.w400,
+  );
+  static TextStyle robotoRegular10White = GoogleFonts.inter(
+    color: AppColors.whiteColor,
+    fontSize: 10,
     fontWeight: FontWeight.w400,
   );
   static TextStyle robotoBlack14Yellow = GoogleFonts.inter(
