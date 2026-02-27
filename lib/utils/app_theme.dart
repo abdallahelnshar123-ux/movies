@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movies/utils/app_colors.dart';
 
+import 'app_colors.dart';
 import 'app_styles.dart';
 
 class AppTheme {
