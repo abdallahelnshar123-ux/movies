@@ -40,6 +40,7 @@ class CustomTextFormField extends StatelessWidget {
     this.obscureText=false,
     this.obscuringCharacter='.',
     this.keyboardType,
+    this.errorStyle
   });
 
   @override

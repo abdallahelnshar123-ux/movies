@@ -53,4 +53,24 @@
 
 
 
+  "watch": "Watch",
+
+  "Register": "Register",
+  "Avatar": "Avatar",
+  "Please Enter your name": "Please Enter your name",
+  "Name": "Name",
+  "please Enter Email": "please Enter Email",
+  "please enter valid email": "please enter valid email",
+  "Email": "Email",
+  "Password": "Password",
+  "please Enter Re-Password": "please Enter Re-Password",
+  "Re-password doesn't match password": "Re-password doesn't match password",
+  "Confirm Password": "Confirm Password",
+  "please Enter password": "please Enter password",
+  "Password should be at least 6 char": "Password should be at least 6 char",
+  "please Enter your phone number": "please Enter your phone number",
+  "Phone Number": "Phone Number",
+  "Create Account": "Create Account",
+  "Already Have Account? ": "Already Have Account? ",
+  "Login": "Login"
 }

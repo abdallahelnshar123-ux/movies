@@ -8,16 +8,21 @@ import 'package:movies/home_screen/home_screen.dart';
 import 'package:movies/login_screen/login_screen.dart';
 import 'package:movies/onboarding_screen/onBoardingSharedPrefrance.dart';
 import 'package:movies/onboarding_screen/onboarding_screen.dart';
+
 import 'package:movies/register_screen/register_screen.dart';
 import 'package:movies/update_profile_screen/update_profile_screen.dart';
 import 'package:movies/utils/app_routes.dart';
 import 'package:movies/utils/app_theme.dart';
+import 'package:provider/provider.dart';
 
 import 'firebase_options.dart';
 
 bool isSeen = false;
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
