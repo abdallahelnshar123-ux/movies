@@ -1,7 +1,6 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:movies/providers/app_language_provider.dart';
-import 'package:provider/provider.dart';
 
 import '../utils/app_assets.dart';
 import '../utils/app_colors.dart';
@@ -12,7 +11,6 @@ class ChangeLanguageItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var languageProvider = Provider.of<AppLanguageProvider>(context);
 
     return Center(
       child: Container(
@@ -24,19 +22,19 @@ class ChangeLanguageItem extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             InkWell(
-              onTap: () => languageProvider.changeLanguage(context, 'en'),
+              onTap: () =>context.setLocale(Locale('en')),
               child: CircleAvatar(
                 radius: 20,
-                backgroundColor:  languageProvider.isEnglish()? AppColors.yellowColor : Colors.transparent,
+                backgroundColor:  context.locale.languageCode=='en'? AppColors.yellowColor : Colors.transparent,
                 child: Image.asset(AppAssets.usaLogo, width: 30),
               ),
             ),
             const SizedBox(width: 10),
             InkWell(
-              onTap: () => languageProvider.changeLanguage(context, 'ar'),
+              onTap: () => context.setLocale(Locale('ar')),
               child: CircleAvatar(
                 radius: 20,
-                backgroundColor: languageProvider.isEnglish()? AppColors.transparentColor : AppColors.yellowColor,
+                backgroundColor: context.locale.languageCode=='en'? AppColors.transparentColor : AppColors.yellowColor,
                 child: CircleAvatar(
                   radius:14,
                   backgroundImage: AssetImage(AppAssets.egyptLogo),

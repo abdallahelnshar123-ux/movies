@@ -6,9 +6,7 @@ import 'package:movies/home_screen/home_screen.dart';
 import 'package:movies/login_screen/login_screen.dart';
 import 'package:movies/onboarding_screen/onBoardingSharedPrefrance.dart';
 import 'package:movies/onboarding_screen/onboarding_screen.dart';
-import 'package:movies/providers/app_language_provider.dart';
-import 'package:movies/providers/avatar_provider.dart';
-import 'package:movies/providers/user_provider.dart';
+
 import 'package:movies/register_screen/register_screen.dart';
 import 'package:movies/update_profile_screen/update_profile_screen.dart';
 import 'package:movies/utils/app_routes.dart';
@@ -20,7 +18,6 @@ import 'firebase_options.dart';
 bool isSeen = false;
 
 void main() async{
-  final langProvider = AppLanguageProvider();
   WidgetsFlutterBinding.ensureInitialized();
 
 
@@ -36,25 +33,11 @@ void main() async{
       supportedLocales: const [Locale('en'), Locale('ar')],
       path: 'assets/translations',
       fallbackLocale: const Locale('en'),
-      startLocale: Locale(langProvider.appLanguage),
-      child: MultiProvider(
-        providers: [
-          ChangeNotifierProvider(
-              create: (_) => langProvider,
+      startLocale: Locale('en'),
 
-          ),
-          ChangeNotifierProvider(
-            create: (_) => AvatarProvider(),
-
-          ),
-          ChangeNotifierProvider(
-            create: (_) =>UserProvider()
-
-          ),
-        ],
         child: MyApp(),
       ),
-    ),
+
   );
 }
 

@@ -1,13 +1,10 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movies/providers/avatar_provider.dart';
 import 'package:movies/utils/app_assets.dart';
 import 'package:movies/utils/screen_size.dart';
-import 'package:provider/provider.dart';
 
 class AvatarCarousel extends StatefulWidget {
   final ValueChanged<int>? onChanged;
-  final int initialIndex; // اختياري
+  final int initialIndex;
 
   const AvatarCarousel({
     super.key,
@@ -47,7 +44,7 @@ class _AvatarCarouselState extends State<AvatarCarousel> {
 
     _controller = PageController(
       viewportFraction: 0.35,
-      initialPage: _initialPage + selectedIndex, // ✅ يخلي البداية على الافاتار المختار
+      initialPage: _initialPage + selectedIndex, //  يخلي البداية على الافاتار المختار
     );
 
     _controller.addListener(() {
@@ -74,7 +71,6 @@ class _AvatarCarouselState extends State<AvatarCarousel> {
 
   @override
   Widget build(BuildContext context) {
-    var avatarProvider = Provider.of<AvatarProvider>(context);
     final n = avatars.length;
 
     return SizedBox(
@@ -84,7 +80,7 @@ class _AvatarCarouselState extends State<AvatarCarousel> {
         itemBuilder: (context, index) {
           final realIndex = index % n;
 
-          final isSelected = avatarProvider.selectedAvatarIndex == realIndex;
+          final isSelected = selectedIndex == realIndex;
           final realPage = _page % n;
           final distance = _circularDistance(realPage, realIndex.toDouble(), n);
 
@@ -97,7 +93,9 @@ class _AvatarCarouselState extends State<AvatarCarousel> {
               scale: scale,
               child: GestureDetector(
                 onTap: () {
-                  context.read<AvatarProvider>().changeAvatar(realIndex);
+                  selectedIndex = realIndex;
+
+                  widget.onChanged?.call(realIndex);
 
                   _controller.animateToPage(
                     index,

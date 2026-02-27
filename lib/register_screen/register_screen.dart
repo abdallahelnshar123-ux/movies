@@ -1,9 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:movies/model/my_user.dart';
 import 'package:movies/register_screen/avatar_carousel.dart';
@@ -17,10 +15,6 @@ import 'package:movies/utils/screen_size.dart';
 import 'package:movies/widgets/change_language_item.dart';
 import 'package:movies/widgets/custom_elevated_button.dart';
 import 'package:movies/widgets/custom_text_form_field.dart';
-import 'package:provider/provider.dart';
-
-import '../providers/avatar_provider.dart';
-import '../providers/user_provider.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -39,6 +33,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool passIsObscure = true;
   bool confPassIsObscure = true;
   bool iseSelected = true;
+  int selectedIndexAvatar = 0;
 
 
   @override
@@ -63,7 +58,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   padding: EdgeInsets.only(bottom: context.height * 0.02),
                   child: Column(
                     children: [
-                      AvatarCarousel(),
+                      AvatarCarousel(onChanged: (index){
+                        selectedIndexAvatar = index;
+                      },),
                       Text(
                         'Avatar'.tr(),
                         style: AppStyles.robotoRegular16White,
@@ -279,7 +276,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
    Future<void> register() async {
-     final avatarIndex = context.read<AvatarProvider>().selectedAvatarIndex;
 
      if(formKey.currentState?.validate() == true){
       //todo: register
@@ -299,13 +295,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
             email: emailController.text,
             name: nameController.text,
             phone: phoneController.text,
-            avatarIndex: avatarIndex);
+            avatarIndex: selectedIndexAvatar);
 
         await FirebaseUtils.addUserToFireStore(myUser);
 
-        //todo: add user in provider
-        var userProvider = Provider.of<UserProvider>(context, listen: false);
-        userProvider.updateUser(myUser);
+
 
         // await FirebaseFirestore.instance
         //     .collection('users')
