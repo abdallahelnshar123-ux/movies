@@ -7,8 +7,7 @@
 
   "onboarding_title3": "Explore All Genres",
   "onboarding_description3": "Discover movies from every genre, in all available qualities. Find something new and exciting to watch every day.",
-
-  "onboarding_title4": "Create Watchlists",
+  "onboarding_title4": "Create Watch lists",
   "onboarding_description4": "Save movies to your watchlist to keep track of what you want to watch next. Enjoy films in various qualities and genres.",
 
   "onboarding_title5": "Rate, Review, and Learn",
@@ -49,11 +48,7 @@
   "login_successfully": "Login Successfully",
   "success": "Success !",
   "error": "Error !",
-  "ok": "Ok"
-
-
-
-  "watch": "Watch",
+  "ok": "Ok",
 
   "Register": "Register",
   "Avatar": "Avatar",
