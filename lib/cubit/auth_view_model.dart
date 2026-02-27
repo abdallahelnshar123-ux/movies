@@ -48,7 +48,10 @@ class AuthCubit extends Cubit<AuthState> {
       debugPrint(e.toString());
 
       if (e is FirebaseAuthException) {
-        emit(AuthError(e.message ?? 'Login failed'));
+        if (e.message ==
+            'The supplied auth credential is incorrect, malformed or has expired.') {
+          emit(AuthError('Email or password is incorrect ! '));
+        }
       } else {
         emit(AuthError('Something went wrong'));
       }

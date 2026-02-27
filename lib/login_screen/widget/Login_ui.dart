@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:movies/cubit/auth_view_model.dart';
+import 'package:movies/widgets/change_language_item.dart';
 
 import '../../model/my_user.dart';
 import '../../utils/app_assets.dart';
@@ -221,71 +222,71 @@ class _LoginUiState extends State<LoginUi> {
                     ],
                   ),
                 ),
-
-                Center(
-                  child: Container(
-                    margin: EdgeInsets.only(top: context.height * 0.02),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                      border: Border.all(color: AppColors.yellowColor),
-                    ),
-                    child: Row(
-                      spacing: context.width * 0.02,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            // todo change language to en
-
-                            if (context.savedLocale?.languageCode != 'en')
-                              context.setLocale(Locale('en'));
-                            setState(() {});
-                            // if (language != 'en') {
-                            //   language == 'en';
-                            //   context.setLocale(Locale('en'));
-                            // }
-                            // setState(() {});
-                            // context.setLocale(Locale('en'));
-                          },
-                          child: CircleAvatar(
-                            radius: 20,
-                            backgroundColor:
-                                context.savedLocale?.languageCode == 'ar'
-                                ? AppColors.yellowColor
-                                : Colors.transparent,
-                            child: Image.asset(AppAssets.usaLogo, width: 30),
-                          ),
-                        ),
-                        // SizedBox(width: context.width * 0.02),
-                        GestureDetector(
-                          onTap: () {
-                            // todo change language to ar
-                            if (context.savedLocale?.languageCode != 'ar')
-                              context.setLocale(Locale('ar'));
-                            setState(() {});
-                            // if (language != 'ar') {
-                            //   context.setLocale(Locale('ar'));
-                            //   language == 'ar';
-                            // }
-                            // setState(() {});
-                          },
-                          child: CircleAvatar(
-                            radius: 20,
-                            backgroundColor:
-                                context.savedLocale?.languageCode == 'en'
-                                ? AppColors.yellowColor
-                                : Colors.transparent,
-
-                            child: CircleAvatar(
-                              radius: 14,
-                              backgroundImage: AssetImage(AppAssets.egyptLogo),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                ChangeLanguageItem(),
+                // Center(
+                //   child: Container(
+                //     margin: EdgeInsets.only(top: context.height * 0.02),
+                //     decoration: BoxDecoration(
+                //       borderRadius: BorderRadius.circular(30),
+                //       border: Border.all(color: AppColors.yellowColor),
+                //     ),
+                //     child: Row(
+                //       spacing: context.width * 0.02,
+                //       mainAxisSize: MainAxisSize.min,
+                //       children: [
+                //         GestureDetector(
+                //           onTap: () {
+                //             // todo change language to en
+                //
+                //             if (context.savedLocale?.languageCode != 'en')
+                //               context.setLocale(Locale('en'));
+                //             setState(() {});
+                //             // if (language != 'en') {
+                //             //   language == 'en';
+                //             //   context.setLocale(Locale('en'));
+                //             // }
+                //             // setState(() {});
+                //             // context.setLocale(Locale('en'));
+                //           },
+                //           child: CircleAvatar(
+                //             radius: 20,
+                //             backgroundColor:
+                //                 context.savedLocale?.languageCode == 'ar'
+                //                 ? AppColors.yellowColor
+                //                 : Colors.transparent,
+                //             child: Image.asset(AppAssets.usaLogo, width: 30),
+                //           ),
+                //         ),
+                //         // SizedBox(width: context.width * 0.02),
+                //         GestureDetector(
+                //           onTap: () {
+                //             // todo change language to ar
+                //             if (context.savedLocale?.languageCode != 'ar')
+                //               context.setLocale(Locale('ar'));
+                //             setState(() {});
+                //             // if (language != 'ar') {
+                //             //   context.setLocale(Locale('ar'));
+                //             //   language == 'ar';
+                //             // }
+                //             // setState(() {});
+                //           },
+                //           child: CircleAvatar(
+                //             radius: 20,
+                //             backgroundColor:
+                //                 context.savedLocale?.languageCode == 'en'
+                //                 ? AppColors.yellowColor
+                //                 : Colors.transparent,
+                //
+                //             child: CircleAvatar(
+                //               radius: 14,
+                //               backgroundImage: AssetImage(AppAssets.egyptLogo),
+                //             ),
+                //           ),
+                //         ),
+                //       ],
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),

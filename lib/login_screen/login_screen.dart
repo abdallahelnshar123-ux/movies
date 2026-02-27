@@ -35,6 +35,7 @@ class LoginScreen extends StatelessWidget {
         }
 
         if (state is AuthError) {
+          debugPrint(state.message);
           DialogUtils.hideLoading(context: context);
           DialogUtils.showMessage(
             posActionText: 'ok',
