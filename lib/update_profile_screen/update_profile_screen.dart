@@ -1,9 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies/cubit/auth_state.dart';
 import 'package:movies/cubit/auth_view_model.dart';
-import 'package:movies/model/my_user.dart';
 import 'package:movies/update_profile_screen/Widget/Custome_Botton.dart';
 import 'package:movies/update_profile_screen/Widget/Custome_TextFormFeild.dart';
 import 'package:movies/update_profile_screen/Widget/selecteAvatarBottomSheet.dart';
@@ -15,7 +13,8 @@ import 'package:movies/utils/app_styles.dart';
 import 'package:movies/utils/dialog_utils.dart';
 
 class UpdateProfileScreen extends StatefulWidget {
-  UpdateProfileScreen({super.key});
+  const UpdateProfileScreen({super.key});
+
   @override
   State<UpdateProfileScreen> createState() => _UpdateProfileScreenState();
 }
@@ -25,40 +24,14 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
 
   TextEditingController phoneController = TextEditingController();
 
- int currentAvatarIndex  = 0;
-  late MyUser user;
+  int currentAvatarIndex = 0;
 
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final authCubit = context.read<AuthCubit>();
-      if (authCubit.currentUser != null) {
-        user = authCubit.currentUser!;
-        currentAvatarIndex = user.avatarIndex;
-        nameController.text = user.name;
-        phoneController.text = user.phone;
-      } else {
-        DialogUtils.showMessage(
-          context: context,
-          message: "Dont Have User In Your Cloud Storage",
-          posActionText: 'Ok',
-          negActionText: 'No',
-          posAction: () {
-            Navigator.pushReplacementNamed(
-              context,
-              AppRoutes.registerRouteName,
-            );
-          },
-        );
-      }
-    });
-  }
+  final _formKey = GlobalKey<FormState>();
+  bool _isInitialized = false;
 
-  var _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    List<Avatardata> AvatarList = [
+    List<Avatardata> avatarList = [
       Avatardata(
         emoji: AppAssets.avatarImage1,
         color: AppColors.darkGrayColor,
@@ -109,30 +82,84 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     var size = MediaQuery.of(context).size;
 
     return BlocConsumer<AuthCubit, AuthState>(
-      listenWhen: (previous, current) => true,
+      listenWhen: (previous, current) =>
+          current is AuthUpdateSuccess ||
+          current is AuthUpdateError ||
+          current is AuthUpdateLoading ||
+          current is AuthDeleteError ||
+          current is AuthDeleteLoading ||
+          current is AuthDeleteSuccess,
       listener: (context, state) {
+        debugPrint(state.runtimeType.toString());
         if (state is AuthUpdateSuccess) {
+          DialogUtils.hideLoading(context: context);
           DialogUtils.showMessage(
             context: context,
-            title: 'Update User Information',
+            title: 'success',
             message: 'Profile updated successfully!',
             posActionText: 'Ok',
             posAction: () {
-              Navigator.pushReplacementNamed(context, AppRoutes.homeRouteName);
+              Navigator.pop(context);
             },
           );
         }
-        if (state is AuthError) {
+        if (state is AuthUpdateError) {
+          DialogUtils.hideLoading(context: context);
           DialogUtils.showMessage(
             context: context,
-            message: 'Error!!!',
+            title: 'Error!!!',
+            message: state.message,
             posActionText: 'Ok',
           );
         }
+        if (state is AuthUpdateLoading) {
+          DialogUtils.showLoading(context: context);
+        }
+        if (state is AuthDeleteSuccess) {
+          DialogUtils.hideLoading(context: context);
+          DialogUtils.showMessage(
+            context: context,
+            title: 'success',
+            message: 'Account deleted successfully!',
+            posActionText: 'Ok',
+            posAction: () {
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                AppRoutes.loginRouteName,
+                (route) => false,
+              );
+            },
+          );
+        }
+        if (state is AuthDeleteError) {
+          DialogUtils.hideLoading(context: context);
+          DialogUtils.showMessage(
+            context: context,
+            title: 'Error!!!',
+            message: state.message,
+            posActionText: 'Ok',
+          );
+        }
+        if (state is AuthDeleteLoading) {
+          DialogUtils.showLoading(context: context);
+        }
       },
-      buildWhen:(previous, current) =>
-      current is AuthLoading || current is AuthUpdateSuccess || current is AuthError,
+
       builder: (context, state) {
+        final authCubit = context.watch<AuthCubit>();
+        final user = authCubit.currentUser;
+
+        if (user == null) {
+          return Center(child: Text("No user found"));
+        }
+
+        if (!_isInitialized) {
+          nameController.text = user.name;
+          phoneController.text = user.phone;
+          currentAvatarIndex = user.avatarIndex;
+          _isInitialized = true;
+        }
+
         return Scaffold(
           appBar: AppBar(
             title: Text("pick Avatar", style: AppStyles.robotoRegular16Yellow),
@@ -156,12 +183,12 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        showAvatrBottomSheet();
+                        showAvatarBottomSheet();
                       },
                       child: SizedBox(
                         height: size.height * 0.12,
                         child: Image.asset(
-                          AvatarList[currentAvatarIndex].emoji,
+                          avatarList[currentAvatarIndex].emoji,
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -192,9 +219,11 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                         if (text == null || text.trim().isEmpty) {
                           return 'Please enter a Phone Number';
                         }
-                        if (text.trim().length < 11) {
-                          return 'Name must be at least 3 characters';
+                        final phoneRegex = RegExp(r'^01[0-9]{9}$');
+                        if (!phoneRegex.hasMatch(text.trim())) {
+                          return 'Enter valid phone number';
                         }
+
                         return null;
                       },
                     ),
@@ -225,18 +254,16 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                         fontWeight: FontWeight.w600,
                       ),
                       backgroundColor: AppColors.redColor,
-                      onPressed: ()  {
-                        if(_formKey.currentState!.validate()){
-                          DialogUtils.showMessage(
-                            context: context,
-                            title: 'Delete Account',
-                            message: 'Are you sure you want to delete your account?',
-                            posActionText: 'Delete',
-                            negActionText: 'Cancel',
-                            posAction: () {
-                              context.read<AuthCubit>().deleteUserAccount();
-                            },
-                          );
+                      onPressed: () async {
+                        String? password = await DialogUtils.showPasswordDialog(
+                          context: context,
+                          message: 'Please Enter Password  to delete account',
+                          title: 'confirmation !',
+                        );
+
+                        if (password != null && password.isNotEmpty) {
+                          if (!context.mounted) return;
+                          context.read<AuthCubit>().deleteUserAccount(password);
                         }
                       },
                     ),
@@ -248,16 +275,15 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                       ),
                       backgroundColor: AppColors.yellowColor,
                       onPressed: () {
-                        print('updated');
-                        if(_formKey.currentState!.validate()){
+                        if (_formKey.currentState!.validate()) {
                           DialogUtils.showMessage(
                             context: context,
-                            title: 'Delete Account',
-                            message: 'Are you sure you want to delete your account?',
-                            posActionText: 'Delete',
+                            title: 'Update Data',
+                            message: 'Are you sure you want to update data?',
+                            posActionText: 'yes',
                             negActionText: 'Cancel',
                             posAction: () {
-                              context.read<AuthCubit>().updateUserProfile(
+                              context.read<AuthCubit>().updateUserData(
                                 name: nameController.text,
                                 phone: phoneController.text,
                                 avatarIndex: currentAvatarIndex,
@@ -265,7 +291,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                             },
                           );
                         }
-                        print('updated');
+                        debugPrint('updated');
                       },
                     ),
                     SizedBox(height: size.height * 0.015),
@@ -279,7 +305,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     );
   }
 
-  void showAvatrBottomSheet() {
+  void showAvatarBottomSheet() {
     showModalBottomSheet(
       // isScrollControlled: true,
       context: context,

@@ -28,13 +28,14 @@ class LoginScreen extends StatelessWidget {
             Duration(seconds: 3),
             () => Navigator.pushNamedAndRemoveUntil(
               context,
-              AppRoutes.homeRouteName,
+              AppRoutes.updateProfileRouteName,
+              // AppRoutes.homeRouteName,
               (route) => false,
             ),
           );
         }
 
-        if (state is AuthError) {
+        if (state is AuthLoginError) {
           debugPrint(state.message);
           DialogUtils.hideLoading(context: context);
           DialogUtils.showMessage(
@@ -44,7 +45,7 @@ class LoginScreen extends StatelessWidget {
             message: state.message,
           );
         }
-        if (state is AuthLoading) {
+        if (state is AuthLoginLoading) {
           DialogUtils.showLoading(context: context);
         }
       },

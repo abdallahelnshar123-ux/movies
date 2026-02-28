@@ -1,35 +1,39 @@
-import 'package:movies/model/my_user.dart';
-import 'package:movies/utils/dialog_utils.dart';
-
 abstract class AuthState {}
 
 class AuthInitial extends AuthState {}
 
-class AuthLoading extends AuthState {}
+// todo : login states
+class AuthLoginLoading extends AuthState {}
 
+class AuthAuthenticated extends AuthState {}
 
-class AuthAuthenticated extends AuthState {
-  final MyUser user;
+class AuthLoginError extends AuthState {
+  final String message;
 
-  AuthAuthenticated(this.user);
+  AuthLoginError(this.message);
 }
 
 class AuthUnauthenticated extends AuthState {}
 
-class AuthError extends AuthState {
+// todo: update states
+class AuthUpdateLoading extends AuthState {}
+
+class AuthUpdateSuccess extends AuthState {}
+
+class AuthUpdateError extends AuthState {
   final String message;
 
-  AuthError(this.message);
+  AuthUpdateError(this.message);
 }
 
+// todo: delete states
 
-class AuthUpdateSuccess extends AuthState {
-  final MyUser updatedUser;
+class AuthDeleteLoading extends AuthState {}
 
-  AuthUpdateSuccess(this.updatedUser);
+class AuthDeleteSuccess extends AuthState {}
 
-  @override
-  List<Object?> get props => [updatedUser];
+class AuthDeleteError extends AuthState {
+  final String message;
+
+  AuthDeleteError(this.message);
 }
-
-class AuthDeleteSuccess extends AuthState{}

@@ -2,7 +2,6 @@ import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:movies/model/my_user.dart';
-import 'package:movies/utils/dialog_utils.dart';
 import 'package:movies/utils/firebase_utils.dart';
 
 import 'auth_state.dart';
@@ -14,7 +13,7 @@ class AuthCubit extends Cubit<AuthState> {
 
   Future<void> login(String email, String password) async {
     try {
-      emit(AuthLoading());
+      emit(AuthLoginLoading());
 
       final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
@@ -28,7 +27,7 @@ class AuthCubit extends Cubit<AuthState> {
       );
 
       if (userData == null) {
-        emit(AuthError('Email not found'));
+        emit(AuthLoginError('Email not found'));
         return;
       }
 
@@ -51,10 +50,10 @@ class AuthCubit extends Cubit<AuthState> {
       if (e is FirebaseAuthException) {
         if (e.message ==
             'The supplied auth credential is incorrect, malformed or has expired.') {
-          emit(AuthError('Email or password is incorrect ! '));
+          emit(AuthLoginError('Email or password is incorrect ! '));
         }
       } else {
-        emit(AuthError('Something went wrong'));
+        emit(AuthLoginError('Something went wrong'));
       }
     }
   }
@@ -64,35 +63,48 @@ class AuthCubit extends Cubit<AuthState> {
     emit(AuthUnauthenticated());
   }
 
-  Future<void> deleteUserAccount() async {
+  Future<void> deleteUserAccount(String password) async {
     try {
-      emit(AuthLoading());
+      emit(AuthDeleteLoading());
 
-      // Delete from Firestore
-      await FirebaseUtils.deleteUser(currentUser!.id);
+      final user = FirebaseAuth.instance.currentUser;
 
-      // Delete from Firebase Auth
-      await FirebaseAuth.instance.currentUser?.delete();
+      final credential = EmailAuthProvider.credential(
+        email: user!.email!,
+        password: password,
+      );
+
+      await user.reauthenticateWithCredential(credential);
+      await FirebaseUtils.deleteUser(user.uid);
+      await user.delete();
 
       currentUser = null;
+
       emit(AuthDeleteSuccess());
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'wrong-password') {
+        emit(AuthDeleteError("Wrong password"));
+      } else if (e.code == 'requires-recent-login') {
+        emit(AuthDeleteError("Please login again"));
+      } else {
+        emit(AuthDeleteError(e.message ?? "Delete failed"));
+      }
     } catch (e) {
-      emit(AuthError(e.toString()));
+      emit(AuthDeleteError("Something went wrong"));
     }
   }
 
-  Future<void> updateUserProfile({
+  Future<void> updateUserData({
     required String name,
     required String phone,
     required int avatarIndex,
   }) async {
     try {
+      emit(AuthUpdateLoading());
       if (currentUser == null) {
-        emit(AuthError("User not logged in"));
+        emit(AuthUpdateError("User not logged in"));
         return;
       }
-
-      emit(AuthLoading());
 
       final updatedUser = MyUser(
         id: currentUser!.id,
@@ -102,13 +114,13 @@ class AuthCubit extends Cubit<AuthState> {
         avatarIndex: avatarIndex,
       );
 
-      await FirebaseUtils.updateUserInFireStore(updatedUser);
+      await FirebaseUtils.updateUserDataToFirestore(updatedUser);
 
       currentUser = updatedUser;
 
-      emit(AuthUpdateSuccess(updatedUser)); // هنا الحالة الجديدة
+      emit(AuthUpdateSuccess());
     } catch (e) {
-      emit(AuthError(e.toString()));
+      emit(AuthUpdateError(e.toString()));
     }
   }
 }
