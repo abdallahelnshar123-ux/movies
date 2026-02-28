@@ -63,18 +63,34 @@ class AuthCubit extends Cubit<AuthState> {
     emit(AuthUnauthenticated());
   }
 
-  Future<void> deleteUserAccount() async {
+  Future<void> deleteUserAccount(String password) async {
     try {
       emit(AuthDeleteLoading());
 
-      await FirebaseAuth.instance.currentUser?.delete();
+      final user = FirebaseAuth.instance.currentUser;
 
-      await FirebaseUtils.deleteUser(currentUser!.id);
+      final credential = EmailAuthProvider.credential(
+        email: user!.email!,
+        password: password,
+      );
+
+      await user.reauthenticateWithCredential(credential);
+      await FirebaseUtils.deleteUser(user.uid);
+      await user.delete();
 
       currentUser = null;
+
       emit(AuthDeleteSuccess());
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'wrong-password') {
+        emit(AuthDeleteError("Wrong password"));
+      } else if (e.code == 'requires-recent-login') {
+        emit(AuthDeleteError("Please login again"));
+      } else {
+        emit(AuthDeleteError(e.message ?? "Delete failed"));
+      }
     } catch (e) {
-      emit(AuthDeleteError(e.toString()));
+      emit(AuthDeleteError("Something went wrong"));
     }
   }
 
@@ -102,7 +118,7 @@ class AuthCubit extends Cubit<AuthState> {
 
       currentUser = updatedUser;
 
-      emit(AuthUpdateSuccess()); // هنا الحالة الجديدة
+      emit(AuthUpdateSuccess());
     } catch (e) {
       emit(AuthUpdateError(e.toString()));
     }

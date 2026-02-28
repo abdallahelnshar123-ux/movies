@@ -13,7 +13,7 @@ import 'package:movies/utils/app_styles.dart';
 import 'package:movies/utils/dialog_utils.dart';
 
 class UpdateProfileScreen extends StatefulWidget {
-  UpdateProfileScreen({super.key});
+  const UpdateProfileScreen({super.key});
 
   @override
   State<UpdateProfileScreen> createState() => _UpdateProfileScreenState();
@@ -26,33 +26,6 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
 
   int currentAvatarIndex = 0;
 
-  // late MyUser user;
-
-  // void initState() {
-  //   super.initState();
-  //   WidgetsBinding.instance.addPostFrameCallback((_) {
-  //     final authCubit = context.watch<AuthCubit>();
-  //     if (authCubit.currentUser != null) {
-  //       user = authCubit.currentUser!;
-  //       currentAvatarIndex = user.avatarIndex;
-  //       nameController.text = user.name;
-  //       phoneController.text = user.phone;
-  //     } else {
-  //       DialogUtils.showMessage(
-  //         context: context,
-  //         message: "Dont Have User In Your Cloud Storage",
-  //         posActionText: 'Ok',
-  //         negActionText: 'No',
-  //         posAction: () {
-  //           Navigator.pushReplacementNamed(
-  //             context,
-  //             AppRoutes.registerRouteName,
-  //           );
-  //         },
-  //       );
-  //     }
-  //   });
-  // }
   final _formKey = GlobalKey<FormState>();
   bool _isInitialized = false;
 
@@ -172,7 +145,6 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
         }
       },
 
-      // buildWhen: (previous, current) => current is AuthUpdateSuccess,
       builder: (context, state) {
         final authCubit = context.watch<AuthCubit>();
         final user = authCubit.currentUser;
@@ -251,9 +223,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                         if (!phoneRegex.hasMatch(text.trim())) {
                           return 'Enter valid phone number';
                         }
-                        // if (text.trim().length < 11) {
-                        //   return 'Name must be at least 3 characters';
-                        // }
+
                         return null;
                       },
                     ),
@@ -284,31 +254,17 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                         fontWeight: FontWeight.w600,
                       ),
                       backgroundColor: AppColors.redColor,
-                      onPressed: () {
-                        DialogUtils.showMessage(
+                      onPressed: () async {
+                        String? password = await DialogUtils.showPasswordDialog(
                           context: context,
-                          title: 'Delete Account',
-                          message:
-                              'Are you sure you want to delete your account?',
-                          posActionText: 'Delete',
-                          negActionText: 'Cancel',
-                          posAction: () {
-                            context.read<AuthCubit>().deleteUserAccount();
-                          },
+                          message: 'Please Enter Password  to delete account',
+                          title: 'confirmation !',
                         );
-                        // if (_formKey.currentState!.validate()) {
-                        //   DialogUtils.showMessage(
-                        //     context: context,
-                        //     title: 'Delete Account',
-                        //     message:
-                        //         'Are you sure you want to delete your account?',
-                        //     posActionText: 'Delete',
-                        //     negActionText: 'Cancel',
-                        //     posAction: () {
-                        //       context.read<AuthCubit>().deleteUserAccount();
-                        //     },
-                        //   );
-                        // }
+
+                        if (password != null && password.isNotEmpty) {
+                          if (!context.mounted) return;
+                          context.read<AuthCubit>().deleteUserAccount(password);
+                        }
                       },
                     ),
                     CustomButton(
@@ -319,20 +275,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                       ),
                       backgroundColor: AppColors.yellowColor,
                       onPressed: () {
-                        // debugPrint('pressed');
-                        // context.read<AuthCubit>().updateUserData(
-                        //   name: nameController.text,
-                        //   phone: phoneController.text,
-                        //   avatarIndex: currentAvatarIndex,
-                        // );
-                        // print('updated');
                         if (_formKey.currentState!.validate()) {
-                          // context.read<AuthCubit>().updateUserData(
-                          //   name: nameController.text,
-                          //   phone: phoneController.text,
-                          //   avatarIndex: currentAvatarIndex,
-                          // );
-
                           DialogUtils.showMessage(
                             context: context,
                             title: 'Update Data',

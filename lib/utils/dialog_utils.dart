@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:movies/utils/app_colors.dart';
 import 'package:movies/utils/app_styles.dart';
 
-// todo: approved ===========================================================
 class DialogUtils {
   static void showLoading({required BuildContext context}) {
     showDialog(
@@ -79,5 +78,66 @@ class DialogUtils {
       ),
     );
     FocusManager.instance.primaryFocus?.unfocus();
+  }
+
+  static Future<String?> showPasswordDialog({
+    required BuildContext context,
+    String title = '',
+    required String message,
+    String confirmText = 'Confirm',
+    String cancelText = 'Cancel',
+  }) {
+    TextEditingController passwordController = TextEditingController();
+
+    return showDialog<String>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return AlertDialog(
+          contentPadding: const EdgeInsets.all(20),
+          title: Text(
+            context.tr(title),
+            style: AppStyles.robotoRegular16Yellow,
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                context.tr(message),
+                style: AppStyles.robotoRegular14White,
+              ),
+              const SizedBox(height: 15),
+              TextField(
+                controller: passwordController,
+                obscureText: true,
+                decoration: const InputDecoration(
+                  hintText: "Enter your password",
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // يرجع null
+              },
+              child: Text(
+                context.tr(cancelText),
+                style: AppStyles.robotoRegular16Yellow,
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context, passwordController.text.trim());
+              },
+              child: Text(
+                context.tr(confirmText),
+                style: AppStyles.robotoRegular16Yellow,
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
