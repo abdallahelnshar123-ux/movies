@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies/cubit/auth_state.dart';
 import 'package:movies/cubit/auth_view_model.dart';
-import 'package:movies/model/my_user.dart';
 import 'package:movies/update_profile_screen/Widget/Custome_Botton.dart';
 import 'package:movies/update_profile_screen/Widget/Custome_TextFormFeild.dart';
 import 'package:movies/update_profile_screen/Widget/selecteAvatarBottomSheet.dart';
@@ -26,9 +25,9 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   TextEditingController phoneController = TextEditingController();
 
   int currentAvatarIndex = 0;
-  late MyUser user;
 
-  @override
+  // late MyUser user;
+
   // void initState() {
   //   super.initState();
   //   WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -54,7 +53,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   //     }
   //   });
   // }
-  var _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   bool _isInitialized = false;
 
   @override
@@ -113,8 +112,12 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       listenWhen: (previous, current) =>
           current is AuthUpdateSuccess ||
           current is AuthUpdateError ||
-          current is AuthUpdateLoading,
+          current is AuthUpdateLoading ||
+          current is AuthDeleteError ||
+          current is AuthDeleteLoading ||
+          current is AuthDeleteSuccess,
       listener: (context, state) {
+        debugPrint(state.runtimeType.toString());
         if (state is AuthUpdateSuccess) {
           DialogUtils.hideLoading(context: context);
           DialogUtils.showMessage(
@@ -122,20 +125,49 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
             title: 'success',
             message: 'Profile updated successfully!',
             posActionText: 'Ok',
-            // posAction: () {
-            //   Navigator.pushReplacementNamed(context, AppRoutes.homeRouteName);
-            // },
+            posAction: () {
+              Navigator.pop(context);
+            },
           );
         }
         if (state is AuthUpdateError) {
           DialogUtils.hideLoading(context: context);
           DialogUtils.showMessage(
             context: context,
-            message: 'Error!!!',
+            title: 'Error!!!',
+            message: state.message,
             posActionText: 'Ok',
           );
         }
         if (state is AuthUpdateLoading) {
+          DialogUtils.showLoading(context: context);
+        }
+        if (state is AuthDeleteSuccess) {
+          DialogUtils.hideLoading(context: context);
+          DialogUtils.showMessage(
+            context: context,
+            title: 'success',
+            message: 'Account deleted successfully!',
+            posActionText: 'Ok',
+            posAction: () {
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                AppRoutes.loginRouteName,
+                (route) => false,
+              );
+            },
+          );
+        }
+        if (state is AuthDeleteError) {
+          DialogUtils.hideLoading(context: context);
+          DialogUtils.showMessage(
+            context: context,
+            title: 'Error!!!',
+            message: state.message,
+            posActionText: 'Ok',
+          );
+        }
+        if (state is AuthDeleteLoading) {
           DialogUtils.showLoading(context: context);
         }
       },
@@ -253,19 +285,30 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                       ),
                       backgroundColor: AppColors.redColor,
                       onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          DialogUtils.showMessage(
-                            context: context,
-                            title: 'Delete Account',
-                            message:
-                                'Are you sure you want to delete your account?',
-                            posActionText: 'Delete',
-                            negActionText: 'Cancel',
-                            posAction: () {
-                              context.read<AuthCubit>().deleteUserAccount();
-                            },
-                          );
-                        }
+                        DialogUtils.showMessage(
+                          context: context,
+                          title: 'Delete Account',
+                          message:
+                              'Are you sure you want to delete your account?',
+                          posActionText: 'Delete',
+                          negActionText: 'Cancel',
+                          posAction: () {
+                            context.read<AuthCubit>().deleteUserAccount();
+                          },
+                        );
+                        // if (_formKey.currentState!.validate()) {
+                        //   DialogUtils.showMessage(
+                        //     context: context,
+                        //     title: 'Delete Account',
+                        //     message:
+                        //         'Are you sure you want to delete your account?',
+                        //     posActionText: 'Delete',
+                        //     negActionText: 'Cancel',
+                        //     posAction: () {
+                        //       context.read<AuthCubit>().deleteUserAccount();
+                        //     },
+                        //   );
+                        // }
                       },
                     ),
                     CustomButton(
@@ -276,28 +319,34 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                       ),
                       backgroundColor: AppColors.yellowColor,
                       onPressed: () {
-                        print('updated');
+                        // debugPrint('pressed');
+                        // context.read<AuthCubit>().updateUserData(
+                        //   name: nameController.text,
+                        //   phone: phoneController.text,
+                        //   avatarIndex: currentAvatarIndex,
+                        // );
+                        // print('updated');
                         if (_formKey.currentState!.validate()) {
-                          context.read<AuthCubit>().updateUserData(
-                            name: nameController.text,
-                            phone: phoneController.text,
-                            avatarIndex: currentAvatarIndex,
-                          );
-
-                          // DialogUtils.showMessage(
-                          //   context: context,
-                          //   title: 'Update Data',
-                          //   message: 'Are you sure you want to update data?',
-                          //   posActionText: 'yes',
-                          //   negActionText: 'Cancel',
-                          //   posAction: () {
-                          //     context.read<AuthCubit>().updateUserData(
-                          //       name: nameController.text,
-                          //       phone: phoneController.text,
-                          //       avatarIndex: currentAvatarIndex,
-                          //     );
-                          //   },
+                          // context.read<AuthCubit>().updateUserData(
+                          //   name: nameController.text,
+                          //   phone: phoneController.text,
+                          //   avatarIndex: currentAvatarIndex,
                           // );
+
+                          DialogUtils.showMessage(
+                            context: context,
+                            title: 'Update Data',
+                            message: 'Are you sure you want to update data?',
+                            posActionText: 'yes',
+                            negActionText: 'Cancel',
+                            posAction: () {
+                              context.read<AuthCubit>().updateUserData(
+                                name: nameController.text,
+                                phone: phoneController.text,
+                                avatarIndex: currentAvatarIndex,
+                              );
+                            },
+                          );
                         }
                         debugPrint('updated');
                       },

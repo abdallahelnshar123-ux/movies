@@ -67,10 +67,7 @@ class AuthCubit extends Cubit<AuthState> {
     try {
       emit(AuthDeleteLoading());
 
-      // Delete from Firebase Auth
-
       await FirebaseAuth.instance.currentUser?.delete();
-      // Delete from Firestore
 
       await FirebaseUtils.deleteUser(currentUser!.id);
 

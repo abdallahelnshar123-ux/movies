@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:movies/utils/app_styles.dart';
-import 'package:movies/utils/screen_size.dart';
 
 class CustomButton extends StatelessWidget {
   String text;
@@ -20,7 +18,7 @@ class CustomButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(15)
         )
       ),
-        onPressed: () {},
+        onPressed: onPressed,
         child: FittedBox(
           fit: BoxFit.scaleDown,
             child: Text(text , style: style, maxLines: 1,)

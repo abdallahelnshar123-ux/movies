@@ -24,7 +24,7 @@ class FirebaseUtils {
 
   static Future<void> updateUserDataToFirestore(MyUser user) async {
     var querySnapshot = getUsersCollection().doc(user.id);
-    return await querySnapshot.update(user.toFireStore());
+    await querySnapshot.update(user.toFireStore());
   }
 
   // static Future<MyUser?> updateUser(String name , String phoneNum , int AvatarIndex , String uId){
