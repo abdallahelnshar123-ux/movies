@@ -57,4 +57,28 @@ class FirebaseUtils {
 
     return null;
   }
+
+  static Future<UserCredential?> reSignInWithGoogle() async {
+    final GoogleSignIn signIn = GoogleSignIn.instance;
+    await signIn.initialize(
+        clientId: '503224830946-tm277q3ec3la0j61i5ds6dc222jhn6sf.apps.googleusercontent.com');
+
+    // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser = await signIn.authenticate();
+    // final GoogleSignInAccount? googleUser = await GoogleSignIn.instance.authenticate();
+    if (googleUser != null) {
+      // Obtain the auth details from the request
+      final GoogleSignInAuthentication googleAuth = googleUser.authentication;
+
+      // Create a new credential
+      final credential = GoogleAuthProvider.credential(
+          idToken: googleAuth.idToken);
+
+      // Once signed in, return the UserCredential
+      return await FirebaseAuth.instance.currentUser!
+          .reauthenticateWithCredential(credential);
+    }
+
+    return null;
+  }
 }

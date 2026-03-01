@@ -297,7 +297,21 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                 .read<AuthCubit>()
                                 .deleteUserAccountWithEmailPassword(password);
                           }
-                        } else {}
+                        } else {
+                          DialogUtils.showMessage(
+                            context: context,
+                            message:
+                                'Are you sure you want to delete the account ?',
+                            title: 'confirmation !',
+                            posAction: () {
+                              context
+                                  .read<AuthCubit>()
+                                  .deleteUserAccountWithGoogle();
+                            },
+                            posActionText: 'yes',
+                            negActionText: 'no',
+                          );
+                        }
                       },
                     ),
                     CustomButton(

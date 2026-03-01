@@ -180,35 +180,40 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  Future<void> deleteUserAccountWithGoogle(String password) async {
+  Future<void> deleteUserAccountWithGoogle() async {
     try {
       emit(AuthDeleteLoading());
       final user = FirebaseAuth.instance.currentUser;
 
       if (user == null) {
-        throw Exception("No logged user");
+        emit(AuthDeleteError('No logged user'));
+        return;
       }
+
+      final googleUserData = await FirebaseUtils.reSignInWithGoogle();
+
+      if (googleUserData == null) return;
 
       // 1️⃣ اعادة تسجيل دخول Google
-      final googleSignIn = GoogleSignIn.instance;
-
-      await googleSignIn.initialize(
-        serverClientId: '503224830946-tm277q3ec3la0j61i5ds6dc222jhn6sf.apps.googleusercontent.com',
-      );
-
-      final googleUser = await googleSignIn.authenticate();
-      if (googleUser == null) {
-        throw Exception("Google re-auth cancelled");
-      }
-
-      final googleAuth = googleUser.authentication;
-
-      final credential = GoogleAuthProvider.credential(
-        idToken: googleAuth.idToken,
-      );
-
-      // 2️⃣ Re-authenticate
-      await user.reauthenticateWithCredential(credential);
+      // final googleSignIn = GoogleSignIn.instance;
+      //
+      // await googleSignIn.initialize(
+      //   serverClientId: '503224830946-tm277q3ec3la0j61i5ds6dc222jhn6sf.apps.googleusercontent.com',
+      // );
+      //
+      // final GoogleSignInAccount? googleUser = await googleSignIn.authenticate();
+      // if (googleUser == null) {
+      //   throw Exception("Google re-auth cancelled");
+      // }
+      //
+      // final googleAuth = googleUser.authentication;
+      //
+      // final credential = GoogleAuthProvider.credential(
+      //   idToken: googleAuth.idToken,
+      // );
+      //
+      // // 2️⃣ Re-authenticate
+      // await user.reauthenticateWithCredential(credential);
 
       // 3️⃣ امسح من Firestore
       await FirebaseUtils.deleteUserFromFirestore(user.uid);
@@ -217,7 +222,8 @@ class AuthCubit extends Cubit<AuthState> {
       await user.delete();
 
       // 5️⃣ اعمل signOut من Google
-      await googleSignIn.signOut();
+      await GoogleSignIn.instance.signOut();
+      currentUser == null;
 
 
       emit(AuthDeleteSuccess());
