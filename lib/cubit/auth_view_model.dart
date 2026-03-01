@@ -11,7 +11,7 @@ class AuthCubit extends Cubit<AuthState> {
 
   MyUser? currentUser;
 
-  Future<void> login(String email, String password) async {
+  Future<void> loginWithEmailAndPassword(String email, String password) async {
     try {
       emit(AuthLoginLoading());
 
@@ -39,6 +39,7 @@ class AuthCubit extends Cubit<AuthState> {
         email: userData.email,
         avatarIndex: userData.avatarIndex,
         phone: userData.phone,
+          provider: userData.provider
       );
 
       currentUser = user;
@@ -112,6 +113,7 @@ class AuthCubit extends Cubit<AuthState> {
         name: name,
         phone: phone,
         avatarIndex: avatarIndex,
+          provider: currentUser!.provider
       );
 
       await FirebaseUtils.updateUserDataToFirestore(updatedUser);
@@ -121,6 +123,59 @@ class AuthCubit extends Cubit<AuthState> {
       emit(AuthUpdateSuccess());
     } catch (e) {
       emit(AuthUpdateError(e.toString()));
+    }
+  }
+
+  ///   auth with google
+  Future<void> loginWithGoogle() async {
+    try {
+      emit(AuthLoginLoading());
+      final googleUserData = await FirebaseUtils.signInWithGoogle();
+
+      if (googleUserData == null) return;
+
+
+      // final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+      //   email: email,
+      //   password: password,
+      // );
+
+      // debugPrint(credential.user?.uid ?? 'no user');
+
+      final firestoreUserData = await FirebaseUtils.readUserFromFireStore(
+        googleUserData.user?.uid ?? '',
+      );
+
+      if (firestoreUserData == null) {
+        // emit(AuthLoginError('Email not found'));
+        // return;
+        final user = MyUser(
+            id: googleUserData.user?.uid ?? '',
+            name: googleUserData.user?.displayName ?? '',
+            email: googleUserData.user?.email ?? '',
+            avatarIndex: -1,
+            phone: googleUserData.user?.phoneNumber ?? '',
+            provider: AuthProviders.google
+        );
+        await FirebaseUtils.addUserToFireStore(user);
+        currentUser = user;
+        emit(AuthAuthenticated());
+      } else {
+        final user = MyUser(
+            id: firestoreUserData.id,
+            name: firestoreUserData.name,
+            email: firestoreUserData.email,
+            avatarIndex: firestoreUserData.avatarIndex,
+            phone: firestoreUserData.phone,
+            provider: firestoreUserData.provider
+        );
+        currentUser = user;
+        emit(AuthAuthenticated());
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+
+      emit(AuthLoginError(e.toString()));
     }
   }
 }

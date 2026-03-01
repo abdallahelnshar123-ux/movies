@@ -11,6 +11,7 @@ import 'package:movies/utils/app_colors.dart';
 import 'package:movies/utils/app_routes.dart';
 import 'package:movies/utils/app_styles.dart';
 import 'package:movies/utils/dialog_utils.dart';
+import 'package:movies/utils/screen_size.dart';
 
 class UpdateProfileScreen extends StatefulWidget {
   const UpdateProfileScreen({super.key});
@@ -152,12 +153,20 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
         if (user == null) {
           return Center(child: Text("No user found"));
         }
-
-        if (!_isInitialized) {
-          nameController.text = user.name;
-          phoneController.text = user.phone;
-          currentAvatarIndex = user.avatarIndex;
-          _isInitialized = true;
+        if (user.phone.isEmpty || user.phone == '') {
+          if (!_isInitialized) {
+            nameController.text = user.name;
+            // phoneController.text = ;
+            currentAvatarIndex = user.avatarIndex;
+            _isInitialized = true;
+          }
+        } else {
+          if (!_isInitialized) {
+            nameController.text = user.name;
+            phoneController.text = user.phone;
+            currentAvatarIndex = user.avatarIndex;
+            _isInitialized = true;
+          }
         }
 
         return Scaffold(
@@ -187,10 +196,24 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                       },
                       child: SizedBox(
                         height: size.height * 0.12,
-                        child: Image.asset(
-                          avatarList[currentAvatarIndex].emoji,
-                          fit: BoxFit.cover,
-                        ),
+                        child: currentAvatarIndex == -1
+                            ? Container(
+                                width: context.width * 0.25,
+                                height: context.width * 0.2,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(100),
+                                  image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: AssetImage(
+                                      AppAssets.fallbackUserImage,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : Image.asset(
+                                avatarList[currentAvatarIndex].emoji,
+                                fit: BoxFit.cover,
+                              ),
                       ),
                     ),
                     SizedBox(height: size.height * 0.01),

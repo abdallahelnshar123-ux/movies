@@ -25,8 +25,8 @@ class AppAssets {
   static const String card2Image = 'assets/images/card2_image.png';
   static const String card3Image = 'assets/images/card3_image.png';
   static const String card4Image = 'assets/images/card4_image.png';
-
-
+  static const String fallbackUserImage =
+      'assets/images/fallback_user_image.png';
 
   /// icons ===================================================================
   static const String emailIcon = 'assets/icons/email-icon.svg';
