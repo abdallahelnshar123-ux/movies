@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies/cubit/auth_state.dart';
 import 'package:movies/cubit/auth_view_model.dart';
+import 'package:movies/model/my_user.dart';
 import 'package:movies/update_profile_screen/Widget/Custome_Botton.dart';
 import 'package:movies/update_profile_screen/Widget/Custome_TextFormFeild.dart';
 import 'package:movies/update_profile_screen/Widget/selecteAvatarBottomSheet.dart';
@@ -250,24 +251,27 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                         return null;
                       },
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(
-                              context,
-                            ).pushNamed(AppRoutes.forgetPasswordRouteName);
-                          },
-                          child: Text(
-                            "Reset Password",
-                            style: AppStyles.robotoRegular16White.copyWith(
-                              decoration: TextDecoration.underline,
-                              decorationColor: AppColors.whiteColor,
+                    Visibility(
+                      visible: user.provider == AuthProviders.emailPassword,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(
+                                context,
+                              ).pushNamed(AppRoutes.forgetPasswordRouteName);
+                            },
+                            child: Text(
+                              "Reset Password",
+                              style: AppStyles.robotoRegular16White.copyWith(
+                                decoration: TextDecoration.underline,
+                                decorationColor: AppColors.whiteColor,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                     SizedBox(height: size.height * 0.32),
                     CustomButton(
@@ -278,16 +282,22 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                       ),
                       backgroundColor: AppColors.redColor,
                       onPressed: () async {
-                        String? password = await DialogUtils.showPasswordDialog(
-                          context: context,
-                          message: 'Please Enter Password  to delete account',
-                          title: 'confirmation !',
-                        );
+                        if (user.provider == AuthProviders.emailPassword) {
+                          String? password =
+                              await DialogUtils.showPasswordDialog(
+                                context: context,
+                                message:
+                                    'Please Enter Password  to delete account',
+                                title: 'confirmation !',
+                              );
 
-                        if (password != null && password.isNotEmpty) {
-                          if (!context.mounted) return;
-                          context.read<AuthCubit>().deleteUserAccount(password);
-                        }
+                          if (password != null && password.isNotEmpty) {
+                            if (!context.mounted) return;
+                            context
+                                .read<AuthCubit>()
+                                .deleteUserAccountWithEmailPassword(password);
+                          }
+                        } else {}
                       },
                     ),
                     CustomButton(

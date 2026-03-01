@@ -294,7 +294,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           name: nameController.text,
           phone: phoneController.text,
           avatarIndex: selectedIndexAvatar,
-          provider: AuthProviders.google,
+          provider: AuthProviders.emailPassword,
         );
 
         await FirebaseUtils.addUserToFireStore(myUser);

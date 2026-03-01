@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:movies/model/my_user.dart';
 import 'package:movies/utils/firebase_utils.dart';
 
@@ -64,7 +65,7 @@ class AuthCubit extends Cubit<AuthState> {
     emit(AuthUnauthenticated());
   }
 
-  Future<void> deleteUserAccount(String password) async {
+  Future<void> deleteUserAccountWithEmailPassword(String password) async {
     try {
       emit(AuthDeleteLoading());
 
@@ -178,4 +179,59 @@ class AuthCubit extends Cubit<AuthState> {
       emit(AuthLoginError(e.toString()));
     }
   }
+
+  Future<void> deleteUserAccountWithGoogle(String password) async {
+    try {
+      emit(AuthDeleteLoading());
+      final user = FirebaseAuth.instance.currentUser;
+
+      if (user == null) {
+        throw Exception("No logged user");
+      }
+
+      // 1️⃣ اعادة تسجيل دخول Google
+      final googleSignIn = GoogleSignIn.instance;
+
+      await googleSignIn.initialize(
+        serverClientId: '503224830946-tm277q3ec3la0j61i5ds6dc222jhn6sf.apps.googleusercontent.com',
+      );
+
+      final googleUser = await googleSignIn.authenticate();
+      if (googleUser == null) {
+        throw Exception("Google re-auth cancelled");
+      }
+
+      final googleAuth = googleUser.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        idToken: googleAuth.idToken,
+      );
+
+      // 2️⃣ Re-authenticate
+      await user.reauthenticateWithCredential(credential);
+
+      // 3️⃣ امسح من Firestore
+      await FirebaseUtils.deleteUserFromFirestore(user.uid);
+
+      // 4️⃣ امسح من Firebase Auth
+      await user.delete();
+
+      // 5️⃣ اعمل signOut من Google
+      await googleSignIn.signOut();
+
+
+      emit(AuthDeleteSuccess());
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'wrong-password') {
+        emit(AuthDeleteError("Wrong password"));
+      } else if (e.code == 'requires-recent-login') {
+        emit(AuthDeleteError("Please login again"));
+      } else {
+        emit(AuthDeleteError(e.message ?? "Delete failed"));
+      }
+    } catch (e) {
+      emit(AuthDeleteError("Something went wrong"));
+    }
+  }
+
 }
