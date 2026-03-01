@@ -26,6 +26,7 @@ class AppAssets {
   static const String card3Image = 'assets/images/card3_image.png';
   static const String card4Image = 'assets/images/card4_image.png';
   static const String playMovieImage = 'assets/images/play_movie_image.png';
+  static const String emptyListImage = 'assets/images/empty_list_image.png';
 
   /// icons ===================================================================
   static const String emailIcon = 'assets/icons/email-icon.svg';
@@ -41,4 +42,6 @@ class AppAssets {
   static const String starIcon = 'assets/icons/star_icon.svg';
   static const String heartIcon = 'assets/icons/heart_icon.svg';
   static const String clockIcon = 'assets/icons/clock_icon.svg';
+  static const String historyIcon = 'assets/icons/history_icon.svg';
+  static const String wishlistIcon = 'assets/icons/wishlist_icon.svg';
 }
