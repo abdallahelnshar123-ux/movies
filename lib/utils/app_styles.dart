@@ -34,6 +34,11 @@ class AppStyles {
     fontSize: 20,
     fontWeight: FontWeight.w600,
   );
+  static TextStyle interBold20yellow = GoogleFonts.inter(
+    color: AppColors.yellowColor,
+    fontSize: 20,
+    fontWeight: FontWeight.w700,
+  );
 
   /// roboto font ============================================================
   static TextStyle robotoRegular16White = GoogleFonts.roboto(
@@ -105,6 +110,11 @@ class AppStyles {
   static TextStyle robotoBold20LightGray = GoogleFonts.roboto(
     color: AppColors.lightGrayColor,
     fontSize: 20,
+    fontWeight: FontWeight.w700,
+  );
+  static TextStyle robotoBold36White = GoogleFonts.roboto(
+    color: AppColors.whiteColor,
+    fontSize: 36,
     fontWeight: FontWeight.w700,
   );
 }
