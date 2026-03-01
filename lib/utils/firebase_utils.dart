@@ -27,7 +27,7 @@ class FirebaseUtils {
     await querySnapshot.update(user.toFireStore());
   }
 
-  static Future<void> deleteUser(String uId) async {
+  static Future<void> deleteUserFromFirestore(String uId) async {
     await getUsersCollection().doc(uId).delete();
   }
 }

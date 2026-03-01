@@ -75,7 +75,7 @@ class AuthCubit extends Cubit<AuthState> {
       );
 
       await user.reauthenticateWithCredential(credential);
-      await FirebaseUtils.deleteUser(user.uid);
+      await FirebaseUtils.deleteUserFromFirestore(user.uid);
       await user.delete();
 
       currentUser = null;
