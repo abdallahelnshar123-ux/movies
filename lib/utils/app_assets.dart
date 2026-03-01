@@ -25,6 +25,8 @@ class AppAssets {
   static const String card2Image = 'assets/images/card2_image.png';
   static const String card3Image = 'assets/images/card3_image.png';
   static const String card4Image = 'assets/images/card4_image.png';
+  static const String fallbackUserImage =
+      'assets/images/fallback_user_image.png';
   static const String playMovieImage = 'assets/images/play_movie_image.png';
   static const String emptyListImage = 'assets/images/empty_list_image.png';
 
