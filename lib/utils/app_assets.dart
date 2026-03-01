@@ -27,6 +27,8 @@ class AppAssets {
   static const String card4Image = 'assets/images/card4_image.png';
   static const String fallbackUserImage =
       'assets/images/fallback_user_image.png';
+  static const String playMovieImage = 'assets/images/play_movie_image.png';
+  static const String emptyListImage = 'assets/images/empty_list_image.png';
 
   /// icons ===================================================================
   static const String emailIcon = 'assets/icons/email-icon.svg';
@@ -39,4 +41,9 @@ class AppAssets {
   static const String bnbHomeIcon = 'assets/icons/bnb_home_icon.svg';
   static const String bnbProfileIcon = 'assets/icons/bnb_profile_icon.svg';
   static const String bnbSearchIcon = 'assets/icons/bnb_search_icon.svg';
+  static const String starIcon = 'assets/icons/star_icon.svg';
+  static const String heartIcon = 'assets/icons/heart_icon.svg';
+  static const String clockIcon = 'assets/icons/clock_icon.svg';
+  static const String historyIcon = 'assets/icons/history_icon.svg';
+  static const String wishlistIcon = 'assets/icons/wishlist_icon.svg';
 }
