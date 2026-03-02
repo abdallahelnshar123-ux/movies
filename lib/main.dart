@@ -6,6 +6,7 @@ import 'package:movies/cubit/auth_view_model.dart';
 import 'package:movies/forget_password_screen/forget_password_screen.dart';
 import 'package:movies/home_screen/home_screen.dart';
 import 'package:movies/login_screen/login_screen.dart';
+import 'package:movies/movie_detials_screen/movie_deitals_Screen.dart';
 import 'package:movies/onboarding_screen/onBoardingSharedPrefrance.dart';
 import 'package:movies/onboarding_screen/onboarding_screen.dart';
 import 'package:movies/register_screen/register_screen.dart';
@@ -19,13 +20,8 @@ bool isSeen = false;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-
-  WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   isSeen = await MyPreferences.isOnboardingCompleted();
 
   runApp(
@@ -35,7 +31,7 @@ void main() async {
         supportedLocales: const [Locale('en'), Locale('ar')],
         path: 'assets/translations',
         fallbackLocale: const Locale('en'),
-        // startLocale: const Locale('en'),
+        startLocale: const Locale('en'),
         child: MyApp(),
       ),
     ),
@@ -53,14 +49,15 @@ class MyApp extends StatelessWidget {
       supportedLocales: context.supportedLocales,
       locale: context.locale,
       initialRoute: isSeen
-          ? AppRoutes.loginRouteName
+          ? AppRoutes.homeRouteName
           : AppRoutes.onboardingRouteName,
       routes: {
+        AppRoutes.updateProfileRouteName: (context) => UpdateProfileScreen(),
+        AppRoutes.movieDetialsScreen:(context)=>MovieDeitalsScreen(),
         AppRoutes.homeRouteName: (context) => HomeScreen(),
         AppRoutes.onboardingRouteName: (context) => OnboardingScreen(),
         AppRoutes.loginRouteName: (context) => LoginScreen(),
         AppRoutes.registerRouteName: (context) => RegisterScreen(),
-        AppRoutes.updateProfileRouteName: (context) => UpdateProfileScreen(),
         AppRoutes.forgetPasswordRouteName: (context) => ForgetPasswordScreen(),
       },
       themeMode: ThemeMode.dark,
