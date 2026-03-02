@@ -54,35 +54,8 @@ class _MovieDeitalsScreenState extends State<MovieDeitalsScreen> {
     return Scaffold(
       backgroundColor: AppColors.blackColor,
       extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        leading: IconButton(
-          onPressed: () {},
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: AppColors.whiteColor,
-            size: 25,
-          ),
-        ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              isBookMarked = !isBookMarked;
-              setState(() {});
-            },
-            icon: isBookMarked
-                ? Icon(Icons.bookmark, color: AppColors.whiteColor, size: 25)
-                : Icon(
-                    Icons.bookmark_border,
-                    color: AppColors.whiteColor,
-                    size: 25,
-                  ),
-          ),
-        ],
-      ),
       body: Stack(
         children: [
-
           Container(
             decoration: BoxDecoration(
               image: DecorationImage(
@@ -93,7 +66,6 @@ class _MovieDeitalsScreenState extends State<MovieDeitalsScreen> {
               ),
             ),
           ),
-
           SingleChildScrollView(
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: size.width * 0.02),
@@ -112,8 +84,29 @@ class _MovieDeitalsScreenState extends State<MovieDeitalsScreen> {
                 spacing: 15,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  SizedBox(height: size.height * 0.6),
-
+                  Padding(
+                    padding: EdgeInsets.only(top:size.height*0.04),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                          onPressed: () => Navigator.pop(context),
+                          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            setState(() { isBookMarked = !isBookMarked; });
+                          },
+                          icon: Icon(
+                            isBookMarked ? Icons.bookmark : Icons.bookmark_border,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: size.height * 0.09),
+                  Image.asset(AppAssets.playMovieImage),
                   ///todo:Movie descreption
                   Text(
                     "Doctor Strange in The Multiverse\n of Madness",
@@ -259,7 +252,7 @@ class _MovieDeitalsScreenState extends State<MovieDeitalsScreen> {
                   },
                   itemCount:5,
                 ),),
-                  SizedBox(height: 80,)
+                  SizedBox(height: size.height*0.005,)
                 ],
               ),
             ),
