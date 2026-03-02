@@ -25,8 +25,22 @@ class AppAssets {
   static const String card2Image = 'assets/images/card2_image.png';
   static const String card3Image = 'assets/images/card3_image.png';
   static const String card4Image = 'assets/images/card4_image.png';
+  static const String fallbackUserImage =
+      'assets/images/fallback_user_image.png';
   static const String playMovieImage = 'assets/images/play_movie_image.png';
   static const String emptyListImage = 'assets/images/empty_list_image.png';
+  static const String doctorStrangeImg = 'assets/images/doctorStrangeImg.png';
+  static const String screenShotOne = 'assets/images/screenShotOne.png';
+  static const String screenShotTwo = 'assets/images/screenShotTwo.png';
+  static const String screenShotThree = 'assets/images/screenShotThree.png';
+  static const String cardOne = 'assets/images/cardOne.png';
+  static const String cardTwo = 'assets/images/cardTwo.png';
+  static const String cardThree= 'assets/images/cardThree.png';
+  static const String cardFour = 'assets/images/cardFour.png';
+  static const String HayleyAtwell = 'assets/images/captainCarter.png';
+  static const String ElizabethOlsen = 'assets/images/ElizabethOlsen.png';
+  static const String RachelMcAdams = 'assets/images/RachelMcAdams.png';
+  static const String CharlizeTheron = 'assets/images/CharlizeTheron.png';
 
   /// icons ===================================================================
   static const String emailIcon = 'assets/icons/email-icon.svg';
@@ -44,4 +58,7 @@ class AppAssets {
   static const String clockIcon = 'assets/icons/clock_icon.svg';
   static const String historyIcon = 'assets/icons/history_icon.svg';
   static const String wishlistIcon = 'assets/icons/wishlist_icon.svg';
+  static const String heartIconPng = 'assets/images/heart.png';
+  static const String starIconPng = 'assets/images/star.png';
+  static const String timerIconPng = 'assets/images/timer.png';
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies/cubit/auth_state.dart';
 import 'package:movies/cubit/auth_view_model.dart';
+import 'package:movies/model/my_user.dart';
 import 'package:movies/update_profile_screen/Widget/Custome_Botton.dart';
 import 'package:movies/update_profile_screen/Widget/Custome_TextFormFeild.dart';
 import 'package:movies/update_profile_screen/Widget/selecteAvatarBottomSheet.dart';
@@ -11,6 +12,7 @@ import 'package:movies/utils/app_colors.dart';
 import 'package:movies/utils/app_routes.dart';
 import 'package:movies/utils/app_styles.dart';
 import 'package:movies/utils/dialog_utils.dart';
+import 'package:movies/utils/screen_size.dart';
 
 class UpdateProfileScreen extends StatefulWidget {
   const UpdateProfileScreen({super.key});
@@ -152,12 +154,20 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
         if (user == null) {
           return Center(child: Text("No user found"));
         }
-
-        if (!_isInitialized) {
-          nameController.text = user.name;
-          phoneController.text = user.phone;
-          currentAvatarIndex = user.avatarIndex;
-          _isInitialized = true;
+        if (user.phone.isEmpty || user.phone == '') {
+          if (!_isInitialized) {
+            nameController.text = user.name;
+            // phoneController.text = ;
+            currentAvatarIndex = user.avatarIndex;
+            _isInitialized = true;
+          }
+        } else {
+          if (!_isInitialized) {
+            nameController.text = user.name;
+            phoneController.text = user.phone;
+            currentAvatarIndex = user.avatarIndex;
+            _isInitialized = true;
+          }
         }
 
         return Scaffold(
@@ -187,10 +197,24 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                       },
                       child: SizedBox(
                         height: size.height * 0.12,
-                        child: Image.asset(
-                          avatarList[currentAvatarIndex].emoji,
-                          fit: BoxFit.cover,
-                        ),
+                        child: currentAvatarIndex == -1
+                            ? Container(
+                                width: context.width * 0.25,
+                                height: context.width * 0.2,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(100),
+                                  image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: AssetImage(
+                                      AppAssets.fallbackUserImage,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : Image.asset(
+                                avatarList[currentAvatarIndex].emoji,
+                                fit: BoxFit.cover,
+                              ),
                       ),
                     ),
                     SizedBox(height: size.height * 0.01),
@@ -227,24 +251,27 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                         return null;
                       },
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(
-                              context,
-                            ).pushNamed(AppRoutes.forgetPasswordRouteName);
-                          },
-                          child: Text(
-                            "Reset Password",
-                            style: AppStyles.robotoRegular16White.copyWith(
-                              decoration: TextDecoration.underline,
-                              decorationColor: AppColors.whiteColor,
+                    Visibility(
+                      visible: user.provider == AuthProviders.emailPassword,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(
+                                context,
+                              ).pushNamed(AppRoutes.forgetPasswordRouteName);
+                            },
+                            child: Text(
+                              "Reset Password",
+                              style: AppStyles.robotoRegular16White.copyWith(
+                                decoration: TextDecoration.underline,
+                                decorationColor: AppColors.whiteColor,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                     SizedBox(height: size.height * 0.32),
                     CustomButton(
@@ -255,15 +282,35 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                       ),
                       backgroundColor: AppColors.redColor,
                       onPressed: () async {
-                        String? password = await DialogUtils.showPasswordDialog(
-                          context: context,
-                          message: 'Please Enter Password  to delete account',
-                          title: 'confirmation !',
-                        );
+                        if (user.provider == AuthProviders.emailPassword) {
+                          String? password =
+                              await DialogUtils.showPasswordDialog(
+                                context: context,
+                                message:
+                                    'Please Enter Password  to delete account',
+                                title: 'confirmation !',
+                              );
 
-                        if (password != null && password.isNotEmpty) {
-                          if (!context.mounted) return;
-                          context.read<AuthCubit>().deleteUserAccount(password);
+                          if (password != null && password.isNotEmpty) {
+                            if (!context.mounted) return;
+                            context
+                                .read<AuthCubit>()
+                                .deleteUserAccountWithEmailPassword(password);
+                          }
+                        } else {
+                          DialogUtils.showMessage(
+                            context: context,
+                            message:
+                                'Are you sure you want to delete the account ?',
+                            title: 'confirmation !',
+                            posAction: () {
+                              context
+                                  .read<AuthCubit>()
+                                  .deleteUserAccountWithGoogle();
+                            },
+                            posActionText: 'yes',
+                            negActionText: 'no',
+                          );
                         }
                       },
                     ),

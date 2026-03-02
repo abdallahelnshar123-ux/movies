@@ -142,7 +142,7 @@ class _LoginUiState extends State<LoginUi> {
                   onPressed: () {
                     //todo login
                     if (formKey.currentState?.validate() == true) {
-                      context.read<AuthCubit>().login(
+                      context.read<AuthCubit>().loginWithEmailAndPassword(
                         emailController.text,
                         passwordController.text,
                       );
@@ -206,6 +206,8 @@ class _LoginUiState extends State<LoginUi> {
                   decorationColor: AppColors.yellowColor,
                   onPressed: () {
                     //todo login with google
+
+                    context.read<AuthCubit>().loginWithGoogle();
                   },
                   child: Row(
                     spacing: context.width * 0.02,
