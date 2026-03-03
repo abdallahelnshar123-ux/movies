@@ -69,5 +69,8 @@
   "Phone Number": "Phone Number",
   "Create Account": "Create Account",
   "Already Have Account? ": "Already Have Account? ",
-  "Login": "Login"
+  "Login": "Login",
+  "character": "Character : ",
+  "name:": "Name : "
+
 }

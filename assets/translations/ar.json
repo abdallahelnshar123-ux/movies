@@ -68,5 +68,8 @@
   "Phone Number": "رقم الهاتف",
   "Create Account": "إنشاء الحساب",
   "Already Have Account? ": "هل لديك حساب بالفعل؟ ",
-  "Login": "تسجيل الدخول"
+  "Login": "تسجيل الدخول",
+  "character": "الشخصية : ",
+  "name:": "الاسم : "
+
 }
