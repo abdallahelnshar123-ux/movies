@@ -78,14 +78,14 @@ class Data {
     if (json['movies'] != null) {
       movies = [];
       json['movies'].forEach((v) {
-        movies?.add(Movies.fromJson(v));
+        movies?.add(Movie.fromJson(v));
       });
     }
   }
   int? movieCount;
   int? limit;
   int? pageNumber;
-  List<Movies>? movies;
+  List<Movie>? movies;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -127,8 +127,8 @@ class Data {
 /// date_uploaded : "2026-02-23 20:56:41"
 /// date_uploaded_unix : 1771876601
 
-class Movies {
-  Movies({
+class Movie {
+  Movie({
       this.id, 
       this.url, 
       this.imdbCode, 
@@ -156,7 +156,7 @@ class Movies {
       this.dateUploaded, 
       this.dateUploadedUnix,});
 
-  Movies.fromJson(dynamic json) {
+  Movie.fromJson(dynamic json) {
     id = json['id'];
     url = json['url'];
     imdbCode = json['imdb_code'];

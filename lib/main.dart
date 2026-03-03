@@ -6,7 +6,6 @@ import 'package:movies/cubit/auth_view_model.dart';
 import 'package:movies/forget_password_screen/forget_password_screen.dart';
 import 'package:movies/home_screen/home_screen.dart';
 import 'package:movies/login_screen/login_screen.dart';
-import 'package:movies/movie_detials_screen/movie_deitals_Screen.dart';
 import 'package:movies/onboarding_screen/onBoardingSharedPrefrance.dart';
 import 'package:movies/onboarding_screen/onboarding_screen.dart';
 import 'package:movies/register_screen/register_screen.dart';
@@ -15,6 +14,7 @@ import 'package:movies/utils/app_routes.dart';
 import 'package:movies/utils/app_theme.dart';
 
 import 'firebase_options.dart';
+import 'movie_details_screen/movie_details_Screen.dart';
 
 bool isSeen = false;
 
@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
           : AppRoutes.onboardingRouteName,
       routes: {
         AppRoutes.updateProfileRouteName: (context) => UpdateProfileScreen(),
-        AppRoutes.movieDetialsScreen:(context)=>MovieDeitalsScreen(),
+        AppRoutes.movieDetialsScreen: (context) => MovieDetailsScreen(),
         AppRoutes.homeRouteName: (context) => HomeScreen(),
         AppRoutes.onboardingRouteName: (context) => OnboardingScreen(),
         AppRoutes.loginRouteName: (context) => LoginScreen(),
