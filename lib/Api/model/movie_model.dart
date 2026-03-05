@@ -5,7 +5,9 @@
 
 class MovieModel {
   MovieModel({
-      this.status, 
+      this.status,
+    this.code,
+    this.message,
       this.statusMessage, 
       this.data, 
       this.meta,});
@@ -22,6 +24,8 @@ class MovieModel {
   String? statusMessage;
   Data? data;
   Meta? meta;
+  String? code;
+  String? message;
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['status'] = status;
@@ -129,6 +133,8 @@ class Data {
 
 class Movie {
   Movie({
+    this.code,
+    this.message,
       this.id, 
       this.url, 
       this.imdbCode, 
@@ -157,6 +163,8 @@ class Movie {
       this.dateUploadedUnix,});
 
   Movie.fromJson(dynamic json) {
+    code = json['code'];
+    message = json['message'];
     id = json['id'];
     url = json['url'];
     imdbCode = json['imdb_code'];
@@ -190,6 +198,8 @@ class Movie {
     dateUploadedUnix = json['date_uploaded_unix'];
   }
   int? id;
+  String? code;
+  String? message;
   String? url;
   String? imdbCode;
   String? title;
