@@ -41,10 +41,13 @@ class Torrents {
     videoCodec = json['video_codec'];
     bitDepth = json['bit_depth'];
     audioChannels = json['audio_channels'];
-    seeds = json['seeds'];
-    peers = json['peers'];
+    // seeds = json['seeds'];
+    seeds = (json['seeds'] as num?)?.toInt();
+    // peers = json['peers'];
+    seeds = (json['seeds'] as num?)?.toInt();
     size = json['size'];
-    sizeBytes = json['size_bytes'];
+    // sizeBytes = json['size_bytes'];
+    sizeBytes = (json['size_bytes'] as num?)?.toInt();
     dateUploaded = json['date_uploaded'];
     dateUploadedUnix = json['date_uploaded_unix'];
   }

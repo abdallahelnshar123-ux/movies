@@ -21,18 +21,18 @@ class _HomeTabState extends State<HomeTab> {
   int currentIndex = 0;
 
   // final MovieModel movie = MovieModel();
-  // late Future<MovieModel> moviesFuture;
+  late Future<AllMoviesResponse> moviesFuture;
 
   @override
   void initState() {
     super.initState();
-    ApiManager.getAllMovies();
+    moviesFuture = ApiManager.getAllMovies();
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<AllMoviesResponse>(
-      future: ApiManager.getAllMovies(),
+      future: moviesFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(
@@ -90,7 +90,7 @@ class _HomeTabState extends State<HomeTab> {
                           onTap: () {
                             Navigator.pushNamed(
                               context,
-                              AppRoutes.movieDetialsScreen,
+                              AppRoutes.movieDetailsScreen,
                               arguments: moviesList[index].id,
                             );
                             // debugPrint(moviesList[index].title);
@@ -148,7 +148,7 @@ class _HomeTabState extends State<HomeTab> {
                       options: CarouselOptions(
                         height: context.height * 0.45,
                         enlargeCenterPage: true,
-                        viewportFraction: context.width * 0.0017,
+                        viewportFraction: 0.7,
                         onPageChanged: (index, reason) {
                           setState(() {
                             currentIndex = index;

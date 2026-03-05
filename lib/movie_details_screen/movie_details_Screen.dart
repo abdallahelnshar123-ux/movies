@@ -3,17 +3,11 @@ import 'package:movies/Api/Api_manager.dart';
 import 'package:movies/Api/widget/main_error_widget.dart';
 import 'package:movies/Api/widget/main_loading_widget.dart';
 import 'package:movies/movie_details_screen/movie_details_item.dart';
-import 'package:movies/utils/app_assets.dart';
 
 import '../Api/model/movie_details_response.dart';
 
-
-
 class MovieDetailsScreen extends StatefulWidget {
-  final MovieDetailsResponse? movie;
-
-  MovieDetailsScreen({super.key, this.movie});
-
+  MovieDetailsScreen({super.key});
 
   @override
   State<MovieDetailsScreen> createState() => _MovieDetailsScreenState();
@@ -21,14 +15,16 @@ class MovieDetailsScreen extends StatefulWidget {
 
 class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
   int currentIndex = 0;
+
   // final MovieModel movieModel = MovieModel();
-   Future<MovieDetailsResponse>? movieFuture;
-  List<String> cardList = [
-    AppAssets.cardOne,
-    AppAssets.cardTwo,
-    AppAssets.cardThree,
-    AppAssets.cardFour,
-  ];
+  Future<MovieDetailsResponse>? movieFuture;
+
+  // List<String> cardList = [
+  //   AppAssets.cardOne,
+  //   AppAssets.cardTwo,
+  //   AppAssets.cardThree,
+  //   AppAssets.cardFour,
+  // ];
 
   late int movieId;
   bool isInitialized = false;
@@ -39,11 +35,10 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
     super.didChangeDependencies();
     if (!isInitialized) {
       movieId = ModalRoute.of(context)!.settings.arguments as int;
-      ApiManager.getMoviesDetails(movieId);
+      movieFuture = ApiManager.getMoviesDetails(movieId);
       isInitialized = true;
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -90,9 +85,9 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
 
         final movie = response!.data!.movie;
 
+        /// can't be null
         return MovieDetailsItem(movie: movie!);
 
-        /// can't be null
         // if (snapshot.connectionState == ConnectionState.waiting) {
         //   return MainLoadingWidget();
         //   // todo : server => response : error
@@ -141,7 +136,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
         //                   fit: BoxFit.cover,
         //                 ),
         //               ),
-        //               
+        //
         //             ),
         //             Container(
         //               height: size.height * 0.8,
@@ -211,7 +206,6 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
         //       ],
         //     ),
         //   );
-
       },
     );
     // var size = MediaQuery.of(context).size;

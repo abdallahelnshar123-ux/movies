@@ -81,7 +81,7 @@ class Movie {
     titleLong = json['title_long'];
     slug = json['slug'];
     year = json['year'];
-    rating = json['rating'];
+    rating = (json['rating'] as num?)?.toDouble();
     runtime = json['runtime'];
     genres = json['genres'] != null ? json['genres'].cast<String>() : [];
     likeCount = json['like_count'];
@@ -114,7 +114,8 @@ class Movie {
       });
     }
     dateUploaded = json['date_uploaded'];
-    dateUploadedUnix = json['date_uploaded_unix'];
+    // dateUploadedUnix = json['date_uploaded_unix'];
+    dateUploadedUnix = (json['date_uploaded_unix'] as num?)?.toInt();
   }
 
   int? id;
