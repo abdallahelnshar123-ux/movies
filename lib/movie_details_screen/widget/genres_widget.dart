@@ -3,10 +3,14 @@ import 'package:movies/utils/app_colors.dart';
 import 'package:movies/utils/app_styles.dart';
 import 'package:movies/utils/screen_size.dart';
 
-class GenresWidget extends StatelessWidget {
-  String? text;
+import '../../Api/model/movie_details_response.dart';
 
-  GenresWidget({super.key, this.text});
+
+class GenresWidget extends StatelessWidget {
+  final Movie movie;
+  int index ;
+
+  GenresWidget({super.key,required this.movie,required this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +23,7 @@ class GenresWidget extends StatelessWidget {
       child: FittedBox(
         fit: BoxFit.scaleDown,
         child: Text(
-          text!,
+          movie.genres![index],
           style: AppStyles.robotoBold24White,
           textAlign: TextAlign.center,
           softWrap: false, // Allows text to wrap to a second line if needed

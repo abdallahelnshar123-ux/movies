@@ -51,9 +51,10 @@ class MyApp extends StatelessWidget {
       initialRoute: isSeen
           ? AppRoutes.homeRouteName
           : AppRoutes.onboardingRouteName,
+      // initialRoute: AppRoutes.homeTabRouteName,
       routes: {
         AppRoutes.updateProfileRouteName: (context) => UpdateProfileScreen(),
-        AppRoutes.movieDetialsScreen: (context) => MovieDetailsScreen(),
+        AppRoutes.movieDetialsScreen: (context) => MovieDetailsScreen(movie: null,),
         AppRoutes.homeRouteName: (context) => HomeScreen(),
         AppRoutes.onboardingRouteName: (context) => OnboardingScreen(),
         AppRoutes.loginRouteName: (context) => LoginScreen(),
