@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:movies/Api/model/Movies.dart';
+
+import '../../Api/model/movie_model.dart';
 
 class Similarmoviecarts extends StatelessWidget {
-  List<String> cardList;
-   Similarmoviecarts({super.key , required this.cardList });
+  final List<Movies> movie;
+   Similarmoviecarts({super.key ,required this.movie });
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +28,8 @@ class Similarmoviecarts extends StatelessWidget {
             child: Stack(
               children: [
                 Positioned.fill(
-                    child: Image.asset(cardList[index] , fit: BoxFit.cover,)
+                  child: Image.network(movie[index].mediumCoverImage!),
+
                 ),
                 Positioned(
                   top: 8,
@@ -41,7 +45,7 @@ class Similarmoviecarts extends StatelessWidget {
                         Icon(Icons.star, color: Colors.amber, size: 16),
                         SizedBox(width: 4),
                         Text(
-                          "7.5",
+                          movie[index].rating.toString(),
                           style: TextStyle(color: Colors.white),
                         ),
                       ],
@@ -52,7 +56,7 @@ class Similarmoviecarts extends StatelessWidget {
             ),
           );
         },
-        itemCount: cardList.length,
+        itemCount: movie.length,
       ),
     );
 
