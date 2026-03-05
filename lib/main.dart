@@ -19,9 +19,6 @@ bool isSeen = false;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-
-  WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -53,7 +50,7 @@ class MyApp extends StatelessWidget {
       supportedLocales: context.supportedLocales,
       locale: context.locale,
       initialRoute: isSeen
-          ? AppRoutes.loginRouteName
+          ? AppRoutes.homeRouteName
           : AppRoutes.onboardingRouteName,
       routes: {
         AppRoutes.homeRouteName: (context) => HomeScreen(),
