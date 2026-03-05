@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:movies/Api/Api_manager.dart';
-import 'package:movies/Api/model/movie_model.dart';
+import 'package:movies/Api/model/all_movies_response.dart';
 import 'package:movies/utils/app_assets.dart';
 import 'package:movies/utils/app_colors.dart';
 import 'package:movies/utils/app_routes.dart';
@@ -19,19 +19,20 @@ class HomeTab extends StatefulWidget {
 
 class _HomeTabState extends State<HomeTab> {
   int currentIndex = 0;
-  final MovieModel movie = MovieModel();
-  late Future<MovieModel> moviesFuture;
+
+  // final MovieModel movie = MovieModel();
+  // late Future<MovieModel> moviesFuture;
 
   @override
   void initState() {
     super.initState();
-    moviesFuture = ApiManager.getMovies();
+    ApiManager.getAllMovies();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<MovieModel>(
-      future: moviesFuture,
+    return FutureBuilder<AllMoviesResponse>(
+      future: ApiManager.getAllMovies(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(

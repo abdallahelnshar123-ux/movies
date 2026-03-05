@@ -1,16 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:movies/Api/Api_manager.dart';
-import 'package:movies/Api/model/Movie_suggestion_response.dart';
-import 'package:movies/Api/model/Movies.dart';
-import 'package:movies/Api/model/movie_model.dart';
+import 'package:movies/Api/model/movie_details_response.dart';
+import 'package:movies/Api/model/suggestion_response.dart';
 import 'package:movies/movie_details_screen/widget/SimilarMovieCarts.dart';
 import 'package:movies/movie_details_screen/widget/genres_widget.dart';
 import 'package:movies/movie_details_screen/widget/rating_widget.dart';
 import 'package:movies/movie_details_screen/widget/screenShotsWidget.dart';
 import 'package:movies/movie_details_screen/widget/title.dart';
-import 'package:movies/Api/model/movie_model.dart' as movie_model;
-import '../Api/model/movie_details_response.dart' as details_model;
+import '../Api/model/inner_classes/movie.dart';
 import '../Api/widget/main_error_widget.dart';
 import '../Api/widget/main_loading_widget.dart';
 import '../utils/app_assets.dart';
@@ -20,16 +18,17 @@ import '../utils/screen_size.dart';
 
 class MovieDetailsItem extends StatefulWidget {
   bool isBookMarked = true;
-  final MovieSuggestionResponse? movieSuggestionResponse;
-  final details_model.MovieDetailsResponse? movieDetailsResponse;
+
+  // final MovieSuggestionResponse? movieSuggestionResponse;
+  // final details_model.MovieDetailsResponse? movieDetailsResponse;
 
   final Movie movie;
 
   MovieDetailsItem({
     super.key,
     required this.movie,
-    this.movieDetailsResponse,
-    this.movieSuggestionResponse,
+    // this.movieDetailsResponse,
+    // this.movieSuggestionResponse,
   });
 
   @override
@@ -37,9 +36,11 @@ class MovieDetailsItem extends StatefulWidget {
 }
 
 class _MovieDetailsItemState extends State<MovieDetailsItem> {
-  late List<details_model.Cast>? castMan = widget.movieDetailsResponse?.data?.movie?.cast;
-  late var torrentsList = widget.movie.torrents ?? [];
-  late var gestureList = widget.movie.genres ?? [];
+  late List<Cast>? castMan = widget.movie.cast;
+
+  // widget.movieDetailsResponse?.data?.movie?.cast;
+  // late var torrentsList = widget.movie.torrents ?? [];
+  // late var gestureList = widget.movie.genres ?? [];
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +74,7 @@ class _MovieDetailsItemState extends State<MovieDetailsItem> {
                       AppColors.blackColor.withAlpha(153),
                       AppColors.blackColor.withAlpha(230),
                     ],
-                    stops: [0.3, 0.95], // Adjust the gradient transition point
+                    stops: [0.3, 0.95],
                   ),
                 ),
               ),
@@ -199,7 +200,7 @@ class _MovieDetailsItemState extends State<MovieDetailsItem> {
                         TitleWidget(text: "Screen Shots"),
                         Screenshotswidget(),
                         TitleWidget(text: "Similar"),
-                        FutureBuilder<MovieSuggestionResponse>(
+                        FutureBuilder<SuggestionResponse>(
                           future: ApiManager.getSuggestionDetails(
                             widget.movie.id!,
                           ),
@@ -229,7 +230,6 @@ class _MovieDetailsItemState extends State<MovieDetailsItem> {
                             if (response == null ||
                                 response.status == "error" ||
                                 response.data == null ||
-                                response.data!.movies == null ||
                                 response.data!.movies == null) {
                               return MainErrorWidget(
                                 errorMessage: "No movie data found",
@@ -243,7 +243,7 @@ class _MovieDetailsItemState extends State<MovieDetailsItem> {
                                 },
                               );
                             } else {
-                              return Similarmoviecarts(
+                              return SimilarMovieCarts(
                                 movie: response.data!.movies!,
                               );
                             }
@@ -288,8 +288,9 @@ class _MovieDetailsItemState extends State<MovieDetailsItem> {
                                             child: Row(
                                               spacing: 10,
                                               children: [
-                                                Image.asset(castMan[index].image),
-                                                Expanded(
+                                  Image.asset(
+                                    castMan![index].urlSmallImage ?? '',
+                                  )Expanded(
                                                   child: Column(
                                                     spacing: 2,
                                                     crossAxisAlignment: CrossAxisAlignment.start,

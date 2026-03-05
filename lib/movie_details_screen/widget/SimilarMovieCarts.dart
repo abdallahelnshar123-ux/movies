@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:movies/Api/model/Movies.dart';
 
-import '../../Api/model/movie_model.dart';
+import '../../Api/model/inner_classes/movie.dart';
 
-class Similarmoviecarts extends StatelessWidget {
-  final List<Movies> movie;
-   Similarmoviecarts({super.key ,required this.movie });
+class SimilarMovieCarts extends StatelessWidget {
+  final List<Movie> movie;
+
+  const SimilarMovieCarts({super.key, required this.movie});
 
   @override
   Widget build(BuildContext context) {

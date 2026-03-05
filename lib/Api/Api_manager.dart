@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
-import 'package:movies/Api/model/Movie_suggestion_response.dart';
+import 'package:movies/Api/model/all_movies_response.dart';
 import 'package:movies/Api/model/movie_details_response.dart';
-import 'package:movies/Api/model/movie_model.dart';
+import 'package:movies/Api/model/suggestion_response.dart';
 
 /*
 
@@ -12,11 +12,11 @@ https://movies-api.accel.li/api/v2/list_movies.json
 class ApiManager {
   static final Dio dio = Dio();
 
-  static Future<MovieModel> getMovies() async {
+  static Future<AllMoviesResponse> getAllMovies() async {
     try{
       var response = await dio.get("https://movies-api.accel.li/api/v2/list_movies.json",);
       var json = response.data;
-      return MovieModel.fromJson(json);
+      return AllMoviesResponse.fromJson(json);
     }
     catch(e){
       rethrow;
@@ -43,14 +43,14 @@ class ApiManager {
 //https://movies-api.accel.li/api/v2/movie_suggestions.json?movie_id=10
 
 
-  static Future<MovieSuggestionResponse> getSuggestionDetails( int movieId) async {
+  static Future<SuggestionResponse> getSuggestionDetails(int movieId) async {
     try{
       var response = await dio.get("https://movies-api.accel.li/api/v2/movie_suggestions.json",
           queryParameters: {
             'movie_id' : movieId ,
           });
       var json = response.data;
-      return MovieSuggestionResponse.fromJson(json);
+      return SuggestionResponse.fromJson(json);
     }
     catch(e){
       rethrow;

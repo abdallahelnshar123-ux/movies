@@ -1,4 +1,3 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:movies/Api/Api_manager.dart';
 import 'package:movies/Api/widget/main_error_widget.dart';
@@ -38,10 +37,9 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
-
     if (!isInitialized) {
       movieId = ModalRoute.of(context)!.settings.arguments as int;
-      movieFuture = ApiManager.getMoviesDetails(movieId);
+      ApiManager.getMoviesDetails(movieId);
       isInitialized = true;
     }
   }
@@ -49,13 +47,13 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-      if (movieFuture == null) {
-        return MainLoadingWidget();
-      }
+    // if (movieFuture == null) {
+    //   return MainLoadingWidget();
+    // }
     return FutureBuilder<MovieDetailsResponse>(
-      future: movieFuture!,
+      future: movieFuture,
       builder: (context, snapshot) {
-        if (movieFuture == null) {
+        if (snapshot.data == null) {
           return MainLoadingWidget();
         }
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -67,7 +65,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
             errorMessage: 'Something went wrong',
             onPressed: () {
               setState(() {
-                movieFuture = ApiManager.getMoviesDetails(movieId);
+                ApiManager.getMoviesDetails(movieId);
               });
             },
           );
@@ -75,52 +73,52 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
 
         final response = snapshot.data;
 
-        if (response == null ||
-            response.status == "error" ||
-            response.data == null ||
-            response.data!.movie == null ||
-            response.data!.movie == null) {
+        if (
+        // response == null ||
+        //     response.status == "error" ||
+        //     response.data == null ||
+        response?.data?.movie == null) {
           return MainErrorWidget(
             errorMessage: "No movie data found",
             onPressed: () {
               setState(() {
-                movieFuture = ApiManager.getMoviesDetails(movieId);
+                ApiManager.getMoviesDetails(movieId);
               });
             },
           );
         }
 
+        final movie = response!.data!.movie;
 
+        return MovieDetailsItem(movie: movie!);
 
-        final selectedMovie = response.data?.movie;
+        /// can't be null
+        // if (snapshot.connectionState == ConnectionState.waiting) {
+        //   return MainLoadingWidget();
+        //   // todo : server => response : error
+        // } else if (snapshot.hasError) {
+        //   return MainErrorWidget(
+        //     errorMessage: 'Something went wrong',
+        //       onPressed: () {
+        //         setState(() {
+        //           movieFuture = ApiManager.getMoviesDetails(movieId);
+        //         });
+        //       }
+        //   );
+        // }
+        // // todo: server=> response : success, error
+        // if (snapshot.data?.status == "error") {
+        //   return MainErrorWidget(
+        //     errorMessage: snapshot.data!.message!,
+        //     onPressed: () {
+        //       ApiManager.getMoviesDetails(movieId );
+        //       setState(() {});
+        //     },
+        //   );
+        // }
 
-        return MovieDetailsItem(movie: selectedMovie!);
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return MainLoadingWidget();
-          // todo : server => response : error
-        } else if (snapshot.hasError) {
-          return MainErrorWidget(
-            errorMessage: 'Something went wrong',
-              onPressed: () {
-                setState(() {
-                  movieFuture = ApiManager.getMoviesDetails(movieId);
-                });
-              }
-          );
-        }
-        // todo: server=> response : success, error
-        if (snapshot.data?.status == "error") {
-          return MainErrorWidget(
-            errorMessage: snapshot.data!.message!,
-            onPressed: () {
-              ApiManager.getMoviesDetails(movieId );
-              setState(() {});
-            },
-          );
-        }
-
-        return MovieDetailsItem(movie: selectedMovie);
-       // List<Movie>? movies;
+        // return MovieDetailsItem(movie: selectedMovie);
+        // List<Movie>? movies;
         // var size = MediaQuery.of(context).size;
         //   return Scaffold(
         //     backgroundColor: AppColors.blackColor,
