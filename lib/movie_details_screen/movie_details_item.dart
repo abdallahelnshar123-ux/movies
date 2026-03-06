@@ -219,6 +219,7 @@ class _MovieDetailsItemState extends State<MovieDetailsItem> {
               ),
             ],
           ),
+
           Column(
             children: [
               Container(
