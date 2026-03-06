@@ -114,7 +114,7 @@ class _GenreMoviesWidgetState extends State<GenreMoviesWidget> {
 
               /// Horizontal Movies List
               SizedBox(
-                height: context.height * 0.15,
+                height: context.height * 0.17,
                 child: ListView.builder(
                   padding: EdgeInsets.only(left: context.width * 0.02),
                   scrollDirection: Axis.horizontal,
@@ -139,7 +139,7 @@ class _GenreMoviesWidgetState extends State<GenreMoviesWidget> {
                                 moviesList[index].mediumCoverImage ?? "",
                                 fit: BoxFit.cover,
                                 width: context.width * 0.25,
-                                height: context.height * 0.15,
+                                height: context.height * 0.17,
                               ),
                             ),
                             Positioned(
