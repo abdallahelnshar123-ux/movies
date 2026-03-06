@@ -32,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
       body: tabsList[selectedTabIndex],
       bottomNavigationBar: Container(
-        padding: EdgeInsets.all(context.width * 0.008),
+        padding: EdgeInsets.all(4),
         margin: EdgeInsets.all(context.width * 0.02),
         decoration: BoxDecoration(
           color: AppColors.darkGrayColor,

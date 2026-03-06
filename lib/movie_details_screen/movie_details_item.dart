@@ -19,17 +19,9 @@ import '../utils/screen_size.dart';
 class MovieDetailsItem extends StatefulWidget {
   bool isBookMarked = true;
 
-  // final MovieSuggestionResponse? movieSuggestionResponse;
-  // final details_model.MovieDetailsResponse? movieDetailsResponse;
-
   final Movie movie;
 
-  MovieDetailsItem({
-    super.key,
-    required this.movie,
-    // this.movieDetailsResponse,
-    // this.movieSuggestionResponse,
-  });
+  MovieDetailsItem({super.key, required this.movie});
 
   @override
   State<MovieDetailsItem> createState() => _MovieDetailsItemState();
@@ -50,10 +42,6 @@ class _MovieDetailsItemState extends State<MovieDetailsItem> {
         widget.movie.mediumScreenshotImage3 ??
         '',
   ];
-
-  // widget.movieDetailsResponse?.data?.movie?.cast;
-  // late var torrentsList = widget.movie.torrents ?? [];
-  // late var gestureList = widget.movie.genres ?? [];
 
   @override
   Widget build(BuildContext context) {
@@ -79,32 +67,13 @@ class _MovieDetailsItemState extends State<MovieDetailsItem> {
                     begin: Alignment.bottomCenter,
                     end: Alignment.topCenter,
                     colors: [
-                      AppColors.blackColor,
+                      Colors.black,
                       AppColors.blackColor.withAlpha(230),
                       AppColors.transparentColor,
                     ],
-                    stops: [0.2, 0.3, 1],
+                    stops: [0.15, 0.3, 1],
                   ),
-                  // image: DecorationImage(
-                  //
-                  //   alignment: Alignment.topCenter,
-                  //   image: NetworkImage(),
-                  //
-                  //   fit: BoxFit.fitWidth,
-                  // ),
                 ),
-                // foregroundDecoration: BoxDecoration(
-                //   gradient: LinearGradient(
-                //     begin: Alignment.bottomCenter,
-                //     end: Alignment.topCenter,
-                //     colors: [
-                //       AppColors.blackColor,
-                //       AppColors.blackColor.withAlpha(230),
-                //       AppColors.transparentColor,
-                //     ],
-                //     stops: [0.2, 0.3, 1],
-                //   ),
-                // ),
                 child: Column(
                   spacing: 15,
                   children: [
@@ -139,28 +108,20 @@ class _MovieDetailsItemState extends State<MovieDetailsItem> {
                       ),
                     ),
                     SizedBox(height: context.height * 0.15),
-
-                    // SizedBox(height: context.height * 0.2),
                     Image.asset(AppAssets.playMovieImage),
-
                     Spacer(),
-
                     //todo:Movie title
                     Text(
                       widget.movie.titleEnglish ?? 'no title',
                       style: AppStyles.robotoBold24White,
                       textAlign: TextAlign.center,
                     ),
-
-                    // SizedBox(height: context.height * 0.03),
                     //todo:Movie year
                     Text(
                       widget.movie.year.toString(),
                       style: AppStyles.robotoBold20LightGray,
                       textAlign: TextAlign.center,
                     ),
-
-                    // SizedBox(height: context.height * 0.03),
 
                     ///todo: Watch Button
                     CustomElevatedButton(
@@ -174,28 +135,6 @@ class _MovieDetailsItemState extends State<MovieDetailsItem> {
                         textAlign: TextAlign.center,
                       ),
                     ),
-
-                    // ElevatedButton(
-                    //   onPressed: () {
-                    //     debugPrint(widget.movie.toString());
-                    //   },
-                    //   style: ElevatedButton.styleFrom(
-                    //     padding: EdgeInsets.symmetric(
-                    //       vertical: context.height * 0.015,
-                    //     ),
-                    //     backgroundColor: AppColors.redColor,
-                    //     shape: RoundedRectangleBorder(
-                    //       borderRadius: BorderRadius.circular(16),
-                    //       side: BorderSide.none,
-                    //     ),
-                    //   ),
-                    //   child: Text(
-                    //     "Watch",
-                    //     style: AppStyles.robotoBold20White,
-                    //     textAlign: TextAlign.center,
-                    //   ),
-                    // ),
-                    // SizedBox(height: context.height * 0.03),
                     Row(
                       spacing: 11,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -219,62 +158,40 @@ class _MovieDetailsItemState extends State<MovieDetailsItem> {
               ),
             ],
           ),
-          Column(
-            children: [
-              Container(
-                padding: EdgeInsets.fromLTRB(
+
+          Padding(
+            padding: EdgeInsets.fromLTRB(
                   context.width * 0.02,
                   0,
                   context.width * 0.02,
                   context.width * 0.02,
                 ),
                 child: Column(
-                  spacing: 15,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    ///todo: Fav Container , Movie Time Container , Rating Container
-                    TitleWidget(text: "screen_shots".tr()),
-                    ScreenShotsWidget(screenShotsList: screenShotsList ?? []),
-                    TitleWidget(text: "similar".tr()),
-                    // todo :  similar
-                    SimilarMovieWidget(movieId: widget.movie.id!),
-                    TitleWidget(text: "Summary"),
-                    SummaryWidget(
-                      summary:
-                          widget.movie.descriptionFull ??
-                          'sorry_no_summary_found'.tr(),
-                    ),
-                    // RichText(
-                    //   text: TextSpan(
-                    //     style: AppStyles.robotoRegular16White.copyWith(
-                    //       height: 1.5,
-                    //     ),
-                    //     children: [
-                    //       const TextSpan(
-                    //         text:
-                    //         "Following the events of Spider-Man No Way Home, Doctor Strange unwittingly casts a forbidden spell that accidentally opens up the multiverse. With help from Wong and Scarlet Witch, Strange confronts various versions of himself as well as teaming up with the young America Chavez while traveling through various realities and working to restore reality as he knows it. Along the way, Strange and his allies realize they must take on a powerful new adversary who seeks to take over the multiverse.",
-                    //       ),
-                    //       TextSpan(
-                    //         text: " —Blazer346",
-                    //         style: AppStyles.robotoRegular16White.copyWith(
-                    //           color: AppColors.lightGrayColor,
-                    //         ),
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
-                    TitleWidget(text: 'cast'.tr()),
+              spacing: 15,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                ///todo: Fav Container , Movie Time Container , Rating Container
+                TitleWidget(text: "screen_shots".tr()),
+                ScreenShotsWidget(screenShotsList: screenShotsList ?? []),
+                TitleWidget(text: "similar".tr()),
+                // todo :  similar
+                SimilarMovieWidget(movieId: widget.movie.id!),
+                TitleWidget(text: "Summary"),
+                SummaryWidget(
+                  summary:
+                      widget.movie.descriptionFull ??
+                      'sorry_no_summary_found'.tr(),
+                ),
+                TitleWidget(text: 'cast'.tr()),
 
-                    // todo : cast Widget
+                // todo : cast Widget
                     CastWidget(castList: castList),
                     TitleWidget(text: 'Genres'),
                     GenresWidget(genresList: genresList),
-                    // SizedBox(height: context.height * 0.005),
                   ],
+
                 ),
               ),
-            ],
-          ),
         ],
       ),
     );

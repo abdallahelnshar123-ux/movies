@@ -17,27 +17,16 @@ class SimilarMovieWidget extends StatelessWidget {
     return FutureBuilder<SuggestionResponse>(
       future: ApiManager.getSuggestionDetails(movieId),
       builder: (context, snapshot) {
-        // if (snapshot == null) {
-        //   return MainLoadingWidget();
-        // }
         if (snapshot.connectionState == ConnectionState.waiting) {
           return MainLoadingWidget();
         }
         if (snapshot.hasError) {
           return Center(
-            child: Text('sorry_we_were_unable_to_upload_similar_movies'.tr(),
-                style: AppStyles.robotoBold20White),
+            child: Text(
+              'sorry_we_were_unable_to_upload_similar_movies'.tr(),
+              style: AppStyles.robotoBold20White,
+            ),
           );
-          //   MainErrorWidget(
-          //   errorMessage: 'Something went wrong',
-          //   onPressed: () {
-          //     // setState(() {
-          //     //   var movieSuggestion = ApiManager.getSuggestionDetails(
-          //     //     widget.movie.id!,
-          //     //   );
-          //     // });
-          //   },
-          // );
         }
         final response = snapshot.data;
 
@@ -46,19 +35,11 @@ class SimilarMovieWidget extends StatelessWidget {
             response.data == null ||
             response.data!.movies == null) {
           return Center(
-            child: Text('sorry_we_were_unable_to_upload_similar_movies'.tr(),
-                style: AppStyles.robotoBold20White),
+            child: Text(
+              'sorry_we_were_unable_to_upload_similar_movies'.tr(),
+              style: AppStyles.robotoBold20White,
+            ),
           );
-          // return MainErrorWidget(
-          //   errorMessage: "No movie data found",
-          //   onPressed: () {
-          //     setState(() {
-          //       var movieSuggestion = ApiManager.getSuggestionDetails(
-          //         widget.movie.id!,
-          //       );
-          //     });
-          //   },
-          // );
         } else {
           return GridView.builder(
             padding: EdgeInsets.zero,
@@ -77,8 +58,10 @@ class SimilarMovieWidget extends StatelessWidget {
                   children: [
                     Positioned.fill(
                       child: CachedNetworkImage(
-                        imageUrl: response.data!.movies![index]
-                            .mediumCoverImage ?? '',
+                        fit: BoxFit.cover,
+                        imageUrl:
+                            response.data!.movies![index].mediumCoverImage ??
+                            '',
                         placeholder: (context, url) => MainLoadingWidget(),
                         errorWidget: (context, url, error) => Icon(Icons.error),
                       ),
@@ -96,9 +79,9 @@ class SimilarMovieWidget extends StatelessWidget {
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Row(
+                          spacing: 4,
                           children: [
                             Icon(Icons.star, color: Colors.amber, size: 16),
-                            SizedBox(width: 4),
                             Text(
                               response.data!.movies?[index].rating.toString() ??
                                   '',

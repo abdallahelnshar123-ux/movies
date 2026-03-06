@@ -15,10 +15,7 @@ class ratingWidget extends StatelessWidget {
 
     return Expanded(
       child: Container(
-        padding: EdgeInsets.symmetric(
-          vertical: size.height * 0.01,
-          // horizontal: size.width * 0.06,
-        ),
+        padding: EdgeInsets.symmetric(vertical: size.height * 0.01),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           color: AppColors.darkGrayColor,
@@ -27,7 +24,6 @@ class ratingWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           spacing: 10,
           children: [
-            // image == null ? const SizedBox() : Image.asset(image!),
             SvgPicture.asset(
               icon,
               colorFilter: ColorFilter.mode(
@@ -35,7 +31,6 @@ class ratingWidget extends StatelessWidget {
                 BlendMode.srcIn,
               ),
             ),
-
             Text(
               text!,
               style: AppStyles.robotoBold20White,
