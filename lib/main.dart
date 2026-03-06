@@ -49,9 +49,8 @@ class MyApp extends StatelessWidget {
       supportedLocales: context.supportedLocales,
       locale: context.locale,
       initialRoute: isSeen
-          ? AppRoutes.homeRouteName
+          ? AppRoutes.loginRouteName
           : AppRoutes.onboardingRouteName,
-      // initialRoute: AppRoutes.homeTabRouteName,
       routes: {
         AppRoutes.updateProfileRouteName: (context) => UpdateProfileScreen(),
         AppRoutes.movieDetailsScreen: (context) => MovieDetailsScreen(),
