@@ -28,7 +28,7 @@ class LoginScreen extends StatelessWidget {
             Duration(seconds: 3),
             () => Navigator.pushNamedAndRemoveUntil(
               context,
-              AppRoutes.updateProfileRouteName,
+              AppRoutes.homeRouteName,
               // AppRoutes.homeRouteName,
               (route) => false,
             ),
