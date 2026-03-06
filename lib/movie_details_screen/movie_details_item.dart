@@ -2,11 +2,12 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:movies/Api/model/movie_details_response.dart';
 import 'package:movies/movie_details_screen/widget/SimilarMovieCarts.dart';
+import 'package:movies/movie_details_screen/widget/cast_widget.dart';
 import 'package:movies/movie_details_screen/widget/genres_widget.dart';
 import 'package:movies/movie_details_screen/widget/rating_widget.dart';
 import 'package:movies/movie_details_screen/widget/screenShotsWidget.dart';
 import 'package:movies/movie_details_screen/widget/summary_widget.dart';
-import 'package:movies/movie_details_screen/widget/title.dart';
+import 'package:movies/movie_details_screen/widget/title_widget.dart';
 import 'package:movies/widgets/custom_elevated_button.dart';
 
 import '../Api/model/inner_classes/movie.dart';
@@ -35,7 +36,9 @@ class MovieDetailsItem extends StatefulWidget {
 }
 
 class _MovieDetailsItemState extends State<MovieDetailsItem> {
-  late List<Cast>? castMan = widget.movie.cast;
+  late List<Cast> castList = widget.movie.cast ?? [];
+  late List<String> genresList = widget.movie.genres ?? [];
+
   late List<String> screenShotsList = [
     widget.movie.largeScreenshotImage1 ??
         widget.movie.mediumScreenshotImage1 ??
@@ -219,7 +222,12 @@ class _MovieDetailsItemState extends State<MovieDetailsItem> {
           Column(
             children: [
               Container(
-                padding: EdgeInsets.symmetric(horizontal: context.width * 0.02),
+                padding: EdgeInsets.fromLTRB(
+                  context.width * 0.02,
+                  0,
+                  context.width * 0.02,
+                  context.width * 0.02,
+                ),
                 child: Column(
                   spacing: 15,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -228,7 +236,6 @@ class _MovieDetailsItemState extends State<MovieDetailsItem> {
                     TitleWidget(text: "screen_shots".tr()),
                     ScreenShotsWidget(screenShotsList: screenShotsList ?? []),
                     TitleWidget(text: "similar".tr()),
-
                     // todo :  similar
                     SimilarMovieWidget(movieId: widget.movie.id!),
                     TitleWidget(text: "Summary"),
@@ -256,97 +263,13 @@ class _MovieDetailsItemState extends State<MovieDetailsItem> {
                     //     ],
                     //   ),
                     // ),
-                    TitleWidget(text: 'Cast'),
+                    TitleWidget(text: 'cast'.tr()),
+
                     // todo : cast Widget
-                    // ListView.separated(
-                    //   physics: NeverScrollableScrollPhysics(),
-                    //   shrinkWrap: true,
-                    //   padding: EdgeInsets.zero,
-                    //   itemBuilder: (context, index) {
-                    //     return Container(
-                    //       padding: EdgeInsetsDirectional.only(
-                    //         start: context.width * 0.02,
-                    //         bottom: context.height * 0.01,
-                    //         top: context.height * 0.01,
-                    //       ),
-                    //       decoration: BoxDecoration(
-                    //         color: AppColors.darkGrayColor,
-                    //         borderRadius: BorderRadius.circular(16),
-                    //       ),
-                    //       child: Row(
-                    //         spacing: 10,
-                    //         children: [
-                    //           Image.asset(castMan![index].urlSmallImage ?? ''),
-                    //           Expanded(
-                    //             child: Column(
-                    //               spacing: 2,
-                    //               crossAxisAlignment: CrossAxisAlignment.start,
-                    //               children: [
-                    //                 Row(
-                    //                   crossAxisAlignment:
-                    //                       CrossAxisAlignment.start,
-                    //
-                    //                   children: [
-                    //                     Text(
-                    //                       context.tr('name:'),
-                    //                       style: AppStyles.robotoRegular14White,
-                    //                     ),
-                    //                     Expanded(
-                    //                       child: Text(
-                    //                         castMan![index].name!,
-                    //                         style:
-                    //                             AppStyles.robotoRegular14White,
-                    //                       ),
-                    //                     ),
-                    //                   ],
-                    //                 ),
-                    //                 Row(
-                    //                   crossAxisAlignment:
-                    //                       CrossAxisAlignment.start,
-                    //                   children: [
-                    //                     Text(
-                    //                       context.tr('character'),
-                    //                       style: AppStyles.robotoRegular14White,
-                    //                     ),
-                    //                     Expanded(
-                    //                       child: Text(
-                    //                         castMan![index].characterName!,
-                    //                         style:
-                    //                             AppStyles.robotoRegular14White,
-                    //                         maxLines: 3,
-                    //                       ),
-                    //                     ),
-                    //                   ],
-                    //                 ),
-                    //               ],
-                    //             ),
-                    //           ),
-                    //         ],
-                    //       ),
-                    //     );
-                    //   },
-                    //   separatorBuilder: (BuildContext context, int index) {
-                    //     return SizedBox(height: context.height * 0.02);
-                    //   },
-                    //   itemCount: castMan!.length,
-                    // ),
+                    CastWidget(castList: castList),
                     TitleWidget(text: 'Genres'),
-                    GridView.builder(
-                      padding: EdgeInsets.zero,
-                      physics: NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3, // tables count
-                        mainAxisSpacing: 10,
-                        crossAxisSpacing: 10,
-                        childAspectRatio: 2.5,
-                      ),
-                      itemBuilder: (context, index) {
-                        return GenresWidget(movie: widget.movie, index: index);
-                      },
-                      itemCount: widget.movie.genres?.length ?? 0,
-                    ),
-                    SizedBox(height: context.height * 0.005),
+                    GenresWidget(genresList: genresList),
+                    // SizedBox(height: context.height * 0.005),
                   ],
                 ),
               ),

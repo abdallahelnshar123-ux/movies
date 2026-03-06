@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:movies/utils/app_styles.dart';
 
 class TitleWidget extends StatelessWidget {
-  String text;
-  TitleWidget({super.key , required this.text});
+  final String text;
+
+  const TitleWidget({super.key, required this.text});
 
   @override
   Widget build(BuildContext context) {
