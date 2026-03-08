@@ -9,8 +9,8 @@ class MoviesCubit extends Cubit<IntialMoviesState> {
    try{
      emit(LoadingMoviesState());
      await Future.delayed(Duration(seconds: 1));
-     var response = await ApiManager.getMovies();
-     print(response.data!.movies);
+      var response = await ApiManager.getAllMovies();
+      print(response.data!.movies);
      if(response.status == "error"){
        print("error");
        emit(ErrorMoviesState(errorMessage: "Something is Wrong"));
@@ -27,7 +27,7 @@ class MoviesCubit extends Cubit<IntialMoviesState> {
   Future<void> getMoviesByGenre(String genre) async {
     emit(LoadingMoviesState());
     try {
-      final response = await ApiManager.getMoviesByCategory(genre);
+      final response = await ApiManager.getMoviesByGenre(genre, 20);
       emit(SuccessMoviesState(response:response.data?.movies));
     } catch (e) {
       emit(ErrorMoviesState(errorMessage: "Something other is Wrong"));

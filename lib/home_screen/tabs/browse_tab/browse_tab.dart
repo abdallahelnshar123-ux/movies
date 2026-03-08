@@ -3,11 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies/home_screen/tabs/browse_tab/widgets/tab_custom.dart';
 import 'package:movies/utils/screen_size.dart';
 
-import '../../../Api/model/movie_model.dart';
 import '../../../cubit/fetch_movies_states.dart';
 import '../../../cubit/movies_view_model.dart';
 import '../../../utils/app_styles.dart';
-import '../../../utils/dialog_utils.dart';
 import '../home_tab/movie_card.dart';
 
 class BrowseTab extends StatefulWidget {

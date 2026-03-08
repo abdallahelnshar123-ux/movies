@@ -1,11 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:movies/Api/model/all_movies_response.dart';
 import 'package:movies/home_screen/tabs/search_tab/widget/movie_item.dart';
 import 'package:movies/widgets/custom_text_form_field.dart';
 
 import '../../../Api/Api_manager.dart';
-import '../../../Api/model/movie_model.dart';
 import '../../../utils/app_assets.dart';
 import '../../../utils/app_colors.dart';
 import '../../../utils/app_styles.dart';
@@ -23,20 +23,20 @@ class SearchTab extends StatefulWidget {
 
 
 class _SearchTabState extends State<SearchTab> {
-  final MovieModel movieStatus = MovieModel();
+  // final MovieModel movieStatus = MovieModel();
 
-  late Future<MovieModel> moviesFuture;
+  late Future<AllMoviesResponse> moviesFuture;
 
   @override
   void initState() {
     super.initState();
-    moviesFuture = ApiManager.getMovies();
+    moviesFuture = ApiManager.getAllMovies();
   }
 
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<MovieModel>(
+    return FutureBuilder<AllMoviesResponse>(
         future: moviesFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {

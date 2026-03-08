@@ -1,11 +1,11 @@
-import 'package:movies/Api/model/movie_model.dart';
+import '../Api/model/inner_classes/movie.dart';
 
 abstract class IntialMoviesState {}
 
 class LoadingMoviesState extends IntialMoviesState {}
 
 class SuccessMoviesState extends IntialMoviesState {
-  List<Movies>? response;
+  List<Movie>? response;
   SuccessMoviesState({
     required this.response
 });

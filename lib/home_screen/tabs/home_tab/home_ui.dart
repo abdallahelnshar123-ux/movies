@@ -1,15 +1,17 @@
 import 'dart:ui';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:movies/Api/model/movie_model.dart';
 import 'package:movies/home_screen/tabs/home_tab/movie_card.dart';
 import 'package:movies/utils/app_assets.dart';
 import 'package:movies/utils/app_colors.dart';
 import 'package:movies/utils/app_styles.dart';
 import 'package:movies/utils/screen_size.dart';
 
+import '../../../Api/model/inner_classes/movie.dart';
+
 class HomeUi extends StatelessWidget {
-   List<Movies> movies;
+  List<Movie> movies;
    int currentIndex;
    Function(int) onPageChanged;
 

@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:movies/Api/model/movie_details_response.dart';
 import 'package:movies/movie_details_screen/widget/SimilarMovieCarts.dart';
+import 'package:movies/movie_details_screen/widget/book_mark_widget.dart';
 import 'package:movies/movie_details_screen/widget/cast_widget.dart';
 import 'package:movies/movie_details_screen/widget/genres_widget.dart';
 import 'package:movies/movie_details_screen/widget/rating_widget.dart';
@@ -90,20 +91,21 @@ class _MovieDetailsItemState extends State<MovieDetailsItem> {
                               color: Colors.white,
                             ),
                           ),
-                          IconButton(
-                            iconSize: 30,
-                            onPressed: () {
-                              setState(() {
-                                widget.isBookMarked = !widget.isBookMarked;
-                              });
-                            },
-                            icon: Icon(
-                              widget.isBookMarked
-                                  ? Icons.bookmark
-                                  : Icons.bookmark_border,
-                              color: Colors.white,
-                            ),
-                          ),
+                          BookMarkWidget(movie: widget.movie),
+                          // IconButton(
+                          //   iconSize: 30,
+                          //   onPressed: () {
+                          //     setState(() {
+                          //       widget.isBookMarked = !widget.isBookMarked;
+                          //     });
+                          //   },
+                          //   icon: Icon(
+                          //     widget.isBookMarked
+                          //         ? Icons.bookmark
+                          //         : Icons.bookmark_border,
+                          //     color: Colors.white,
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),
