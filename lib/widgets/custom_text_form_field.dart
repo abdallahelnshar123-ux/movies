@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movies/utils/app_styles.dart';
 import 'package:movies/utils/screen_size.dart';
+
 import '../../utils/app_colors.dart';
 typedef OnChanged =void Function(String)?;
 typedef OnValidator = String? Function(String?)? ;
@@ -46,7 +47,8 @@ class CustomTextFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      maxLines: maxLines ?? 1,
+
+    maxLines: maxLines ?? 1,
       controller:controller ,
       onChanged:onChanged ,
       validator:validator ,
