@@ -14,15 +14,14 @@ import 'package:movies/utils/app_routes.dart';
 import 'package:movies/utils/app_theme.dart';
 
 import 'firebase_options.dart';
+import 'movie_details_screen/movie_details_Screen.dart';
 
 bool isSeen = false;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   isSeen = await MyPreferences.isOnboardingCompleted();
 
   runApp(
@@ -32,7 +31,7 @@ void main() async {
         supportedLocales: const [Locale('en'), Locale('ar')],
         path: 'assets/translations',
         fallbackLocale: const Locale('en'),
-        // startLocale: const Locale('en'),
+        startLocale: const Locale('en'),
         child: MyApp(),
       ),
     ),
@@ -53,11 +52,12 @@ class MyApp extends StatelessWidget {
           ? AppRoutes.homeRouteName
           : AppRoutes.onboardingRouteName,
       routes: {
+        AppRoutes.updateProfileRouteName: (context) => UpdateProfileScreen(),
+        AppRoutes.movieDetailsScreen: (context) => MovieDetailsScreen(),
         AppRoutes.homeRouteName: (context) => HomeScreen(),
         AppRoutes.onboardingRouteName: (context) => OnboardingScreen(),
         AppRoutes.loginRouteName: (context) => LoginScreen(),
         AppRoutes.registerRouteName: (context) => RegisterScreen(),
-        AppRoutes.updateProfileRouteName: (context) => UpdateProfileScreen(),
         AppRoutes.forgetPasswordRouteName: (context) => ForgetPasswordScreen(),
       },
       themeMode: ThemeMode.dark,

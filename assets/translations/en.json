@@ -69,5 +69,16 @@
   "Phone Number": "Phone Number",
   "Create Account": "Create Account",
   "Already Have Account? ": "Already Have Account? ",
-  "Login": "Login"
+  "Login": "Login",
+  "character": "Character : ",
+  "name:": "Name : ",
+  "similar": "Similar",
+  "summary": "Summary",
+  "cast": "Cast",
+  "genres": "Genres",
+  "sorry_we_were_unable_to_upload_similar_movies": "Sorry, we were unable to upload similar movies.",
+  "sorry_no_summary_found": "Sorry, no summary found !"
+
+
+
 }
