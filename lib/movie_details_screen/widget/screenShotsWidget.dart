@@ -1,34 +1,28 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:movies/utils/app_assets.dart';
+import 'package:movies/Api/widget/main_loading_widget.dart';
 
-class Screenshotswidget extends StatelessWidget {
-  const Screenshotswidget({super.key});
+class ScreenShotsWidget extends StatelessWidget {
+  final List<String> screenShotsList;
+
+  const ScreenShotsWidget({super.key, required this.screenShotsList});
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
-
-    return Column(
-      spacing: 10,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        ClipRRect(
-          child: Image.asset(AppAssets.screenShotOne),
-          borderRadius: BorderRadiusGeometry.circular(16),
-          clipBehavior: Clip.antiAlias,
+    return ListView.separated(
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      itemBuilder: (context, index) => ClipRRect(
+        borderRadius: BorderRadiusGeometry.circular(16),
+        clipBehavior: Clip.antiAlias,
+        child: CachedNetworkImage(
+          imageUrl: screenShotsList[index],
+          placeholder: (context, url) => MainLoadingWidget(),
+          errorWidget: (context, url, error) => Icon(Icons.error),
         ),
-        ClipRRect(
-          child: Image.asset(AppAssets.screenShotTwo),
-          borderRadius: BorderRadiusGeometry.circular(16),
-          clipBehavior: Clip.antiAlias,
-        ),
-        ClipRRect(
-          child: Image.asset(AppAssets.screenShotThree
-          ),
-          borderRadius: BorderRadiusGeometry.circular(16),
-          clipBehavior: Clip.antiAlias,
-        ),
-      ],
+      ),
+      separatorBuilder: (context, index) => SizedBox(height: 10),
+      itemCount: screenShotsList.length,
     );
   }
 }

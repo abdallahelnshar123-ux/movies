@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../utils/app_colors.dart';
 
 class CustomElevatedButton extends StatelessWidget {
@@ -14,6 +15,7 @@ class CustomElevatedButton extends StatelessWidget {
     var width = MediaQuery.of(context).size.width;
     return ElevatedButton(
         style: ElevatedButton.styleFrom(
+            minimumSize: Size(double.infinity, 0),
             side: BorderSide(
                 color: borderSideColor??AppColors.transparentColor
             ),

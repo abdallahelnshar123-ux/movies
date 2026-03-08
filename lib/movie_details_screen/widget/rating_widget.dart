@@ -13,35 +13,32 @@ class ratingWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
 
-    return Container(
-      padding: EdgeInsets.symmetric(
-        vertical: size.height * 0.007,
-        // horizontal: size.width * 0.06,
-      ),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        color: AppColors.darkGrayColor,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        spacing: 10,
-        children: [
-          // image == null ? const SizedBox() : Image.asset(image!),
-          SvgPicture.asset(
-            icon,
-            colorFilter: ColorFilter.mode(
-              AppColors.yellowColor,
-              BlendMode.srcIn,
+    return Expanded(
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: size.height * 0.01),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          color: AppColors.darkGrayColor,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          spacing: 10,
+          children: [
+            SvgPicture.asset(
+              icon,
+              colorFilter: ColorFilter.mode(
+                AppColors.yellowColor,
+                BlendMode.srcIn,
+              ),
             ),
-          ),
-
-          Text(
-            text!,
-            style: AppStyles.robotoBold20White,
-            textAlign: TextAlign.center,
-            softWrap: false, // Allows text to wrap to a second line if needed
-          ),
-        ],
+            Text(
+              text!,
+              style: AppStyles.robotoBold20White,
+              textAlign: TextAlign.center,
+              softWrap: false,
+            ),
+          ],
+        ),
       ),
     );
   }

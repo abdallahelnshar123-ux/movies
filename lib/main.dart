@@ -49,11 +49,11 @@ class MyApp extends StatelessWidget {
       supportedLocales: context.supportedLocales,
       locale: context.locale,
       initialRoute: isSeen
-          ? AppRoutes.homeRouteName
+          ? AppRoutes.loginRouteName
           : AppRoutes.onboardingRouteName,
       routes: {
         AppRoutes.updateProfileRouteName: (context) => UpdateProfileScreen(),
-        AppRoutes.movieDetialsScreen: (context) => MovieDetailsScreen(),
+        AppRoutes.movieDetailsScreen: (context) => MovieDetailsScreen(),
         AppRoutes.homeRouteName: (context) => HomeScreen(),
         AppRoutes.onboardingRouteName: (context) => OnboardingScreen(),
         AppRoutes.loginRouteName: (context) => LoginScreen(),

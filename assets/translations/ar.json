@@ -70,6 +70,16 @@
   "Already Have Account? ": "هل لديك حساب بالفعل؟ ",
   "Login": "تسجيل الدخول",
   "character": "الشخصية : ",
-  "name:": "الاسم : "
+  "name:": "الاسم : ",
+  "similar": "مشابه",
+  "summary": "الملخص",
+  "cast": "طاقم التمثيل",
+  "genres": "الفئات",
+  "sorry_we_were_unable_to_upload_similar_movies": "عذراً, لم نتمكن من تحميل أفلام مشابهة . ",
+  "sorry_no_summary_found": "عذراُ , لا يوجد ملخص ! "
+
+
+
+
 
 }
