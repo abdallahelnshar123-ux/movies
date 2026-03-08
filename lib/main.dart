@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
       supportedLocales: context.supportedLocales,
       locale: context.locale,
       initialRoute: isSeen
-          ? AppRoutes.loginRouteName
+          ? AppRoutes.homeRouteName
           : AppRoutes.onboardingRouteName,
       routes: {
         AppRoutes.updateProfileRouteName: (context) => UpdateProfileScreen(),

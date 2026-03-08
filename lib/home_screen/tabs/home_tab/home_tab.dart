@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies/Api/Api_manager.dart';
 import 'package:movies/Api/model/all_movies_response.dart';
 import 'package:movies/home_screen/tabs/home_tab/widget/genre_movies_widget.dart';
@@ -9,7 +10,10 @@ import 'package:movies/utils/app_assets.dart';
 import 'package:movies/utils/app_colors.dart';
 import 'package:movies/utils/app_routes.dart';
 import 'package:movies/utils/app_styles.dart';
+import 'package:movies/utils/dialog_utils.dart';
 import 'package:movies/utils/screen_size.dart';
+
+import 'home_ui.dart';
 
 class HomeTab extends StatefulWidget {
   const HomeTab({super.key});
@@ -259,6 +263,24 @@ class _HomeTabState extends State<HomeTab> {
           ),
         );
       },
+      child: BlocBuilder<MoviesCubit, IntialMoviesState>(
+        bloc: cubit,
+        builder: (context, state) {
+          if (state is SuccessMoviesState) {
+            return HomeUi(
+              movies: state.response!,
+              currentIndex: currentIndex,
+              onPageChanged: (index) {
+                setState(() {
+                  currentIndex = index;
+                });
+              },
+            );
+          }
+
+          return SizedBox();
+        },
+      ),
     );
   }
 }
