@@ -15,7 +15,7 @@ class MovieCard extends StatelessWidget {
   final double badgeLeft;
 
   const MovieCard({
-    Key? key,
+    super.key,
     required this.imageUrl,
     required this.width,
     required this.height,
@@ -29,7 +29,7 @@ class MovieCard extends StatelessWidget {
     this.badgeColor = const Color(0xB3000000),
     this.badgeTop = 6,
     this.badgeLeft = 6,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

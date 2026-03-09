@@ -5,25 +5,29 @@ import 'package:movies/utils/screen_size.dart';
 import '../../utils/app_colors.dart';
 typedef OnChanged =void Function(String)?;
 typedef OnValidator = String? Function(String?)? ;
+typedef OnFieldSubmitted = void Function(String)?;
+
 class CustomTextFormField extends StatelessWidget {
-  Color? borderSideColor;
-  Color? fillColor;
-  bool? filled;
-  String? hintText;
-  TextStyle? hintStyle;
-  String? labelText;
-  TextStyle? labelStyle;
-  TextStyle? errorStyle;
-  Widget? prefixIcon;
-  Widget? suffixIcon;
-  int? maxLines;
-  OnChanged onChanged;
-  TextEditingController? controller;
-  OnValidator validator;
-  TextInputType? keyboardType;
-  String obscuringCharacter;
-  bool obscureText;
-  CustomTextFormField({
+  final Color? borderSideColor;
+  final Color? fillColor;
+  final bool? filled;
+  final String? hintText;
+  final TextStyle? hintStyle;
+  final String? labelText;
+  final TextStyle? labelStyle;
+  final TextStyle? errorStyle;
+  final Widget? prefixIcon;
+  final Widget? suffixIcon;
+  final int? maxLines;
+  final OnChanged onChanged;
+  final OnFieldSubmitted onFieldSubmitted;
+  final TextEditingController? controller;
+  final OnValidator validator;
+  final TextInputType? keyboardType;
+  final String obscuringCharacter;
+  final bool obscureText;
+
+  const CustomTextFormField({
     super.key,
     this.hintText,
     this.hintStyle,
@@ -41,14 +45,15 @@ class CustomTextFormField extends StatelessWidget {
     this.obscureText=false,
     this.obscuringCharacter='.',
     this.keyboardType,
-    this.errorStyle
+    this.errorStyle,
+    this.onFieldSubmitted,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-
-    maxLines: maxLines ?? 1,
+      onFieldSubmitted: onFieldSubmitted,
+      maxLines: maxLines ?? 1,
       controller:controller ,
       onChanged:onChanged ,
       validator:validator ,

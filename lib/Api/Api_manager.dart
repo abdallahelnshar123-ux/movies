@@ -80,6 +80,21 @@ class ApiManager {
       rethrow;
     }
   }
+
+  static Future<AllMoviesResponse> getMoviesBySearch(String searchText) async {
+    try {
+      var response = await dio.get(
+        "list_movies.json",
+        queryParameters: {
+          "query_term": searchText,
+        },
+      );
+      var json = response.data;
+      return AllMoviesResponse.fromJson(json);
+    } catch (e) {
+      rethrow;
+    }
+  }
 // static Future<MovieModel> getMoviesByCategory(String gatergory) async {
 //   try{
 //     var response = await dio.get("list_movies.json",queryParameters: {

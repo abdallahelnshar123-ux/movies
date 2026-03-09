@@ -6,7 +6,6 @@ import 'package:movies/home_screen/tabs/profile_tab/profile_tab.dart';
 import 'package:movies/home_screen/tabs/search_tab/search_tab.dart';
 import 'package:movies/utils/app_assets.dart';
 import 'package:movies/utils/app_colors.dart';
-import 'package:movies/utils/screen_size.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -28,12 +27,12 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       extendBody: true,
-
       body: tabsList[selectedTabIndex],
       bottomNavigationBar: Container(
         padding: EdgeInsets.all(4),
-        margin: EdgeInsets.all(context.width * 0.02),
+        margin: EdgeInsets.all(7),
         decoration: BoxDecoration(
           color: AppColors.darkGrayColor,
           borderRadius: BorderRadiusGeometry.circular(16),
