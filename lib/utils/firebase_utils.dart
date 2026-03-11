@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:movies/Api/model/inner_classes/movie.dart';
 
 import '../model/my_user.dart';
-
 
 class FirebaseUtils {
   static CollectionReference<MyUser> getUsersCollection() {
@@ -34,11 +34,44 @@ class FirebaseUtils {
     await getUsersCollection().doc(uId).delete();
   }
 
+  static CollectionReference<Movie> getWatchListCollection(String uId) {
+    Movie movie = Movie();
+    return getUsersCollection()
+        .doc(uId)
+        .collection(Movie.watchListCollectionName)
+        .withConverter<Movie>(
+          fromFirestore: (snapshot, options) => Movie.fromJson(snapshot.data()),
+          toFirestore: (movie, options) => movie.toJson(),
+        );
+  }
+
+  static Future<void> addMovieToWatchList({
+    required Movie movie,
+    required String uId,
+  }) {
+    return getWatchListCollection(uId).doc(movie.id.toString()).set(movie);
+  }
+
+  static Future<void> deleteMovieFromWatchList({
+    required Movie movie,
+    required String uId,
+  }) {
+    return getWatchListCollection(uId).doc(movie.id.toString()).delete();
+  }
+
+  static Stream<DocumentSnapshot<Movie>> watchMovieInWatchList({
+    required String uId,
+    required Movie movie,
+  }) {
+    return getWatchListCollection(uId).doc(movie.id.toString()).snapshots();
+  }
 
   static Future<UserCredential?> signInWithGoogle() async {
     final GoogleSignIn signIn = GoogleSignIn.instance;
     await signIn.initialize(
-        clientId: '503224830946-tm277q3ec3la0j61i5ds6dc222jhn6sf.apps.googleusercontent.com');
+      clientId:
+          '503224830946-tm277q3ec3la0j61i5ds6dc222jhn6sf.apps.googleusercontent.com',
+    );
 
     // Trigger the authentication flow
     final GoogleSignInAccount? googleUser = await signIn.authenticate();
@@ -49,7 +82,8 @@ class FirebaseUtils {
 
       // Create a new credential
       final credential = GoogleAuthProvider.credential(
-          idToken: googleAuth.idToken);
+        idToken: googleAuth.idToken,
+      );
 
       // Once signed in, return the UserCredential
       return await FirebaseAuth.instance.signInWithCredential(credential);
@@ -61,7 +95,9 @@ class FirebaseUtils {
   static Future<UserCredential?> reSignInWithGoogle() async {
     final GoogleSignIn signIn = GoogleSignIn.instance;
     await signIn.initialize(
-        clientId: '503224830946-tm277q3ec3la0j61i5ds6dc222jhn6sf.apps.googleusercontent.com');
+      clientId:
+          '503224830946-tm277q3ec3la0j61i5ds6dc222jhn6sf.apps.googleusercontent.com',
+    );
 
     // Trigger the authentication flow
     final GoogleSignInAccount? googleUser = await signIn.authenticate();
@@ -72,7 +108,8 @@ class FirebaseUtils {
 
       // Create a new credential
       final credential = GoogleAuthProvider.credential(
-          idToken: googleAuth.idToken);
+        idToken: googleAuth.idToken,
+      );
 
       // Once signed in, return the UserCredential
       return await FirebaseAuth.instance.currentUser!

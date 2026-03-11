@@ -1,19 +1,21 @@
 import 'dart:ui';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:movies/Api/model/movie_model.dart';
 import 'package:movies/home_screen/tabs/home_tab/movie_card.dart';
 import 'package:movies/utils/app_assets.dart';
 import 'package:movies/utils/app_colors.dart';
 import 'package:movies/utils/app_styles.dart';
 import 'package:movies/utils/screen_size.dart';
 
-class HomeUi extends StatelessWidget {
-   List<Movies> movies;
-   int currentIndex;
-   Function(int) onPageChanged;
+import '../../../Api/model/inner_classes/movie.dart';
 
-   HomeUi({
+class HomeUi extends StatelessWidget {
+  final List<Movie> movies;
+  final int currentIndex;
+  final Function(int) onPageChanged;
+
+  const HomeUi({
     super.key,
     required this.movies,
     required this.currentIndex,
@@ -56,12 +58,15 @@ class HomeUi extends StatelessWidget {
                       ratingTextStyle: AppStyles.robotoRegular16White,
                       starSize: 22,
                       margin: EdgeInsets.symmetric(
-                          horizontal: context.width * 0.01),
+                        horizontal: context.width * 0.01,
+                      ),
                       badgeTop: context.height * 0.02,
                       badgeLeft: context.width * 0.03,
                       badgeColor: const Color(0x66000000),
-                      badgePadding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      badgePadding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
                     );
                   },
                   options: CarouselOptions(
@@ -85,8 +90,10 @@ class HomeUi extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(movies[currentIndex].genres![0],
-                          style: AppStyles.robotoRegular20White),
+                      Text(
+                        movies[currentIndex].genres![0],
+                        style: AppStyles.robotoRegular20White,
+                      ),
                       Row(
                         children: [
                           TextButton(
@@ -107,29 +114,24 @@ class HomeUi extends StatelessWidget {
                   ),
                 ),
 
-                SizedBox(height: context.height * 0.015),
+                SizedBox(height: context.height * 0.1),
 
                 SizedBox(
                   height: context.height * 0.15,
                   child: ListView.builder(
-                    padding:
-                    EdgeInsets.only(left: context.width * 0.02),
+                    padding: EdgeInsets.only(left: context.width * 0.02),
                     scrollDirection: Axis.horizontal,
                     itemCount: movies.length,
                     itemBuilder: (context, index) {
                       return Container(
-                        margin: EdgeInsets.only(
-                          right: context.width * 0.03,
-                        ),
+                        margin: EdgeInsets.only(right: context.width * 0.03),
                         width: context.width * 0.25,
                         child: MovieCard(
-                          imageUrl:
-                          movies[index].largeCoverImage ?? "",
+                          imageUrl: movies[index].largeCoverImage ?? "",
                           rating: movies[index].rating,
                           width: context.width * 0.25,
                           height: context.height * 0.15,
-                          ratingTextStyle:
-                          AppStyles.robotoRegular10White,
+                          ratingTextStyle: AppStyles.robotoRegular10White,
                           starSize: 14,
                         ),
                       );
@@ -137,7 +139,7 @@ class HomeUi extends StatelessWidget {
                   ),
                 ),
 
-                SizedBox(height: context.height * 0.1),
+                SizedBox(height: context.height * 0.9),
               ],
             ),
           ),

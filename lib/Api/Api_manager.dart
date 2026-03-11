@@ -20,7 +20,7 @@ class ApiManager {
   static Future<AllMoviesResponse> getAllMovies() async {
     try {
       var response = await dio.get(
-        "https://movies-api.accel.li/api/v2/list_movies.json",
+        "list_movies.json",
       );
       var json = response.data;
       return AllMoviesResponse.fromJson(json);
@@ -34,7 +34,7 @@ class ApiManager {
   static Future<MovieDetailsResponse> getMoviesDetails(int movieId) async {
     try {
       var response = await dio.get(
-        "https://movies-api.accel.li/api/v2/movie_details.json",
+        "movie_details.json",
         queryParameters: {
           'movie_id': movieId,
           'with_images': true,
@@ -53,7 +53,7 @@ class ApiManager {
   static Future<SuggestionResponse> getSuggestionDetails(int movieId) async {
     try {
       var response = await dio.get(
-        "https://movies-api.accel.li/api/v2/movie_suggestions.json",
+        "movie_suggestions.json",
         queryParameters: {'movie_id': movieId},
       );
       var json = response.data;
@@ -71,7 +71,7 @@ class ApiManager {
   ) async {
     try {
       var response = await dio.get(
-        "https://movies-api.accel.li/api/v2/list_movies.json",
+        "list_movies.json",
         queryParameters: {'genre': genre, 'limit': limit},
       );
       var json = response.data;
@@ -80,15 +80,30 @@ class ApiManager {
       rethrow;
     }
   }
-  static Future<MovieModel> getMoviesByCategory(String gatergory) async {
-    try{
-      var response = await dio.get("list_movies.json",queryParameters: {
-        "genre":gatergory
-      });
+
+  static Future<AllMoviesResponse> getMoviesBySearch(String searchText) async {
+    try {
+      var response = await dio.get(
+        "list_movies.json",
+        queryParameters: {
+          "query_term": searchText,
+        },
+      );
       var json = response.data;
-      return MovieModel.fromJson(json);
-    }catch(e){
+      return AllMoviesResponse.fromJson(json);
+    } catch (e) {
       rethrow;
     }
   }
+// static Future<MovieModel> getMoviesByCategory(String gatergory) async {
+//   try{
+//     var response = await dio.get("list_movies.json",queryParameters: {
+//       "genre":gatergory
+//     });
+//     var json = response.data;
+//     return MovieModel.fromJson(json);
+//   }catch(e){
+//     rethrow;
+//   }
+// }
 }

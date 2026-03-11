@@ -1,122 +1,155 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movies/home_screen/tabs/browse_tab/widgets/tab_custom.dart';
+import 'package:movies/cubit/browse_state.dart';
+import 'package:movies/cubit/browse_view_model.dart';
+import 'package:movies/home_screen/tabs/browse_tab/widgets/genres_tab_bar.dart';
+import 'package:movies/home_screen/tabs/search_tab/widget/movie_item.dart';
 import 'package:movies/utils/screen_size.dart';
 
-import '../../../Api/model/movie_model.dart';
-import '../../../cubit/fetch_movies_states.dart';
-import '../../../cubit/movies_view_model.dart';
-import '../../../utils/app_styles.dart';
-import '../../../utils/dialog_utils.dart';
-import '../home_tab/movie_card.dart';
+import '../../../utils/app_colors.dart';
+import '../../../utils/app_routes.dart';
 
 class BrowseTab extends StatefulWidget {
+  const BrowseTab({super.key});
+
   @override
   State<BrowseTab> createState() => _BrowseTabState();
 }
 
 class _BrowseTabState extends State<BrowseTab> {
-  final MoviesCubit cubit = MoviesCubit();
-
-  String selectedGenre = '';
+  late String selectedGenre = genresList[0];
+  List<String> genresList = [
+    'action',
+    'adventure',
+    'animation',
+    'anime',
+    'comedy',
+    'crime',
+    'documentary',
+    'drama',
+    'family',
+    'fantasy',
+    'horror',
+    'music',
+    'musical',
+    'mystery',
+    'reality TV',
+    'romance',
+    'sci-fi',
+    'seasonal',
+    'short',
+    'sport',
+    'thriller',
+  ];
 
   @override
   void initState() {
     super.initState();
-    cubit.getMovies(); // first load
+    context.read<BrowseCubit>().getBrowseMovies(selectedGenre);
   }
+
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MoviesCubit, IntialMoviesState>(
-      bloc: cubit,
-      builder: (context, state) {
+    return SafeArea(
+      bottom: false,
+      child: Scaffold(
+        body: Column(
+          spacing: context.width * 0.04,
+          children: [
+            DefaultTabController(
+              length: genresList.length,
+              child: TabBar(
+                tabAlignment: TabAlignment.start,
+                labelPadding: EdgeInsetsDirectional.only(
+                  start: context.width * 0.04,
+                ),
+                padding: EdgeInsetsDirectional.only(top: context.width * 0.04),
+                dividerColor: AppColors.transparentColor,
+                indicatorColor: AppColors.transparentColor,
+                isScrollable: true,
 
-        List movies = [];
-        List<String> allGenres = [];
+                onTap: (index) {
+                  if (selectedGenre == genresList[index]) return;
 
-        if (state is SuccessMoviesState) {
-          movies = state.response ?? [];
+                  setState(() {
+                    selectedGenre = genresList[index];
+                  });
 
-          allGenres = movies
-              .expand<String>((movie) =>
-              (movie.genres ?? []).cast<String>())
-              .toSet()
-              .toList()
-            ..sort();
-          
-          if (selectedGenre.isEmpty && allGenres.isNotEmpty) {
-            selectedGenre = allGenres.first;
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              cubit.getMoviesByGenre(selectedGenre);
-            });
-          }
-        }
+                  context.read<BrowseCubit>().getBrowseMovies(selectedGenre);
+                },
+                tabs: genresList
+                    .map(
+                      (genre) =>
+                      GenresTabBar(
+                        isSelected:
+                        selectedGenre ==
+                            genresList[genresList.indexOf(genre)],
+                        category: genre,
+                      ),
+                )
+                    .toList(),
+              ),
+            ),
+            Expanded(
+              child: BlocBuilder<BrowseCubit, BrowseState>(
+                builder: (context, state) {
+                  if (state is BrowseErrorState) {
+                    return Center(child: Text(state.message));
+                  }
+                  if (state is BrowseEmptyState) {
+                    return const Center(
+                      child: Text("No Movies Found For This Genre"),
+                    );
+                  }
 
-        return Scaffold(
-          body: SafeArea(
-            child: Column(
-              spacing: 10,
-              children: [
-                if (allGenres.isNotEmpty)
-                  SizedBox(
-                    height: context.height * 0.05,
-                    child: ListView.separated(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: allGenres.length,
-                      separatorBuilder: (_, __) =>
-                       SizedBox(width: 12),
+                  if (state is BrowseSuccessState) {
+                    final movies = state.movies;
+
+                    return GridView.builder(
+                      padding: EdgeInsets.only(
+                        right: context.width * 0.04,
+                        left: context.width * 0.04,
+                        bottom: context.height * 0.1,
+                      ),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: context.width * 0.04,
+                        mainAxisSpacing: context.width * 0.04,
+                        childAspectRatio: 0.7,
+                      ),
+                      itemCount: movies.length,
                       itemBuilder: (context, index) {
-                        final genre = allGenres[index];
+                        final movie = movies[index];
 
-                        return TabCustom(
-                          isSelected: selectedGenre == genre,
-                          category: genre,
+                        return GestureDetector(
                           onTap: () {
-                            if (selectedGenre == genre) return;
-
-                            setState(() {
-                              selectedGenre = genre;
-                            });
-
-                            cubit.getMoviesByGenre(genre);
+                            Navigator.pushNamed(
+                              context,
+                              AppRoutes.movieDetailsScreen,
+                              arguments: movie.id,
+                            );
                           },
+                          child: MovieItem(
+                            movieImage: movie.mediumCoverImage ?? '',
+                            movieRating: movie.rating.toString(),
+                          ),
                         );
                       },
-                    ),
-                  ),
-                Expanded(
-                  child: state is LoadingMoviesState
-                      ?  Center(
-                    child: CircularProgressIndicator(),
-                  )
-                      : GridView.builder(
-                    padding:  EdgeInsets.all(16),
-                    gridDelegate:
-                     SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 12,
-                      mainAxisSpacing: 12,
-                      childAspectRatio: 0.7,
-                    ),
-                    itemCount: movies.length,
-                    itemBuilder: (context, index) {
-                      final movie = movies[index];
-                      return MovieCard(
-                        imageUrl:
-                        movie.mediumCoverImage ?? '',
-                        rating: movie.rating?.toDouble(),
-                        width: context.width,
-                        height: context.height,
-                        ratingTextStyle: AppStyles.robotoRegular10White,
-                      );
-                    },
-                  ),
-                ),
-              ],
+                    );
+                  }
+
+                  return Center(
+
+                      child: CircularProgressIndicator(
+
+                        color: AppColors.yellowColor,
+                      ));
+                },
+              ),
             ),
-          ),
-        );
-      },
+          ],
+        ),
+      ),
     );
   }
 }

@@ -37,6 +37,7 @@ import 'package:movies/Api/model/inner_classes/torrents.dart';
 import '../movie_details_response.dart';
 
 class Movie {
+  static const String watchListCollectionName = 'watch_list';
   Movie({
     this.id,
     this.url,
