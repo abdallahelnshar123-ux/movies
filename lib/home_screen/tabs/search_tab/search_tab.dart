@@ -48,7 +48,9 @@ class SearchTab extends StatelessWidget {
               child: BlocBuilder<SearchCubit, SearchState>(
                 builder: (context, state) {
                   if (state is SearchLoadingState) {
-                    return const Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator(
+                      color: AppColors.yellowColor,
+                    ));
                   }
 
                   if (state is SearchEmptyState) {

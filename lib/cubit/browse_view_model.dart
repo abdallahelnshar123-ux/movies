@@ -1,33 +1,33 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movies/cubit/search_state.dart';
+import 'package:movies/cubit/browse_state.dart';
 
 import '../../Api/Api_manager.dart';
 
 /// todo :   modify
 
-class SearchCubit extends Cubit<SearchState> {
-  SearchCubit() : super(SearchInitialState());
+class BrowseCubit extends Cubit<BrowseState> {
+  BrowseCubit() : super(BrowseInitialState());
 
-  Future<void> searchMovies(String searchText) async {
-    if (searchText.trim().isEmpty) {
-      emit(SearchInitialState());
-      return;
-    }
+  Future<void> getBrowseMovies(String genre) async {
+    // if (searchText.trim().isEmpty) {
+    //   emit(SearchInitialState());
+    //   return;
+    // }
 
-    emit(SearchLoadingState());
+    emit(BrowseLoadingState());
 
     try {
-      final response = await ApiManager.getMoviesBySearch(searchText);
+      final response = await ApiManager.getMoviesByGenre(genre, 20);
 
       final movies = response.data?.movies ?? [];
 
       if (movies.isEmpty) {
-        emit(SearchEmptyState());
+        emit(BrowseEmptyState());
       } else {
-        emit(SearchSuccessState(movies));
+        emit(BrowseSuccessState(movies));
       }
     } catch (e) {
-      emit(SearchErrorState(e.toString()));
+      emit(BrowseErrorState(e.toString()));
     }
   }
 }
