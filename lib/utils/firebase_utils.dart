@@ -35,7 +35,6 @@ class FirebaseUtils {
   }
 
   static CollectionReference<Movie> getWatchListCollection(String uId) {
-    Movie movie = Movie();
     return getUsersCollection()
         .doc(uId)
         .collection(Movie.watchListCollectionName)
