@@ -26,7 +26,7 @@ class _BrowseTabState extends State<BrowseTab> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MoviesCubit, IntialMoviesState>(
+    return BlocBuilder<MoviesCubit, MoviesState>(
       bloc: cubit,
       builder: (context, state) {
         List movies = [];

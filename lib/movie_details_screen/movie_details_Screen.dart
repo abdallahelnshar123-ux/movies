@@ -7,7 +7,7 @@ import 'package:movies/movie_details_screen/movie_details_item.dart';
 import '../Api/model/movie_details_response.dart';
 
 class MovieDetailsScreen extends StatefulWidget {
-  MovieDetailsScreen({super.key});
+  const MovieDetailsScreen({super.key});
 
   @override
   State<MovieDetailsScreen> createState() => _MovieDetailsScreenState();
@@ -23,7 +23,6 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
 
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     if (!isInitialized) {
       movieId = ModalRoute.of(context)!.settings.arguments as int;

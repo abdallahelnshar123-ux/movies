@@ -18,11 +18,11 @@ import '../utils/app_styles.dart';
 import '../utils/screen_size.dart';
 
 class MovieDetailsItem extends StatefulWidget {
-  bool isBookMarked = true;
+  final bool isBookMarked = true;
 
   final Movie movie;
 
-  MovieDetailsItem({super.key, required this.movie});
+  const MovieDetailsItem({super.key, required this.movie});
 
   @override
   State<MovieDetailsItem> createState() => _MovieDetailsItemState();
@@ -92,20 +92,6 @@ class _MovieDetailsItemState extends State<MovieDetailsItem> {
                             ),
                           ),
                           BookMarkWidget(movie: widget.movie),
-                          // IconButton(
-                          //   iconSize: 30,
-                          //   onPressed: () {
-                          //     setState(() {
-                          //       widget.isBookMarked = !widget.isBookMarked;
-                          //     });
-                          //   },
-                          //   icon: Icon(
-                          //     widget.isBookMarked
-                          //         ? Icons.bookmark
-                          //         : Icons.bookmark_border,
-                          //     color: Colors.white,
-                          //   ),
-                          // ),
                         ],
                       ),
                     ),

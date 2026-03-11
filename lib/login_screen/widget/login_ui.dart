@@ -15,7 +15,7 @@ import '../../widgets/custom_elevated_button.dart';
 import '../../widgets/custom_text_form_field.dart';
 
 class LoginUi extends StatefulWidget {
-  LoginUi({super.key});
+  const LoginUi({super.key});
 
   @override
   State<LoginUi> createState() => _LoginUiState();
@@ -225,70 +225,6 @@ class _LoginUiState extends State<LoginUi> {
                   ),
                 ),
                 ChangeLanguageItem(),
-                // Center(
-                //   child: Container(
-                //     margin: EdgeInsets.only(top: context.height * 0.02),
-                //     decoration: BoxDecoration(
-                //       borderRadius: BorderRadius.circular(30),
-                //       border: Border.all(color: AppColors.yellowColor),
-                //     ),
-                //     child: Row(
-                //       spacing: context.width * 0.02,
-                //       mainAxisSize: MainAxisSize.min,
-                //       children: [
-                //         GestureDetector(
-                //           onTap: () {
-                //             // todo change language to en
-                //
-                //             if (context.savedLocale?.languageCode != 'en')
-                //               context.setLocale(Locale('en'));
-                //             setState(() {});
-                //             // if (language != 'en') {
-                //             //   language == 'en';
-                //             //   context.setLocale(Locale('en'));
-                //             // }
-                //             // setState(() {});
-                //             // context.setLocale(Locale('en'));
-                //           },
-                //           child: CircleAvatar(
-                //             radius: 20,
-                //             backgroundColor:
-                //                 context.savedLocale?.languageCode == 'ar'
-                //                 ? AppColors.yellowColor
-                //                 : Colors.transparent,
-                //             child: Image.asset(AppAssets.usaLogo, width: 30),
-                //           ),
-                //         ),
-                //         // SizedBox(width: context.width * 0.02),
-                //         GestureDetector(
-                //           onTap: () {
-                //             // todo change language to ar
-                //             if (context.savedLocale?.languageCode != 'ar')
-                //               context.setLocale(Locale('ar'));
-                //             setState(() {});
-                //             // if (language != 'ar') {
-                //             //   context.setLocale(Locale('ar'));
-                //             //   language == 'ar';
-                //             // }
-                //             // setState(() {});
-                //           },
-                //           child: CircleAvatar(
-                //             radius: 20,
-                //             backgroundColor:
-                //                 context.savedLocale?.languageCode == 'en'
-                //                 ? AppColors.yellowColor
-                //                 : Colors.transparent,
-                //
-                //             child: CircleAvatar(
-                //               radius: 14,
-                //               backgroundImage: AssetImage(AppAssets.egyptLogo),
-                //             ),
-                //           ),
-                //         ),
-                //       ],
-                //     ),
-                //   ),
-                // ),
               ],
             ),
           ),

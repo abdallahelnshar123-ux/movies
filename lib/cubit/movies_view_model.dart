@@ -3,7 +3,7 @@ import 'package:movies/Api/Api_manager.dart';
 
 import 'fetch_movies_states.dart';
 
-class MoviesCubit extends Cubit<IntialMoviesState> {
+class MoviesCubit extends Cubit<MoviesState> {
   MoviesCubit() : super(LoadingMoviesState());
   Future<void> getMovies() async {
    try{

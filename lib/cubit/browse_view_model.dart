@@ -3,6 +3,8 @@ import 'package:movies/cubit/search_state.dart';
 
 import '../../Api/Api_manager.dart';
 
+/// todo :   modify
+
 class SearchCubit extends Cubit<SearchState> {
   SearchCubit() : super(SearchInitialState());
 
