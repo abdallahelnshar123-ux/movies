@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies/cubit/auth_view_model.dart';
 import 'package:movies/cubit/browse_view_model.dart';
+import 'package:movies/cubit/movie_details_view_model.dart';
 import 'package:movies/cubit/search_view_model.dart';
 import 'package:movies/forget_password_screen/forget_password_screen.dart';
 import 'package:movies/home_screen/home_screen.dart';
@@ -34,6 +35,7 @@ void main() async {
         BlocProvider(create: (context) => AuthCubit(),),
         BlocProvider(create: (context) => SearchCubit(),),
         BlocProvider(create: (context) => BrowseCubit(),),
+        BlocProvider(create: (context) => MovieDetailsCubit(),),
       ],
       child: EasyLocalization(
         supportedLocales: const [Locale('en'), Locale('ar')],

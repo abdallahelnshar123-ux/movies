@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:movies/Api/Api_manager.dart';
-import 'package:movies/Api/widget/main_error_widget.dart';
-import 'package:movies/Api/widget/main_loading_widget.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movies/cubit/auth_view_model.dart';
+import 'package:movies/cubit/movie_details_state.dart';
+import 'package:movies/cubit/movie_details_view_model.dart';
 import 'package:movies/movie_details_screen/movie_details_item.dart';
 
-import '../Api/model/movie_details_response.dart';
+import '../utils/app_colors.dart';
 
 class MovieDetailsScreen extends StatefulWidget {
   const MovieDetailsScreen({super.key});
@@ -14,9 +15,6 @@ class MovieDetailsScreen extends StatefulWidget {
 }
 
 class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
-  int currentIndex = 0;
-
-  Future<MovieDetailsResponse>? movieFuture;
 
   late int movieId;
   bool isInitialized = false;
@@ -26,14 +24,39 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
     super.didChangeDependencies();
     if (!isInitialized) {
       movieId = ModalRoute.of(context)!.settings.arguments as int;
-      movieFuture = ApiManager.getMoviesDetails(movieId);
+      String uId = context.read<AuthCubit>().currentUser!.id;
+
+      context.read<MovieDetailsCubit>().getMovieDetails(movieId, uId);
+
       isInitialized = true;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<MovieDetailsResponse>(
+    return BlocBuilder<MovieDetailsCubit, MovieDetailsState>(
+      builder: (context, state) {
+        if (state is MovieDetailsErrorState) {
+          return Center(child: Text(state.message));
+        }
+
+        if (state is MovieDetailsSuccessState) {
+          final movie = state.movie;
+
+          return MovieDetailsItem(movie: movie);
+        }
+
+        return Center(
+          child: CircularProgressIndicator(color: AppColors.yellowColor),
+        );
+      },
+    );
+  }
+}
+
+/*
+
+ FutureBuilder<MovieDetailsResponse>(
       future: movieFuture,
       builder: (context, snapshot) {
         if (snapshot.data == null) {
@@ -73,5 +96,4 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
         return MovieDetailsItem(movie: movie!);
       },
     );
-  }
-}
+ */
