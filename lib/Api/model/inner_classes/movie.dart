@@ -38,6 +38,7 @@ import '../movie_details_response.dart';
 
 class Movie {
   static const String watchListCollectionName = 'watch_list';
+  static const String historyCollectionName = 'history';
   Movie({
     this.id,
     this.url,

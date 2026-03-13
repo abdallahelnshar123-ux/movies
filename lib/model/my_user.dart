@@ -19,12 +19,12 @@ class MyUser {
   /// todo : json => object
   MyUser.fromFireStore(Map<String, dynamic> data)
     : this(
-        id: data['id'] as String,
-        name: data['name'] as String,
-        email: data['email'] as String,
-        phone: data['phone'] as String,
-        avatarIndex: data['avatarIndex'],
-        provider: data['provider'] as String,
+    id: data['id']?.toString() ?? '',
+    name: data['name']?.toString() ?? '',
+    email: data['email']?.toString() ?? '',
+    phone: data['phone']?.toString() ?? '',
+    avatarIndex: (data['avatarIndex'] as num?)?.toInt() ?? 0,
+    provider: data['provider']?.toString() ?? '',
       );
 
   ///  todo : object => jason
