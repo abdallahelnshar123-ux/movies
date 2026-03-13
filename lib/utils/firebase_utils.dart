@@ -59,6 +59,30 @@ class FirebaseUtils {
     return getWatchListCollection(uId).doc(movie.id.toString()).delete();
   }
 
+  static CollectionReference<Movie> getHistoryCollection(String uId) {
+    return getUsersCollection()
+        .doc(uId)
+        .collection(Movie.historyCollectionName)
+        .withConverter<Movie>(
+          fromFirestore: (snapshot, options) => Movie.fromJson(snapshot.data()),
+          toFirestore: (movie, options) => movie.toJson(),
+        );
+  }
+
+  static Future<void> addMovieToHistory({
+    required Movie movie,
+    required String uId,
+  }) {
+    return getHistoryCollection(uId).doc(movie.id.toString()).set(movie);
+  }
+
+  static Future<void> deleteMovieFromHistory({
+    required Movie movie,
+    required String uId,
+  }) {
+    return getHistoryCollection(uId).doc(movie.id.toString()).delete();
+  }
+
   static Stream<DocumentSnapshot<Movie>> watchMovieInWatchList({
     required String uId,
     required Movie movie,
