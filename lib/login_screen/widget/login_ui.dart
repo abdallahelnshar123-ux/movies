@@ -56,6 +56,7 @@ class _LoginUiState extends State<LoginUi> {
               children: [
                 Image.asset(AppAssets.appLogo, height: context.height * 0.3),
                 CustomTextFormField(
+                  keyboardType: TextInputType.emailAddress,
                   validator: (text) {
                     if (text?.trim().isEmpty ?? true) {
                       return context.tr('please_enter_email');
@@ -79,6 +80,7 @@ class _LoginUiState extends State<LoginUi> {
                   fillColor: AppColors.darkGrayColor,
                 ),
                 CustomTextFormField(
+                  keyboardType: TextInputType.visiblePassword,
                   validator: (text) {
                     if (text?.trim().isEmpty ?? true) {
                       return context.tr('please_enter_password');

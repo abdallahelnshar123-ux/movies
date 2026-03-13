@@ -7,6 +7,7 @@ import 'package:movies/utils/app_colors.dart';
 import 'package:movies/utils/app_routes.dart';
 import 'package:movies/utils/app_styles.dart';
 import 'package:movies/utils/firebase_utils.dart';
+
 import 'profile_button.dart';
 
 class MainProfileTabSection extends StatelessWidget {
@@ -34,9 +35,11 @@ class MainProfileTabSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    final int rawIndex = user?.avatarIndex ?? 0;
-    final int safeIndex = rawIndex.clamp(0, avatarAssets.length - 1);
-    final String avatarAsset = avatarAssets[safeIndex];
+    final int rawIndex = user?.avatarIndex ?? -1;
+    // final int safeIndex = rawIndex.clamp(0, avatarAssets.length - 1);
+    final String avatarAsset = rawIndex == -1
+        ? AppAssets.fallbackUserImage
+        : avatarAssets[rawIndex];
 
     final String? userId = user?.id;
 

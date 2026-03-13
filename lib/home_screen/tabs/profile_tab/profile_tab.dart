@@ -10,6 +10,7 @@ import 'package:movies/utils/app_routes.dart';
 import 'package:movies/utils/app_styles.dart';
 import 'package:movies/utils/firebase_utils.dart';
 import 'package:movies/utils/screen_size.dart';
+
 import 'widgets/main_profile_tab_section.dart';
 import 'widgets/movie_grid.dart';
 import 'widgets/section_switcher.dart';
@@ -26,7 +27,9 @@ class _ProfileTabState extends State<ProfileTab> {
 
   @override
   Widget build(BuildContext context) {
-    final MyUser? user = context.read<AuthCubit>().currentUser;
+    final MyUser? user = context
+        .watch<AuthCubit>()
+        .currentUser;
     final size = MediaQuery.of(context).size;
 
     return SingleChildScrollView(
