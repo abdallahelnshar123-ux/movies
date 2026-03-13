@@ -1,6 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies/Api/model/movie_details_response.dart';
+import 'package:movies/cubit/auth_view_model.dart';
 import 'package:movies/movie_details_screen/widget/SimilarMovieCarts.dart';
 import 'package:movies/movie_details_screen/widget/book_mark_widget.dart';
 import 'package:movies/movie_details_screen/widget/cast_widget.dart';
@@ -9,6 +11,7 @@ import 'package:movies/movie_details_screen/widget/rating_widget.dart';
 import 'package:movies/movie_details_screen/widget/screenShotsWidget.dart';
 import 'package:movies/movie_details_screen/widget/summary_widget.dart';
 import 'package:movies/movie_details_screen/widget/title_widget.dart';
+import 'package:movies/utils/firebase_utils.dart';
 import 'package:movies/widgets/custom_elevated_button.dart';
 
 import '../Api/model/inner_classes/movie.dart';
@@ -116,6 +119,14 @@ class _MovieDetailsItemState extends State<MovieDetailsItem> {
                       decorationColor: AppColors.redColor,
                       onPressed: () {
                         debugPrint(widget.movie.title);
+                        final String? userId =
+                            context.read<AuthCubit>().currentUser?.id;
+                        if (userId != null) {
+                          FirebaseUtils.addMovieToHistory(
+                            movie: widget.movie,
+                            uId: userId,
+                          );
+                        }
                       },
                       child: Text(
                         "watch".tr(),

@@ -175,7 +175,9 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
             title: Text("pick Avatar", style: AppStyles.robotoRegular16Yellow),
             centerTitle: true,
             leading: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pop(context);
+              },
               icon: Icon(
                 Icons.arrow_back,
                 size: 25,
