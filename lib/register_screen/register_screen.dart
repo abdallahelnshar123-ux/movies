@@ -351,9 +351,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
       return 'please enter phone number';
     }
     final phone = text.trim();
-    final basic = RegExp(r'^\+\d{8,15}$');
+    final basic = RegExp(r'^01[0-9]{9}$');
     if (!basic.hasMatch(phone)) {
-      return 'Enter a valid phone number e.g.(+1234567890)';
+      return 'Enter a valid phone number e.g.(0123456789)';
     }
 
     return null;
