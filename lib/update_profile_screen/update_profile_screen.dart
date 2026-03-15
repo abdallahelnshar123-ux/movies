@@ -92,7 +92,6 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
           current is AuthDeleteLoading ||
           current is AuthDeleteSuccess,
       listener: (context, state) {
-        debugPrint(state.runtimeType.toString());
         if (state is AuthUpdateSuccess) {
           DialogUtils.hideLoading(context: context);
           DialogUtils.showMessage(
