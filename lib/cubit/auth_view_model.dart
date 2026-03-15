@@ -40,7 +40,7 @@ class AuthCubit extends Cubit<AuthState> {
         email: userData.email,
         avatarIndex: userData.avatarIndex,
         phone: userData.phone,
-          provider: userData.provider
+        provider: userData.provider,
       );
 
       currentUser = user;
@@ -79,7 +79,6 @@ class AuthCubit extends Cubit<AuthState> {
       await user.reauthenticateWithCredential(credential);
       await FirebaseUtils.deleteUserFromFirestore(user.uid);
       await user.delete();
-
       currentUser = null;
 
       emit(AuthDeleteSuccess());
@@ -114,7 +113,7 @@ class AuthCubit extends Cubit<AuthState> {
         name: name,
         phone: phone,
         avatarIndex: avatarIndex,
-          provider: currentUser!.provider
+        provider: currentUser!.provider,
       );
 
       await FirebaseUtils.updateUserDataToFirestore(updatedUser);
@@ -135,14 +134,6 @@ class AuthCubit extends Cubit<AuthState> {
 
       if (googleUserData == null) return;
 
-
-      // final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-      //   email: email,
-      //   password: password,
-      // );
-
-      // debugPrint(credential.user?.uid ?? 'no user');
-
       final firestoreUserData = await FirebaseUtils.readUserFromFireStore(
         googleUserData.user?.uid ?? '',
       );
@@ -151,24 +142,24 @@ class AuthCubit extends Cubit<AuthState> {
         // emit(AuthLoginError('Email not found'));
         // return;
         final user = MyUser(
-            id: googleUserData.user?.uid ?? '',
-            name: googleUserData.user?.displayName ?? '',
-            email: googleUserData.user?.email ?? '',
-            avatarIndex: -1,
-            phone: googleUserData.user?.phoneNumber ?? '',
-            provider: AuthProviders.google
+          id: googleUserData.user?.uid ?? '',
+          name: googleUserData.user?.displayName ?? '',
+          email: googleUserData.user?.email ?? '',
+          avatarIndex: -1,
+          phone: googleUserData.user?.phoneNumber ?? '',
+          provider: AuthProviders.google,
         );
         await FirebaseUtils.addUserToFireStore(user);
         currentUser = user;
         emit(AuthAuthenticated());
       } else {
         final user = MyUser(
-            id: firestoreUserData.id,
-            name: firestoreUserData.name,
-            email: firestoreUserData.email,
-            avatarIndex: firestoreUserData.avatarIndex,
-            phone: firestoreUserData.phone,
-            provider: firestoreUserData.provider
+          id: firestoreUserData.id,
+          name: firestoreUserData.name,
+          email: firestoreUserData.email,
+          avatarIndex: firestoreUserData.avatarIndex,
+          phone: firestoreUserData.phone,
+          provider: firestoreUserData.provider,
         );
         currentUser = user;
         emit(AuthAuthenticated());
@@ -194,37 +185,12 @@ class AuthCubit extends Cubit<AuthState> {
 
       if (googleUserData == null) return;
 
-      // 1️⃣ اعادة تسجيل دخول Google
-      // final googleSignIn = GoogleSignIn.instance;
-      //
-      // await googleSignIn.initialize(
-      //   serverClientId: '503224830946-tm277q3ec3la0j61i5ds6dc222jhn6sf.apps.googleusercontent.com',
-      // );
-      //
-      // final GoogleSignInAccount? googleUser = await googleSignIn.authenticate();
-      // if (googleUser == null) {
-      //   throw Exception("Google re-auth cancelled");
-      // }
-      //
-      // final googleAuth = googleUser.authentication;
-      //
-      // final credential = GoogleAuthProvider.credential(
-      //   idToken: googleAuth.idToken,
-      // );
-      //
-      // // 2️⃣ Re-authenticate
-      // await user.reauthenticateWithCredential(credential);
-
-      // 3️⃣ امسح من Firestore
       await FirebaseUtils.deleteUserFromFirestore(user.uid);
 
-      // 4️⃣ امسح من Firebase Auth
       await user.delete();
 
-      // 5️⃣ اعمل signOut من Google
       await GoogleSignIn.instance.signOut();
-      currentUser == null;
-
+      currentUser = null;
 
       emit(AuthDeleteSuccess());
     } on FirebaseAuthException catch (e) {
@@ -239,5 +205,4 @@ class AuthCubit extends Cubit<AuthState> {
       emit(AuthDeleteError("Something went wrong"));
     }
   }
-
 }

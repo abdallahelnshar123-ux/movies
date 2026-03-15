@@ -4,7 +4,6 @@ import 'package:movies/cubit/auth_state.dart';
 import 'package:movies/cubit/auth_view_model.dart';
 import 'package:movies/model/my_user.dart';
 import 'package:movies/update_profile_screen/Widget/Custome_Botton.dart';
-import 'package:movies/update_profile_screen/Widget/Custome_TextFormFeild.dart';
 import 'package:movies/update_profile_screen/Widget/selecteAvatarBottomSheet.dart';
 import 'package:movies/update_profile_screen/model/AvatarData.dart';
 import 'package:movies/utils/app_assets.dart';
@@ -13,6 +12,7 @@ import 'package:movies/utils/app_routes.dart';
 import 'package:movies/utils/app_styles.dart';
 import 'package:movies/utils/dialog_utils.dart';
 import 'package:movies/utils/screen_size.dart';
+import 'package:movies/widgets/custom_text_form_field.dart';
 
 class UpdateProfileScreen extends StatefulWidget {
   const UpdateProfileScreen({super.key});
@@ -22,14 +22,28 @@ class UpdateProfileScreen extends StatefulWidget {
 }
 
 class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
-  TextEditingController nameController = TextEditingController();
-
-  TextEditingController phoneController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   int currentAvatarIndex = 0;
-
-  final _formKey = GlobalKey<FormState>();
+  MyUser? currentUser;
   bool _isInitialized = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (!_isInitialized) {
+      currentUser = context.read<AuthCubit>().currentUser;
+
+      nameController.text = currentUser?.name ?? '';
+      phoneController.text = currentUser?.phone ?? '';
+      currentAvatarIndex = currentUser?.avatarIndex ?? -1;
+
+      _isInitialized = true;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,10 +94,9 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
         label: "label",
       ),
     ];
-
     var size = MediaQuery.of(context).size;
 
-    return BlocConsumer<AuthCubit, AuthState>(
+    return BlocListener<AuthCubit, AuthState>(
       listenWhen: (previous, current) =>
           current is AuthUpdateSuccess ||
           current is AuthUpdateError ||
@@ -145,217 +158,201 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
           DialogUtils.showLoading(context: context);
         }
       },
-
-      builder: (context, state) {
-        final authCubit = context.watch<AuthCubit>();
-        final user = authCubit.currentUser;
-
-        if (user == null) {
-          return Center(child: Text("No user found"));
-        }
-        if (user.phone.isEmpty || user.phone == '') {
-          if (!_isInitialized) {
-            nameController.text = user.name;
-            // phoneController.text = ;
-            currentAvatarIndex = user.avatarIndex;
-            _isInitialized = true;
-          }
-        } else {
-          if (!_isInitialized) {
-            nameController.text = user.name;
-            phoneController.text = user.phone;
-            currentAvatarIndex = user.avatarIndex;
-            _isInitialized = true;
-          }
-        }
-
-        return Scaffold(
-          appBar: AppBar(
-            title: Text("pick Avatar", style: AppStyles.robotoRegular16Yellow),
-            centerTitle: true,
-            leading: IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: Icon(
-                Icons.arrow_back,
-                size: 25,
-                color: AppColors.yellowColor,
-              ),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("Edit Profile", style: AppStyles.robotoRegular16Yellow),
+          centerTitle: true,
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(
+              Icons.arrow_back,
+              size: 25,
+              color: AppColors.yellowColor,
             ),
           ),
-          body: Padding(
-            padding: EdgeInsets.symmetric(horizontal: size.width * 0.015),
-            child: SingleChildScrollView(
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  spacing: 15,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        showAvatarBottomSheet();
+        ),
+        bottomNavigationBar: Padding(
+          padding: EdgeInsets.all(size.width * 0.015),
+          child: Column(
+            spacing: 15,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CustomButton(
+                text: 'Delete Account',
+                style: AppStyles.robotoRegular16White.copyWith(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+                backgroundColor: AppColors.redColor,
+                onPressed: () async {
+                  if (currentUser?.provider == AuthProviders.emailPassword) {
+                    String? password = await DialogUtils.showPasswordDialog(
+                      context: context,
+                      message: 'Please Enter Password to delete account',
+                      title: 'confirmation !',
+                    );
+
+                    if (password != null && password.isNotEmpty) {
+                      if (!context.mounted) return;
+                      context
+                          .read<AuthCubit>()
+                          .deleteUserAccountWithEmailPassword(password);
+                    }
+                  } else {
+                    DialogUtils.showMessage(
+                      context: context,
+                      message: 'Are you sure you want to delete the account ?',
+                      title: 'confirmation !',
+                      posAction: () {
+                        context.read<AuthCubit>().deleteUserAccountWithGoogle();
                       },
-                      child: SizedBox(
-                        height: size.height * 0.12,
-                        child: currentAvatarIndex == -1
-                            ? Container(
-                                width: context.width * 0.25,
-                                height: context.width * 0.2,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(100),
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: AssetImage(
-                                      AppAssets.fallbackUserImage,
-                                    ),
+                      posActionText: 'yes',
+                      negActionText: 'no',
+                    );
+                  }
+                },
+              ),
+              CustomButton(
+                text: 'Update Account',
+                style: AppStyles.robotoRegular16DarkGray.copyWith(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+                backgroundColor: AppColors.yellowColor,
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    DialogUtils.showMessage(
+                      context: context,
+                      title: 'Update Data',
+                      message: 'Are you sure you want to update data?',
+                      posActionText: 'yes',
+                      negActionText: 'Cancel',
+                      posAction: () {
+                        context.read<AuthCubit>().updateUserData(
+                          name: nameController.text,
+                          phone: phoneController.text,
+                          avatarIndex: currentAvatarIndex,
+                        );
+                      },
+                    );
+                  }
+                  debugPrint('updated');
+                },
+              ),
+            ],
+          ),
+        ),
+        body: Padding(
+          padding: EdgeInsets.symmetric(horizontal: size.width * 0.015),
+          child: SingleChildScrollView(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                spacing: 15,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      showAvatarBottomSheet();
+                    },
+                    child: SizedBox(
+                      height: size.height * 0.12,
+                      child: currentAvatarIndex == -1
+                          ? Container(
+                              width: context.width * 0.25,
+                              height: context.width * 0.2,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(100),
+                                image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: AssetImage(
+                                    AppAssets.fallbackUserImage,
                                   ),
                                 ),
-                              )
-                            : Image.asset(
-                                avatarList[currentAvatarIndex].emoji,
-                                fit: BoxFit.cover,
                               ),
-                      ),
+                            )
+                          : Image.asset(
+                              avatarList[currentAvatarIndex].emoji,
+                              fit: BoxFit.cover,
+                            ),
                     ),
-                    SizedBox(height: size.height * 0.01),
-                    CustomeTextfeild(
-                      prefixIcon: Icon(
-                        Icons.person,
-                        color: AppColors.whiteColor,
-                      ),
-                      textcontroller: nameController,
-                      hint: "Enter Your Name",
-                      validation: (text) {
-                        if (text == null || text.trim().isEmpty) {
-                          return 'Please enter a name';
-                        }
-                        return null;
-                      },
+                  ),
+                  SizedBox(height: size.height * 0.01),
+                  CustomTextFormField(
+                    prefixIcon: Icon(Icons.person, color: AppColors.whiteColor),
+                    controller: nameController,
+                    hintText: "Enter Your Name",
+                    hintStyle: AppStyles.robotoRegular16White.copyWith(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w800,
                     ),
-                    CustomeTextfeild(
-                      prefixIcon: Icon(
-                        Icons.phone,
-                        color: AppColors.whiteColor,
-                      ),
-                      textcontroller: phoneController,
-                      hint: "Enter Your Phone Number",
-                      validation: (text) {
-                        if (text == null || text.trim().isEmpty) {
-                          return 'Please enter a Phone Number';
-                        }
-                        final phoneRegex = RegExp(r'^01[0-9]{9}$');
-                        if (!phoneRegex.hasMatch(text.trim())) {
-                          return 'Enter valid phone number';
-                        }
-
-                        return null;
-                      },
+                    validator: (text) {
+                      if (text == null || text.trim().isEmpty) {
+                        return 'Please enter a name';
+                      }
+                      return null;
+                    },
+                    fillColor: AppColors.darkGrayColor,
+                    filled: true,
+                    keyboardType: TextInputType.name,
+                  ),
+                  CustomTextFormField(
+                    prefixIcon: Icon(Icons.phone, color: AppColors.whiteColor),
+                    controller: phoneController,
+                    hintText: "Enter Your Phone Number",
+                    hintStyle: AppStyles.robotoRegular16White.copyWith(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w800,
                     ),
-                    Visibility(
-                      visible: user.provider == AuthProviders.emailPassword,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(
-                                context,
-                              ).pushNamed(AppRoutes.forgetPasswordRouteName);
-                            },
-                            child: Text(
-                              "Reset Password",
-                              style: AppStyles.robotoRegular16White.copyWith(
-                                decoration: TextDecoration.underline,
-                                decorationColor: AppColors.whiteColor,
-                              ),
+                    validator: (text) {
+                      if (text == null || text.trim().isEmpty) {
+                        return 'Please enter a Phone Number';
+                      }
+                      final phoneRegex = RegExp(r'^01[0-9]{9}$');
+                      if (!phoneRegex.hasMatch(text.trim())) {
+                        return 'Enter valid phone number';
+                      }
+                      return null;
+                    },
+                    fillColor: AppColors.darkGrayColor,
+                    filled: true,
+                    keyboardType: TextInputType.phone,
+                  ),
+                  Visibility(
+                    visible:
+                        currentUser?.provider == AuthProviders.emailPassword,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(
+                              context,
+                            ).pushNamed(AppRoutes.forgetPasswordRouteName);
+                          },
+                          child: Text(
+                            "Reset Password",
+                            style: AppStyles.robotoRegular16White.copyWith(
+                              decoration: TextDecoration.underline,
+                              decorationColor: AppColors.whiteColor,
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                    SizedBox(height: size.height * 0.32),
-                    CustomButton(
-                      text: 'Delete Account',
-                      style: AppStyles.robotoRegular16White.copyWith(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      backgroundColor: AppColors.redColor,
-                      onPressed: () async {
-                        if (user.provider == AuthProviders.emailPassword) {
-                          String? password =
-                              await DialogUtils.showPasswordDialog(
-                                context: context,
-                                message:
-                                    'Please Enter Password  to delete account',
-                                title: 'confirmation !',
-                              );
-
-                          if (password != null && password.isNotEmpty) {
-                            if (!context.mounted) return;
-                            context
-                                .read<AuthCubit>()
-                                .deleteUserAccountWithEmailPassword(password);
-                          }
-                        } else {
-                          DialogUtils.showMessage(
-                            context: context,
-                            message:
-                                'Are you sure you want to delete the account ?',
-                            title: 'confirmation !',
-                            posAction: () {
-                              context
-                                  .read<AuthCubit>()
-                                  .deleteUserAccountWithGoogle();
-                            },
-                            posActionText: 'yes',
-                            negActionText: 'no',
-                          );
-                        }
-                      },
-                    ),
-                    CustomButton(
-                      text: 'Update Account',
-                      style: AppStyles.robotoRegular16DarkGray.copyWith(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      backgroundColor: AppColors.yellowColor,
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          DialogUtils.showMessage(
-                            context: context,
-                            title: 'Update Data',
-                            message: 'Are you sure you want to update data?',
-                            posActionText: 'yes',
-                            negActionText: 'Cancel',
-                            posAction: () {
-                              context.read<AuthCubit>().updateUserData(
-                                name: nameController.text,
-                                phone: phoneController.text,
-                                avatarIndex: currentAvatarIndex,
-                              );
-                            },
-                          );
-                        }
-                        debugPrint('updated');
-                      },
-                    ),
-                    SizedBox(height: size.height * 0.015),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 
   void showAvatarBottomSheet() {
     showModalBottomSheet(
-      // isScrollControlled: true,
       context: context,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadiusGeometry.circular(16),
