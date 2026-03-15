@@ -11,6 +11,7 @@ class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
   @override
+  @override
   Widget build(BuildContext context) {
     return BlocListener<AuthCubit, AuthState>(
       listener: (context, state) {
@@ -21,7 +22,6 @@ class LoginScreen extends StatelessWidget {
             context: context,
             message: 'login_successfully',
           );
-
           Future.delayed(Duration(seconds: 3), () {
             if (context.mounted) {
               Navigator.pushNamedAndRemoveUntil(
