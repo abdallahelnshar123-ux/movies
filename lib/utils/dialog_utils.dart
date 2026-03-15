@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:movies/utils/app_colors.dart';
 import 'package:movies/utils/app_styles.dart';
+import 'package:movies/widgets/custom_text_form_field.dart';
 
 class DialogUtils {
   static void showLoading({required BuildContext context}) {
@@ -88,6 +89,7 @@ class DialogUtils {
     String cancelText = 'Cancel',
   }) {
     TextEditingController passwordController = TextEditingController();
+    GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
     return showDialog<String>(
       context: context,
@@ -99,27 +101,41 @@ class DialogUtils {
             context.tr(title),
             style: AppStyles.robotoRegular16Yellow,
           ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                context.tr(message),
-                style: AppStyles.robotoRegular14White,
-              ),
-              const SizedBox(height: 15),
-              TextField(
-                controller: passwordController,
-                obscureText: true,
-                decoration: const InputDecoration(
-                  hintText: "Enter your password",
+          content: Form(
+            key: formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  context.tr(message),
+                  style: AppStyles.robotoRegular14White,
                 ),
-              ),
-            ],
+                const SizedBox(height: 15),
+                CustomTextFormField(
+                  keyboardType: TextInputType.visiblePassword,
+                  validator: (text) {
+                    if (text?.trim().isEmpty ?? true) {
+                      return context.tr('please_enter_password');
+                    }
+                    if (text!.length < 6) {
+                      return context.tr('password_must_be_at_least');
+                    }
+                    return null;
+                  },
+                  controller: passwordController,
+                  hintText: "password".tr(),
+                  hintStyle: AppStyles.robotoRegular16White,
+                  obscureText: true,
+                  filled: true,
+                  fillColor: AppColors.blackColor,
+                ),
+              ],
+            ),
           ),
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.pop(context); // يرجع null
+                Navigator.pop(context);
               },
               child: Text(
                 context.tr(cancelText),
@@ -128,7 +144,9 @@ class DialogUtils {
             ),
             TextButton(
               onPressed: () {
-                Navigator.pop(context, passwordController.text.trim());
+                if (formKey.currentState!.validate()) {
+                  Navigator.pop(context, passwordController.text.trim());
+                }
               },
               child: Text(
                 context.tr(confirmText),
